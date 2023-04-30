@@ -1,0 +1,11 @@
+.todolist {
+    width: 250px;
+    border-radius: 5px;
+}
+
+.btnFilterContainer {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+    padding: 10px 0;
+}
