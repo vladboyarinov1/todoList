@@ -41,7 +41,7 @@ export type TaskType = {
 
 export type FilterValueType = 'all' | 'active' | 'complete'
 
-type TodoListType = { // описываем тип одного TodoList
+export type TodoListType = { // описываем тип одного TodoList
     id: string
     title: string
     filter: FilterValueType
@@ -77,19 +77,6 @@ const App = (): JSX.Element => {
     const removeTask = (taskId: string, todoListId: string) => {
         setTasks({...tasks, [todoListId]: tasks[todoListId].filter(t => t.id !== taskId)})
     }
-    const changeTodoListFilter = (filter: FilterValueType, todoListId: string) => {
-        setTodoList(todoList.map(tl => tl.id === todoListId ? {...tl, filter: filter} : tl))
-    }
-    const getFilterValues = (tasksList: Array<TaskType>, filterValue: FilterValueType) => {
-        switch (filterValue) {
-            case 'active':
-                return tasksList.filter(t => !t.isDone)
-            case 'complete':
-                return tasksList.filter(t => t.isDone)
-            default:
-                return tasksList
-        }
-    }
     const addTask = (title: string, todoListId: string) => {
         const newTask: TaskType = {
             id: v1(),
@@ -106,15 +93,28 @@ const App = (): JSX.Element => {
             ...tasks,
             [todoListId]: tasks[todoListId].map(tl => tl.id === taskId ? {...tl, title: newTitle} : tl)
         })
-    } // изменить title
+    }
     //todoLists
-    const removeTodoList = (todoListId: string) => { // delete TodoList
+    const changeTodoListFilter = (filter: FilterValueType, todoListId: string) => {
+        setTodoList(todoList.map(tl => tl.id === todoListId ? {...tl, filter: filter} : tl))
+    }
+    const getFilterValues = (tasksList: Array<TaskType>, filterValue: FilterValueType) => {
+        switch (filterValue) {
+            case 'active':
+                return tasksList.filter(t => !t.isDone)
+            case 'complete':
+                return tasksList.filter(t => t.isDone)
+            default:
+                return tasksList
+        }
+    }
+    const removeTodoList = (todoListId: string) => { // +
         setTodoList(todoList.filter(tl => tl.id !== todoListId))
         const copyTasks = {...tasks}
         delete copyTasks[todoListId]
         setTasks(copyTasks)// и удаляем таски от этого тудулиста
     }
-    const addNewTodoList = (title: string) => {
+    const addNewTodoList = (title: string) => { //+
         const todoListId = v1()
         const newTodoList: TodoListType = {
             id: todoListId,
@@ -126,7 +126,7 @@ const App = (): JSX.Element => {
     }
     const changeTodoListTitle = (title: string, todoListId: string) => {
         setTodoList(todoList.map(tl => tl.id === todoListId ? {...tl, title: title} : tl))
-    }
+    } // +
 
 
     const todoListsComponents = todoList.map(tl => {
