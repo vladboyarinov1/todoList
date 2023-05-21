@@ -47,7 +47,7 @@ export type TodoListType = { // описываем тип одного TodoList
     filter: FilterValueType
 }
 
-type TasksStateType = { // стейт с тасками
+export type TasksStateType = { // стейт с тасками
     [todoListId: string]: Array<TaskType>
 }
 
