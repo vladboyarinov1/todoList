@@ -18,10 +18,10 @@ type TasksPropsType = {
 export const TasksList: FC<TasksPropsType> = (props) => {
     const {tasks, removeTask, todoListId, changeTaskStatus, changeTasksTitle, changeTodoListTitle} = props
 
+    const onChangeTaskStatusHandler = (id: string, current: boolean) => changeTaskStatus(id, current, todoListId)
+
     const taskList = tasks.length ? tasks.map((t) => {// map вернет новый массив и в новом массиве будут новые элементы, полученные в результате преобразованя элементов исходного массива
         const onClickRemoveTaskHandler = () => removeTask(t.id, todoListId)
-
-        const onClickChangeTaskStatus = (current: boolean) => changeTaskStatus(t.id, current, todoListId)
 
         const changeTaskTitleHandler = (title: string) => {
             changeTasksTitle(t.id, title, todoListId)
@@ -29,9 +29,10 @@ export const TasksList: FC<TasksPropsType> = (props) => {
         const isDoneTitleStyle = t.isDone ? 'taskDone' : 'task'
 
         return (
-            <ListItem id={t.id} divider disablePadding secondaryAction={<IconButton onClick={onClickRemoveTaskHandler} size={'small'}><ClearIcon/></IconButton>}>
+            <ListItem id={t.id} divider disablePadding secondaryAction={<IconButton onClick={onClickRemoveTaskHandler}
+                                                                                    size={'small'}><ClearIcon/></IconButton>}>
 
-                <SuperCheckBox onChange={onClickChangeTaskStatus} checked={t.isDone}/>
+                <SuperCheckBox callBack={(current) => onChangeTaskStatusHandler(t.id, current)} checked={t.isDone}/>
 
                 <EditableSpan title={t.title} spanClasses={isDoneTitleStyle} changeTitle={changeTaskTitleHandler}/>
             </ListItem>

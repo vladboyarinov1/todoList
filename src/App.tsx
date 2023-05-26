@@ -113,7 +113,7 @@ const App = (): JSX.Element => {
         const copyTasks = {...tasks}
         delete copyTasks[todoListId]
         setTasks(copyTasks)// и удаляем таски от этого тудулиста
-    }
+    } 
     const addNewTodoList = (title: string) => { //+
         const todoListId = v1()
         const newTodoList: TodoListType = {

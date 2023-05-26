@@ -1,11 +1,11 @@
 import {
-    AddTodolistAT,
-    ChangeTodolistFilterAT,
-    ChangeTodoListTitleAT,
-    RemoveTodolistAT,
-    todolistReducer
+    addTodolistAC,
+    AddTodolistAT, changeTodolistFilterAC, ChangeTodolistFilterAT, changeTodoListTitleAC, ChangeTodoListTitleAT,
+    removeTodolistAC,
+    RemoveTodolistAT, todolistReducer
+
 } from './todolist-reducer';
-import {TodoListType} from '../App';
+import {TodoListType} from '../../App';
 
 describe('todolistReducer', () => {
     let initialState: TodoListType[];
@@ -18,7 +18,7 @@ describe('todolistReducer', () => {
 
     test('should remove a todolist from the state', () => {
 
-        const action: RemoveTodolistAT = RemoveTodolistAT('2');
+        const action: RemoveTodolistAT = removeTodolistAC('2');
         const expectedState = [
             {id: '1', title: 'First Todo List', filter: 'all'},
         ];
@@ -28,7 +28,7 @@ describe('todolistReducer', () => {
         expect(newState).toEqual(expectedState);
     });
     test('should add a new todolist to the state', () => {
-        const action: AddTodolistAT = AddTodolistAT('New Todo List');
+        const action: AddTodolistAT = addTodolistAC('New Todo List');
 
         const expectedState = [
             ...initialState,
@@ -43,7 +43,7 @@ describe('todolistReducer', () => {
     });
     test('todolist should change the title', () => {
 
-        const action: ChangeTodoListTitleAT = ChangeTodoListTitleAT('newTitleForTodolistWithID2', '2')
+        const action = changeTodoListTitleAC('newTitleForTodolistWithID2', '2')
         const expectedState = [
             {id: '1', title: 'First Todo List', filter: 'all'},
             {id: '2', title: 'newTitleForTodolistWithID2', filter: 'all'}
@@ -54,7 +54,7 @@ describe('todolistReducer', () => {
         expect(newState[1].title).toBe('newTitleForTodolistWithID2')
     })
     test('todolist should change the filter', () => {
-        const action: ChangeTodolistFilterAT = ChangeTodolistFilterAT('active', '2')
+        const action: ChangeTodolistFilterAT = changeTodolistFilterAC('active', '2')
         const expectedState = [
             {id: '1', title: 'First Todo List', filter: 'all'},
             {id: '2', title: 'Second Todo List', filter: 'active'}

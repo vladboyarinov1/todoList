@@ -2,17 +2,17 @@ import React, {ChangeEvent, FC} from 'react';
 import {Checkbox} from '@mui/material';
 
 type CheckBoxType = {
-    onChange: (current: boolean) => void
-    checked: any
+    callBack: (current: boolean) => void
+    checked: boolean
 }
 
 export const SuperCheckBox: FC<CheckBoxType> = (props) => {
-    const {onChange, checked} = props
+    const {callBack, checked} = props
 
-    const onClickChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        onChange(e.currentTarget.checked)
+    const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        callBack(e.currentTarget.checked)
     }
     return (
-        <Checkbox onChange={onClickChangeTaskStatusHandler} checked={checked} size="small"/>
+        <Checkbox onChange={onChangeTaskStatusHandler} checked={checked} size="small"/>
     );
 };
