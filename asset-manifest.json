@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/vladboyarinov1/todolist/static/css/main.4638721e.css",
+    "main.js": "/vladboyarinov1/todolist/static/js/main.b227fb91.js",
+    "static/js/787.97a945da.chunk.js": "/vladboyarinov1/todolist/static/js/787.97a945da.chunk.js",
+    "index.html": "/vladboyarinov1/todolist/index.html",
+    "main.4638721e.css.map": "/vladboyarinov1/todolist/static/css/main.4638721e.css.map",
+    "main.b227fb91.js.map": "/vladboyarinov1/todolist/static/js/main.b227fb91.js.map",
+    "787.97a945da.chunk.js.map": "/vladboyarinov1/todolist/static/js/787.97a945da.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4638721e.css",
+    "static/js/main.b227fb91.js"
+  ]
+}
