@@ -5,7 +5,7 @@ import {
     RemoveTodolistAT, todolistReducer
 
 } from './todolist-reducer';
-import {TodoListType} from '../../App';
+import {TodoListType} from '../../AppWithRedux';
 
 describe('todolistReducer', () => {
     let initialState: TodoListType[];

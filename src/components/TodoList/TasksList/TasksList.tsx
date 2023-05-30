@@ -1,30 +1,30 @@
-import React, {ChangeEvent, FC} from 'react';
-import {TaskType} from '../../../App';
+import React, {FC} from 'react';
 import {EditableSpan} from '../../EditableSpan/EditableSpan';
-import {Checkbox, IconButton, ListItem} from '@mui/material';
+import {IconButton, ListItem} from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import {SuperCheckBox} from '../../SuperCheckBox/SuperCheckBox';
+import {useDispatch} from 'react-redux';
+import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from '../../../reducers/tasks-reducer/tasks-reducer';
+import {TaskType, TodoListType} from '../../../AppWithRedux';
 
 
 type TasksPropsType = {
-    todoListId: string
-    tasks: Array<TaskType>
-    removeTask: (taskId: string, todoListId: string) => void
-    changeTaskStatus: (taskId: string, newIsDone: boolean, todoListId: string) => void
-    changeTasksTitle: (taskId: string, newTitle: string, todoListId: string) => void
-    changeTodoListTitle: (title: string, todoListId: string) => void
+    todolist: TodoListType
+    tasks: TaskType[]
 }
 
-export const TasksList: FC<TasksPropsType> = (props) => {
-    const {tasks, removeTask, todoListId, changeTaskStatus, changeTasksTitle, changeTodoListTitle} = props
+export const TasksList: FC<TasksPropsType> = ({todolist, tasks}) => {
+    const {id} = todolist
 
-    const onChangeTaskStatusHandler = (id: string, current: boolean) => changeTaskStatus(id, current, todoListId)
+    const dispatch = useDispatch()
+
+    const onChangeTaskStatusHandler = (taskId: string, current: boolean) => dispatch(changeTaskStatusAC(taskId, current, id))
 
     const taskList = tasks.length ? tasks.map((t) => {// map вернет новый массив и в новом массиве будут новые элементы, полученные в результате преобразованя элементов исходного массива
-        const onClickRemoveTaskHandler = () => removeTask(t.id, todoListId)
+        const onClickRemoveTaskHandler = () => dispatch(removeTaskAC(t.id, id))
 
         const changeTaskTitleHandler = (title: string) => {
-            changeTasksTitle(t.id, title, todoListId)
+            dispatch(changeTaskTitleAC(t.id, title, id))
         }//naming????
         const isDoneTitleStyle = t.isDone ? 'taskDone' : 'task'
 
@@ -42,6 +42,4 @@ export const TasksList: FC<TasksPropsType> = (props) => {
     return <>
         {taskList}
     </>
-
-
 };
