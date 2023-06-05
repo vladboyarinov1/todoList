@@ -32,12 +32,16 @@ export const AddItemForm: FC<addItemFormProps> = (props) => {
     }
     const addItemEnter = taskNotAdd ? undefined : (e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && addItemHandler()
 
+    const onBlurHandler = () => {
+        setError(false)
+    }
+
 
     return (
         <div style={{display: 'flex', justifyContent: 'center'}}>
             <TextField onChange={changeLocalTitle} value={title} onKeyDown={addItemEnter}
                        error={error} helperText={errorMessage || maxValueError} size={'small'}
-                       placeholder="Enter task name"/>
+                       placeholder="Enter task name" onBlur={onBlurHandler}/>
             <IconButton onClick={addItemHandler} size={'small'} disabled={taskNotAdd}><AddIcon/></IconButton>
         </div>
     );

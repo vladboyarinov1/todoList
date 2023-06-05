@@ -29,7 +29,7 @@ export const TasksList: FC<TasksPropsType> = ({todolist, tasks}) => {
         const isDoneTitleStyle = t.isDone ? 'taskDone' : 'task'
 
         return (
-            <ListItem id={t.id} divider disablePadding secondaryAction={<IconButton onClick={onClickRemoveTaskHandler}
+            <ListItem key={t.id} id={t.id} divider disablePadding secondaryAction={<IconButton onClick={onClickRemoveTaskHandler}
                                                                                     size={'small'}><ClearIcon/></IconButton>}>
 
                 <SuperCheckBox callBack={(current) => onChangeTaskStatusHandler(t.id, current)} checked={t.isDone}/>
