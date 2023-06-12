@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import './App.css';
 import {AddItemForm} from './components/AddItemForm/AddItemForm';
 
@@ -19,18 +19,12 @@ import {
 import {ThemeProvider} from '@emotion/react';
 import {createTheme} from '@mui/material/styles';
 import {
-    addTodolistAC,
-    changeTodolistFilterAC, changeTodoListTitleAC, removeTodolistAC,
+    addTodolistAC
 } from './reducers/todolist-reducer/todolist-reducer';
-import {
-    addTaskAC,
-    changeTaskStatusAC,
-    changeTaskTitleAC,
-    removeTaskAC,
-} from './reducers/tasks-reducer/tasks-reducer';
+
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './store';
-import {TodoListWithRedux} from './components/TodoList/TodoListWithRedux';
+import {TodoList} from './components/TodoList/TodoList';
 
 export type TaskType = {
     id: string
@@ -50,61 +44,12 @@ export type TasksStateType = { // стейт с тасками
     [todoListId: string]: Array<TaskType>
 }
 
-const AppWithRedux = (): JSX.Element => {
-    //BLL
+const App = (): JSX.Element => {
+
     let todolists = useSelector<AppRootStateType, TodoListType[]>(state => state.todolists)
-    // let tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const dispatch = useDispatch()
 
     const [isDark, setDarkMode] = useState<boolean>(false)
-    //BLL
-    //tasks
-    const removeTask = (taskId: string, todoListId: string) => {
-        dispatch(removeTaskAC(taskId, todoListId))
-    }
-    const addTask = (title: string, todoListId: string) => {
-        dispatch(addTaskAC(title, todoListId))
-    }
-    const changeTaskStatus = (taskId: string, newIsDone: boolean, todoListId: string) => {
-        dispatch(changeTaskStatusAC(taskId, newIsDone, todoListId))
-    }
-    const changeTasksTitle = (taskId: string, newTitle: string, todoListId: string) => {
-        dispatch(changeTaskTitleAC(taskId, newTitle, todoListId))
-    }
-    //todoLists
-    const changeTodoListFilter = (filter: FilterValueType, todoListId: string) => {
-        dispatch(changeTodolistFilterAC(filter, todoListId))
-    }
-    const getFilterValues = (tasksList: Array<TaskType>, filterValue: FilterValueType) => {
-        switch (filterValue) {
-            case 'active':
-                return tasksList.filter(t => !t.isDone)
-            case 'complete':
-                return tasksList.filter(t => t.isDone)
-            default:
-                return tasksList
-        }
-    }
-    const removeTodoList = (todoListId: string) => {
-        dispatch(removeTodolistAC(todoListId))
-    }
-    const addNewTodoList = (title: string) => {
-        dispatch(addTodolistAC(title))
-    }
-    const changeTodoListTitle = (title: string, todoListId: string) => {
-        dispatch(changeTodoListTitleAC(title, todoListId))
-    }
-
-    const todoListsComponents = todolists.map(tl => {
-
-        return (
-            <Grid key={tl.id} item>
-                <Paper elevation={12}>
-                    <TodoListWithRedux todolist={tl}/>
-                </Paper>
-            </Grid>
-        )
-    })
 
     const mode = isDark ? 'dark' : 'light'
 
@@ -118,6 +63,23 @@ const AppWithRedux = (): JSX.Element => {
             },
             mode: mode,
         },
+    })
+
+    //todoLists
+
+    const addNewTodoList = useCallback((title: string) => {
+        dispatch(addTodolistAC(title))
+    }, [dispatch])
+
+
+    const todoListsComponents = todolists.map(tl => {
+        return (
+            <Grid key={tl.id} item>
+                <Paper elevation={12}>
+                    <TodoList todolist={tl}/>
+                </Paper>
+            </Grid>
+        )
     })
 
     return (
@@ -158,4 +120,4 @@ const AppWithRedux = (): JSX.Element => {
     );
 }
 
-export default AppWithRedux;
+export default App;

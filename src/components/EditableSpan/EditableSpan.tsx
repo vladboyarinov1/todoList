@@ -1,22 +1,19 @@
-import React, {ChangeEvent, FC, useState} from 'react';
+import React, {ChangeEvent, FC, memo, useState} from 'react';
 import {TextField} from '@mui/material';
 
 type EditableSpanPropsType = {
     title: string
-    spanClasses?: string
-    inputClasses?: string
     changeTitle: (title: string) => void
 }
 
-export const EditableSpan: FC<EditableSpanPropsType> = (props) => {
-    const {title, spanClasses, changeTitle} = props
+export const EditableSpan: FC<EditableSpanPropsType> = memo(({title, changeTitle}) => {
 
     const [editMode, setEditMode] = useState<boolean>(false)
     const [localTitle, setTitle] = useState<string>(title)
 
     const changeLocalTitle = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
-    }//
+    }
 
     const onEditMode = () => {
         setEditMode(true)
@@ -26,13 +23,14 @@ export const EditableSpan: FC<EditableSpanPropsType> = (props) => {
         changeTitle(localTitle)// передаем новое название в функцию
     }
 
+
     return (
         editMode
             ? <TextField onChange={changeLocalTitle}
                          onBlur={offEditMode}
                          value={localTitle} size="small" variant="standard"/>// title но уже пропущенный через локальный стейт
-            : <span onDoubleClick={onEditMode} className={spanClasses}>{title}</span>
+            : <span onDoubleClick={onEditMode}>{title}</span>
     );
-};
+});
 
 //кликаем по названию таски - появляется форма для редактирования
