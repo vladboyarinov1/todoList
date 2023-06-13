@@ -1,6 +1,6 @@
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './tasks-reducer'
-import {TasksStateType} from '../../App';
-import {addTodolistAC, removeTodolistAC} from '../todolist-reducer/todolist-reducer';
+import {TasksStateType} from '../../App/App';
+import {addTodolistAC, removeTodolistAC} from '../todolist-reducer/todolists-reducer';
 
 
 describe('todolistReducer', () => {

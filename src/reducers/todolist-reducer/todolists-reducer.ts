@@ -1,4 +1,4 @@
-import {FilterValueType, TodoListType} from '../../App';
+import {FilterValueType, TodoListType} from '../../App/App';
 import {v1} from 'uuid';
 //reducer - это чистая функция (это когда функция на одних и тех же данных функция дает один и тот же результат / это функция которая не работает с внешними переменными, не изменяет их и все что нужно получает в параметрах / не должны изменять входящие данные)
 //в параметрах редюсера нужно указать:
@@ -25,10 +25,9 @@ export const todoListId_2 = v1()
 
 const initState: TodoListType[] = [
     {id: todoListId_1, title: 'What to learn', filter: 'all'},
-    {id: todoListId_2, title: 'What to buy', filter: 'all'}
 ]
 
-export const todolistReducer = (todolists = initState, action: TodolistActionType): TodoListType[] => {
+export const todolistsReducer = (todolists = initState, action: TodolistActionType): TodoListType[] => {
     switch (action.type) {
 
         case 'REMOVE-TODOLIST':

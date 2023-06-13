@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import './App.css';
-import {AddItemForm} from './components/AddItemForm/AddItemForm';
+import {AddItemForm} from '../components/AddItemForm/AddItemForm';
 
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -20,11 +20,11 @@ import {ThemeProvider} from '@emotion/react';
 import {createTheme} from '@mui/material/styles';
 import {
     addTodolistAC
-} from './reducers/todolist-reducer/todolist-reducer';
+} from '../reducers/todolist-reducer/todolists-reducer';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from './store';
-import {TodoList} from './components/TodoList/TodoList';
+import {AppRootStateType} from '../store/store';
+import {TodoList} from '../components/TodoList/TodoList';
 
 export type TaskType = {
     id: string
@@ -110,7 +110,7 @@ const App = (): JSX.Element => {
                 </AppBar>
                 <Container fixed>
                     <Grid container sx={{p: '15px 0'}}>
-                        <AddItemForm addItem={addNewTodoList}/>
+                        <AddItemForm addItem={addNewTodoList} label='todolist name'/>
                     </Grid>
                     <Grid container spacing={4}>{todoListsComponents}</Grid>
                 </Container>

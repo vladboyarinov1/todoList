@@ -5,8 +5,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import {SuperCheckBox} from '../../SuperCheckBox/SuperCheckBox';
 import {useDispatch} from 'react-redux';
 import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from '../../../reducers/tasks-reducer/tasks-reducer';
-import {TaskType} from '../../../App';
-
+import {TaskType} from '../../../App/App';
 
 type TasksPropsType = {
     todolistId: string
@@ -24,7 +23,6 @@ export const Task: FC<TasksPropsType> = memo(({todolistId, task}) => {
     const changeTaskTitle = useCallback((title: string) => {
         dispatch(changeTaskTitleAC(task.id, title, todolistId))
     }, [dispatch, task.id, todolistId])
-
 
     return (
         <ListItem key={task.id} id={task.id} divider disablePadding

@@ -2,10 +2,10 @@ import {
     addTodolistAC,
     AddTodolistAT, changeTodolistFilterAC, ChangeTodolistFilterAT, changeTodoListTitleAC, ChangeTodoListTitleAT,
     removeTodolistAC,
-    RemoveTodolistAT, todolistReducer
+    RemoveTodolistAT, todolistsReducer
 
-} from './todolist-reducer';
-import {TodoListType} from '../../App';
+} from './todolists-reducer';
+import {TodoListType} from '../../App/App';
 
 describe('todolistReducer', () => {
     let initialState: TodoListType[];
@@ -23,7 +23,7 @@ describe('todolistReducer', () => {
             {id: '1', title: 'First Todo List', filter: 'all'},
         ];
 
-        const newState = todolistReducer(initialState, action);
+        const newState = todolistsReducer(initialState, action);
 
         expect(newState).toEqual(expectedState);
     });
@@ -35,7 +35,7 @@ describe('todolistReducer', () => {
             {id: expect.any(String), title: 'New Todo List', filter: 'all'}
         ];
 
-        const newState = todolistReducer(initialState, action);
+        const newState = todolistsReducer(initialState, action);
 
         expect(newState).toEqual(expectedState);
         expect(newState[2].id).toHaveLength(36);
@@ -49,7 +49,7 @@ describe('todolistReducer', () => {
             {id: '2', title: 'newTitleForTodolistWithID2', filter: 'all'}
         ];
 
-        const newState = todolistReducer(initialState, action);
+        const newState = todolistsReducer(initialState, action);
 
         expect(newState[1].title).toBe('newTitleForTodolistWithID2')
     })
@@ -60,7 +60,7 @@ describe('todolistReducer', () => {
             {id: '2', title: 'Second Todo List', filter: 'active'}
         ];
 
-        const newState = todolistReducer(initialState, action)
+        const newState = todolistsReducer(initialState, action)
 
         expect(newState[1].filter).toBe('active')
 
