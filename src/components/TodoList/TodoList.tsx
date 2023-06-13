@@ -1,20 +1,20 @@
 import React, {FC, memo, useCallback} from 'react';
-import {FilterValueType, TaskType, TodoListType} from '../../App';
+import {FilterValueType, TaskType, TodoListType} from '../../App/App';
 import {AddItemForm} from '../AddItemForm/AddItemForm';
 import {EditableSpan} from '../EditableSpan/EditableSpan';
 import s from './TodoList.module.css'
 import {IconButton, Typography} from '@mui/material';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from '../../store';
+import {AppRootStateType} from '../../store/store';
 import {addTaskAC} from '../../reducers/tasks-reducer/tasks-reducer';
 import {
     changeTodolistFilterAC,
     changeTodoListTitleAC,
     removeTodolistAC
-} from '../../reducers/todolist-reducer/todolist-reducer';
+} from '../../reducers/todolist-reducer/todolists-reducer';
 import {ButtonWithMemo} from '../ButtonWithMemo/ButtonWithMemo';
-import {Task} from './TasksList/Task';
+import {Task} from './Task/Task';
 
 
 type TodoListPropsType = {
@@ -65,11 +65,11 @@ export const TodoList: FC<TodoListPropsType> = memo(({todolist}) => {
                 <IconButton onClick={() => dispatch(removeTodolistAC(id))}
                             size={'small'} sx={{}}><RestoreFromTrashIcon/></IconButton>
             </Typography>
-            <AddItemForm addItem={addTask}/>
+            <AddItemForm addItem={addTask} label={'task name'}/>
             {
                 filteredTasks.length ? filteredTasks.map(t => <Task key={t.id} todolistId={todolist.id} task={t}/>)
                     :
-                    <div style={{display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
+                    <div>
                         Task list is empty</div>
             }
             <div className={s.btnFilterContainer}>
