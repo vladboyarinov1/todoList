@@ -5,7 +5,8 @@ import ClearIcon from '@mui/icons-material/Clear';
 import {SuperCheckBox} from '../../SuperCheckBox/SuperCheckBox';
 import {useDispatch} from 'react-redux';
 import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from '../../../reducers/tasks-reducer/tasks-reducer';
-import {TaskType} from '../../../App/App';
+
+import {TaskStatuses, TaskType} from '../../../api/todolist-api';
 
 type TasksPropsType = {
     todolistId: string
@@ -13,10 +14,10 @@ type TasksPropsType = {
 }
 
 export const Task: FC<TasksPropsType> = memo(({todolistId, task}) => {
-
+    console.log(task.status === 2)
     const dispatch = useDispatch()
 
-    const changeTaskStatus = useCallback((taskId: string, current: boolean) => dispatch(changeTaskStatusAC(taskId, current, todolistId)), [dispatch, todolistId])
+    const changeTaskStatus = useCallback((taskId: string, current: TaskStatuses) => dispatch(changeTaskStatusAC(taskId, current, todolistId)), [dispatch, todolistId])
 
     const removeTask = useCallback(() => dispatch(removeTaskAC(task.id, todolistId)), [dispatch, task.id, todolistId])
 
@@ -29,7 +30,8 @@ export const Task: FC<TasksPropsType> = memo(({todolistId, task}) => {
                   secondaryAction={<IconButton onClick={removeTask}
                                                size={'small'}><ClearIcon/></IconButton>}>
 
-            <SuperCheckBox callBack={(current) => changeTaskStatus(task.id, current)} checked={task.isDone}/>
+            <SuperCheckBox callBack={(current) => changeTaskStatus(task.id, current)}
+                           checked={task.status === TaskStatuses.Completed}/>
 
             <EditableSpan title={task.title} changeTitle={changeTaskTitle}/>
         </ListItem>

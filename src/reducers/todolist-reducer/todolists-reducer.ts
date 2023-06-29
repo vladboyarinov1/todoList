@@ -1,5 +1,5 @@
-import {FilterValueType, TodoListType} from '../../App/App';
 import {v1} from 'uuid';
+import {TodolistType} from '../../api/todolist-api';
 //reducer - это чистая функция (это когда функция на одних и тех же данных функция дает один и тот же результат / это функция которая не работает с внешними переменными, не изменяет их и все что нужно получает в параметрах / не должны изменять входящие данные)
 //в параметрах редюсера нужно указать:
 //state - исходный state
@@ -19,22 +19,34 @@ export  type TodolistActionType =
     | ChangeTodoListTitleAT
     | ChangeTodolistFilterAT
 // export type ActionType = Record<string, { type: string; id?: string; title?: string; filter?: FilterValueType }>
+export type FilterValueType = 'all' | 'active' | 'complete'
+
+export type TodolistDomainType = TodolistType & {
+    filter: FilterValueType
+}
 
 export const todoListId_1 = v1()
 export const todoListId_2 = v1()
 
-const initState: TodoListType[] = [
-    {id: todoListId_1, title: 'What to learn', filter: 'all'},
+const initState: TodolistDomainType[] = [
+    {id: todoListId_1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
 ]
 
-export const todolistsReducer = (todolists = initState, action: TodolistActionType): TodoListType[] => {
+
+export const todolistsReducer = (todolists: TodolistDomainType[] = initState, action: TodolistActionType): TodolistDomainType[] => {
     switch (action.type) {
 
         case 'REMOVE-TODOLIST':
             //todoList.filter(tl => tl.id !== todoListId)
             return todolists.filter(tl => tl.id !== action.id)
         case 'ADD-TODOLIST':
-            const newTodoList: TodoListType = {id: action.todolistId, title: action.title, filter: 'all'}
+            const newTodoList: TodolistDomainType = {
+                id: action.todolistId,
+                title: action.title,
+                filter: 'all',
+                addedDate: '',
+                order: 0
+            }
             return [...todolists, newTodoList]
         case 'CHANGE-TODOLIST-TITLE':
             return todolists.map(tl => tl.id === action.id ? {...tl, title: action.title} : tl)

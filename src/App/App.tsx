@@ -19,34 +19,35 @@ import {
 import {ThemeProvider} from '@emotion/react';
 import {createTheme} from '@mui/material/styles';
 import {
-    addTodolistAC
+    addTodolistAC, TodolistDomainType
 } from '../reducers/todolist-reducer/todolists-reducer';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../store/store';
 import {TodoList} from '../components/TodoList/TodoList';
+import {TaskType, TodolistType} from '../api/todolist-api';
 
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
+// export type TaskType = {
+//     id: string
+//     title: string
+//     isDone: boolean
+// }
 
-export type FilterValueType = 'all' | 'active' | 'complete'
 
-export type TodoListType = { // описываем тип одного TodoList
-    id: string
-    title: string
-    filter: FilterValueType
-}
+
+// export type TodoListType = { // описываем тип одного TodoList
+//     id: string
+//     title: string
+//     filter: FilterValueType
+// }
 
 export type TasksStateType = { // стейт с тасками
-    [todoListId: string]: Array<TaskType>
+    [todoListId: string]: TaskType[]
 }
 
 const App = (): JSX.Element => {
 
-    let todolists = useSelector<AppRootStateType, TodoListType[]>(state => state.todolists)
+    let todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolists)
     const dispatch = useDispatch()
 
     const [isDark, setDarkMode] = useState<boolean>(false)

@@ -1,22 +1,46 @@
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './tasks-reducer'
 import {TasksStateType} from '../../App/App';
 import {addTodolistAC, removeTodolistAC} from '../todolist-reducer/todolists-reducer';
+import {TaskPriorities, TaskStatuses} from '../../api/todolist-api';
 
 
 describe('todolistReducer', () => {
     let startState: TasksStateType;
     beforeEach(() => {
         startState = {
+            //f t f
             'todolistId1': [
-                {id: '1', title: 'CSS', isDone: false},
-                {id: '2', title: 'JS', isDone: true},
-                {id: '3', title: 'React', isDone: false}
+                {
+                    id: '1', title: 'CSS', status: TaskStatuses.New,
+                    startDate: '',
+                    deadline: '',
+                    addedDate: '',
+                    order: 0,
+                    priority: TaskPriorities.Low,
+                    todoListId: 'todolistId1',
+                    description: '',
+                },
+                {
+                    id: '2', title: 'JS', status: TaskStatuses.Completed,
+                    startDate: '',
+                    deadline: '',
+                    addedDate: '',
+                    order: 0,
+                    priority: TaskPriorities.Low,
+                    todoListId: 'todolistId1',
+                    description: ''
+                },
+                {
+                    id: '3', title: 'React', status: TaskStatuses.New,
+                    startDate: '',
+                    deadline: '',
+                    addedDate: '',
+                    order: 0,
+                    priority: TaskPriorities.Low,
+                    todoListId: 'todolistId1',
+                    description: '',
+                }
             ],
-            'todolistId2': [
-                {id: '1', title: 'bread', isDone: false},
-                {id: '2', title: 'milk', isDone: true},
-                {id: '3', title: 'tea', isDone: false}
-            ]
         }
 
     });
@@ -49,15 +73,15 @@ describe('todolistReducer', () => {
         expect(endState['todolistId2'].length).toBe(4)
         expect(endState['todolistId2'][0].id).toBeDefined()
         expect(endState['todolistId2'][0].title).toBe('juce')
-        expect(endState['todolistId2'][0].isDone).toBe(false)
+        expect(endState['todolistId2'][0].status).toBe(TaskStatuses.New)
     })
     test('status of specified task should be changed', () => {
-        const action = changeTaskStatusAC('2', false, 'todolistId2')
+        const action = changeTaskStatusAC('2', TaskStatuses.New, 'todolistId2')
 
         const endState = tasksReducer(startState, action)
 
-        expect(endState['todolistId2'][1].isDone).toBeFalsy()
-        expect(endState['todolistId1'][1].isDone).toBeTruthy()
+        expect(endState['todolistId2'][1].status).toBeFalsy()
+        expect(endState['todolistId1'][1].status).toBeTruthy()
     })
 
     test('title of specified task should be changed', () => {

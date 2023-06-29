@@ -3,9 +3,9 @@ import React from 'react';
 import {Task} from './Task';
 import {Provider, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../../store/store';
-import {TaskType} from '../../../App/App';
 import {ReduxStoreProviderDecorator, storyBookStore} from '../../../store/decorators/ReduxStoreProviderDecorator';
 import {action} from '@storybook/addon-actions';
+import {TaskPriorities, TaskStatuses, TaskType} from '../../../api/todolist-api';
 
 const meta: Meta<typeof Task> = {
     title: 'TODOLISTS/Task',
@@ -35,7 +35,18 @@ export const TaskStory = () => {
     return (
         <Task
             todolistId={'todolistId1'}
-            task={task ? task : {id: 'Default', title: 'Default', isDone: false}}
+            task={task ? task : {
+                id: 'Default',
+                title: 'Default',
+                status: TaskStatuses.New,
+                description: '',
+                priority: TaskPriorities.Low,
+                startDate: '',
+                deadline: '',
+                todoListId: '',
+                order: 0,
+                addedDate: ''
+            }}
         />
     );
 };

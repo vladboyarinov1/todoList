@@ -1,18 +1,18 @@
 import {
     addTodolistAC,
-    AddTodolistAT, changeTodolistFilterAC, ChangeTodolistFilterAT, changeTodoListTitleAC, ChangeTodoListTitleAT,
+    AddTodolistAT, changeTodolistFilterAC, ChangeTodolistFilterAT, changeTodoListTitleAC,
     removeTodolistAC,
-    RemoveTodolistAT, todolistsReducer
+    RemoveTodolistAT, TodolistDomainType, todolistsReducer
 
 } from './todolists-reducer';
-import {TodoListType} from '../../App/App';
+import {TodolistType} from '../../api/todolist-api';
 
 describe('todolistReducer', () => {
-    let initialState: TodoListType[];
+    let initialState: TodolistDomainType[];
     beforeEach(() => {
         initialState = [
-            {id: '1', title: 'First Todo List', filter: 'all'},
-            {id: '2', title: 'Second Todo List', filter: 'all'}
+            {id: '1', title: 'First Todo List', filter: 'all', addedDate: '', order: 0},
+            {id: '2', title: 'Second Todo List', filter: 'all', addedDate: '', order: 0}
         ];
     });
 
@@ -20,7 +20,7 @@ describe('todolistReducer', () => {
 
         const action: RemoveTodolistAT = removeTodolistAC('2');
         const expectedState = [
-            {id: '1', title: 'First Todo List', filter: 'all'},
+            {id: '1', title: 'First Todo List', filter: 'all', addedDate: '', order: 0},
         ];
 
         const newState = todolistsReducer(initialState, action);
@@ -32,7 +32,7 @@ describe('todolistReducer', () => {
 
         const expectedState = [
             ...initialState,
-            {id: expect.any(String), title: 'New Todo List', filter: 'all'}
+            {id: expect.any(String), title: 'New Todo List', filter: 'all', addedDate: '', order: 0}
         ];
 
         const newState = todolistsReducer(initialState, action);
@@ -45,8 +45,8 @@ describe('todolistReducer', () => {
 
         const action = changeTodoListTitleAC('newTitleForTodolistWithID2', '2')
         const expectedState = [
-            {id: '1', title: 'First Todo List', filter: 'all'},
-            {id: '2', title: 'newTitleForTodolistWithID2', filter: 'all'}
+            {id: '1', title: 'First Todo List', filter: 'all', addedDate: '', order: 0},
+            {id: '2', title: 'newTitleForTodolistWithID2', filter: 'all', addedDate: '', order: 0}
         ];
 
         const newState = todolistsReducer(initialState, action);
@@ -56,8 +56,8 @@ describe('todolistReducer', () => {
     test('todolist should change the filter', () => {
         const action: ChangeTodolistFilterAT = changeTodolistFilterAC('active', '2')
         const expectedState = [
-            {id: '1', title: 'First Todo List', filter: 'all'},
-            {id: '2', title: 'Second Todo List', filter: 'active'}
+            {id: '1', title: 'First Todo List', filter: 'all', addedDate: '', order: 0},
+            {id: '2', title: 'Second Todo List', filter: 'active', addedDate: '', order: 0}
         ];
 
         const newState = todolistsReducer(initialState, action)
