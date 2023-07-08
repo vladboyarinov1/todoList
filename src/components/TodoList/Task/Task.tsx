@@ -1,12 +1,18 @@
-import React, {FC, memo, useCallback} from 'react';
+import React, {FC, memo, useCallback, useEffect} from 'react';
 import {EditableSpan} from '../../EditableSpan/EditableSpan';
 import {IconButton, ListItem} from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import {SuperCheckBox} from '../../SuperCheckBox/SuperCheckBox';
 import {useDispatch} from 'react-redux';
-import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from '../../../reducers/tasks-reducer/tasks-reducer';
+import {
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    getTasksTC,
+    deleteTaskAC, deleteTaskTC
+} from '../../../reducers/tasks-reducer/tasks-reducer';
 
 import {TaskStatuses, TaskType} from '../../../api/todolist-api';
+import {useAppDispatch} from '../../../store/store';
 
 type TasksPropsType = {
     todolistId: string
@@ -14,12 +20,9 @@ type TasksPropsType = {
 }
 
 export const Task: FC<TasksPropsType> = memo(({todolistId, task}) => {
-    console.log(task.status === 2)
-    const dispatch = useDispatch()
-
+    const dispatch = useAppDispatch()
     const changeTaskStatus = useCallback((taskId: string, current: TaskStatuses) => dispatch(changeTaskStatusAC(taskId, current, todolistId)), [dispatch, todolistId])
-
-    const removeTask = useCallback(() => dispatch(removeTaskAC(task.id, todolistId)), [dispatch, task.id, todolistId])
+    const removeTask = useCallback(() => dispatch(deleteTaskTC(todolistId, task.id)), [dispatch, task.id, todolistId])
 
     const changeTaskTitle = useCallback((title: string) => {
         dispatch(changeTaskTitleAC(task.id, title, todolistId))

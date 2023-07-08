@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import './App.css';
 import {AddItemForm} from '../components/AddItemForm/AddItemForm';
 
@@ -19,36 +19,27 @@ import {
 import {ThemeProvider} from '@emotion/react';
 import {createTheme} from '@mui/material/styles';
 import {
-    addTodolistAC, TodolistDomainType
+    addTodolistAC, getTodolistTC
 } from '../reducers/todolist-reducer/todolists-reducer';
 
-import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from '../store/store';
+import {useSelector} from 'react-redux';
+import {AppDispatchType, AppRootStateType, useAppDispatch} from '../store/store';
 import {TodoList} from '../components/TodoList/TodoList';
 import {TaskType, TodolistType} from '../api/todolist-api';
 
-// export type TaskType = {
-//     id: string
-//     title: string
-//     isDone: boolean
-// }
-
-
-
-// export type TodoListType = { // описываем тип одного TodoList
-//     id: string
-//     title: string
-//     filter: FilterValueType
-// }
 
 export type TasksStateType = { // стейт с тасками
     [todoListId: string]: TaskType[]
 }
 
 const App = (): JSX.Element => {
-
     let todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolists)
-    const dispatch = useDispatch()
+    const dispatch: AppDispatchType = useAppDispatch()
+
+    useEffect(() => {// диспатчим санку, она попадет в Redux
+        dispatch(getTodolistTC())
+    }, [])
+
 
     const [isDark, setDarkMode] = useState<boolean>(false)
 
@@ -65,8 +56,6 @@ const App = (): JSX.Element => {
             mode: mode,
         },
     })
-
-    //todoLists
 
     const addNewTodoList = useCallback((title: string) => {
         dispatch(addTodolistAC(title))
@@ -111,7 +100,7 @@ const App = (): JSX.Element => {
                 </AppBar>
                 <Container fixed>
                     <Grid container sx={{p: '15px 0'}}>
-                        <AddItemForm addItem={addNewTodoList} label='todolist name'/>
+                        <AddItemForm addItem={addNewTodoList} label="todolist name"/>
                     </Grid>
                     <Grid container spacing={4}>{todoListsComponents}</Grid>
                 </Container>

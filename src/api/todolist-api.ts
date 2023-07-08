@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import {FilterValueType} from '../reducers/todolist-reducer/todolists-reducer';
 
 export type TodolistType = {
@@ -58,7 +58,9 @@ export const TodolistApi = {
         //возвращает Promise
     },
     createTodolist(title: string) {
-        return instance.post<ResponseType<{ item: TodolistType }>>(`todo-lists`, {title: title})
+        return instance.post<ResponseType<{ item: TodolistType }>, AxiosResponse<ResponseType>, {
+            title: string
+        }>(`todo-lists`, {title: title}) // в продакшене обычно используют 1 тип (ResponseType<{ item: TodolistType }>)
     },
     deleteTodolist(id: string) {
         return instance.delete<ResponseType>(`todo-lists/${id}`)
@@ -67,10 +69,10 @@ export const TodolistApi = {
         return instance.put<ResponseType>(`todo-lists/${id}`, {title})
     },
     getTasks(todolistId: string) {
-        return instance.get<TaskType[]>(`/todo-lists/${todolistId}/tasks`)
+        return instance.get<any>(`/todo-lists/${todolistId}/tasks`)
     },
     createTask(todolistId: string, title: string) {
-        return instance.post<ResponseType<TaskType>>(`/todo-lists/${todolistId}/tasks`, {title: title})
+        return instance.post<ResponseType<any>>(`/todo-lists/${todolistId}/tasks`, {title: title})
     },
     deleteTask(todolistId: string, taskId: string) {
         return instance.delete<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)

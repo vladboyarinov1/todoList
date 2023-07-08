@@ -1,12 +1,12 @@
-import React, {FC, memo, useCallback, useState} from 'react';
+import React, {FC, memo, useCallback, useEffect, useState} from 'react';
 import {AddItemForm} from '../AddItemForm/AddItemForm';
 import {EditableSpan} from '../EditableSpan/EditableSpan';
 import s from './TodoList.module.css'
 import {IconButton, Typography} from '@mui/material';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from '../../store/store';
-import {addTaskAC} from '../../reducers/tasks-reducer/tasks-reducer';
+import {AppRootStateType, useAppDispatch} from '../../store/store';
+import {addTaskAC, createTaskTC, getTasksTC} from '../../reducers/tasks-reducer/tasks-reducer';
 import {
     changeTodolistFilterAC,
     changeTodoListTitleAC,
@@ -17,6 +17,7 @@ import {
 import {ButtonWithMemo} from '../ButtonWithMemo/ButtonWithMemo';
 import {Task} from './Task/Task';
 import {TaskStatuses, TaskType, TodolistType} from '../../api/todolist-api';
+import {log} from 'util';
 
 
 type TodoListPropsType = {
@@ -28,10 +29,14 @@ type TodoListPropsType = {
 
 export const TodoList: FC<TodoListPropsType> = memo(
     ({todolist}) => {
+        const dispatch = useAppDispatch()
         const {id, title} = todolist
         const [filter, setFilter] = useState<FilterValueType>('all')
         let tasks: TaskType[] = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
-        const dispatch = useDispatch()
+
+        useEffect(() => {
+            dispatch(getTasksTC(id))
+        }, [])
 
 
         const onClickAllFilter = useCallback(() => {
@@ -49,7 +54,7 @@ export const TodoList: FC<TodoListPropsType> = memo(
             setFilter('complete')
         }, [dispatch, id])
 
-        const addTask = useCallback((title: string) => dispatch(addTaskAC(title, id)), [dispatch, id])
+        const addTask = useCallback((title: string) => dispatch(createTaskTC(id, title)), [dispatch, id])
 
         const changeTodoListTitle = useCallback((title: string) => {
             dispatch(changeTodoListTitleAC(title, id))
@@ -65,22 +70,26 @@ export const TodoList: FC<TodoListPropsType> = memo(
                     return tasksList
             }
         }, [])
-        const filteredTasks = getFilterValues(tasks, filter)
+
+        let filteredTasks: TaskType[] = getFilterValues(tasks, filter)
 
         return (
             <div className={s.todolist}>
                 <Typography variant="h5" align="center" fontWeight="bold" padding="10px 0">
                     <EditableSpan title={title} changeTitle={changeTodoListTitle}/>
-                    <IconButton onClick={() => dispatch(removeTodolistAC(id))}
+                    <IconButton onClick={() => {
+                        return dispatch(removeTodolistAC(id))
+                    }}
                                 size={'small'} sx={{}}><RestoreFromTrashIcon/></IconButton>
                 </Typography>
                 <AddItemForm addItem={addTask} label={'task name'}/>
                 {
-                    filteredTasks.length ? filteredTasks.map(t => <Task key={t.id} todolistId={id} task={t}/>)
+                    filteredTasks ? filteredTasks?.map(t => <Task key={t.id} todolistId={id} task={t}/>)
                         :
                         <div>
                             Task list is empty</div>
                 }
+
                 <div className={s.btnFilterContainer}>
                     <ButtonWithMemo title={'all'} variant={'contained'} size={'small'}
                                     color={filter === 'all' ? 'secondary' : 'primary'}
