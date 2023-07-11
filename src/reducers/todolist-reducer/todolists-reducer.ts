@@ -1,14 +1,6 @@
 import {v1} from 'uuid';
 import {TodolistApi, TodolistType} from '../../api/todolist-api';
 import {Dispatch} from 'redux';
-import {useEffect} from 'react';
-//reducer - это чистая функция (это когда функция на одних и тех же данных функция дает один и тот же результат / это функция которая не работает с внешними переменными, не изменяет их и все что нужно получает в параметрах / не должны изменять входящие данные)
-//в параметрах редюсера нужно указать:
-//state - исходный state
-//action - инструкция о том, какие действия мы хотим произвести + (еще нужно передать определенный набор данных необходимых для выполнения этой инструкции (параметры)) action - object
-//должна вернуть новый state
-
-//объект action - это объект, который обязательно имеет свойство type, и содержит еще какие то дополнительные данные, которые можно упаковать в объект payload
 
 export type RemoveTodolistAT = ReturnType<typeof removeTodolistAC>
 export type AddTodolistAT = ReturnType<typeof addTodolistAC>
@@ -32,15 +24,12 @@ export type TodolistDomainType = TodolistType & {
 export const todoListId_1 = v1()
 export const todoListId_2 = v1()
 
-const initState: TodolistDomainType[] = [
-    // {id: todoListId_1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
-]
+const initState: TodolistDomainType[] = []
 
 
 export const todolistsReducer = (todolists: TodolistDomainType[] = initState, action: TodolistActionType): TodolistDomainType[] => {
-    // console.log(initState[0].id)
-    switch (action.type) {
 
+    switch (action.type) {
         case 'REMOVE-TODOLIST':
             return todolists.filter(tl => tl.id !== action.id)
         case 'ADD-TODOLIST':
@@ -51,7 +40,11 @@ export const todolistsReducer = (todolists: TodolistDomainType[] = initState, ac
                 addedDate: '',
                 order: 0
             }
-            return [...todolists, newTodoList]
+
+            return [
+                newTodoList,
+                ...todolists
+            ]
         case 'CHANGE-TODOLIST-TITLE':
             return todolists.map(tl => tl.id === action.id ? {...tl, title: action.title} : tl)
         case 'CHANGE-TODOLIST-FILTER':
@@ -66,7 +59,9 @@ export const todolistsReducer = (todolists: TodolistDomainType[] = initState, ac
 export const removeTodolistAC = (id: string) => {
     return {type: 'REMOVE-TODOLIST', id} as const
 }
-export const addTodolistAC = (title: string) => ({type: 'ADD-TODOLIST', title, todolistId: v1()} as const)
+export const addTodolistAC = (title: string, id: string) => {
+    return ({type: 'ADD-TODOLIST', title, todolistId: id} as const)
+}
 export const changeTodoListTitleAC = (title: string, id: string) => ({
     type: 'CHANGE-TODOLIST-TITLE', title, id
 } as const)
@@ -77,7 +72,26 @@ export const setTodolistAC = (todos: TodolistType[]) => ({type: 'SET-TODOLIST', 
 
 export const getTodolistTC = () => (dispatch: Dispatch) => {
     TodolistApi.getTodolists()
-        .then((res) => {
+        .then(res => {
             dispatch(setTodolistAC(res.data))
         })
+}
+
+export const deleteTodolistTC = (id: string) => (dispatch: Dispatch) => {
+    TodolistApi.deleteTodolist(id)
+        .then(() => {
+            dispatch(removeTodolistAC(id))
+        })
+}
+
+export const addTodolistTC = (title: string) => (dispatch: Dispatch) => {
+    TodolistApi.createTodolist(title)
+        .then((res) => {
+            dispatch(addTodolistAC(res.data.data.item.title, res.data.data.item.id))
+        })
+}
+
+export const updateTodolistTC = (id: string, title: string) => (dispatch: Dispatch) => {
+    TodolistApi.updateTodolistTitle(id, title)
+        .then(() => dispatch(changeTodoListTitleAC(title, id)))
 }

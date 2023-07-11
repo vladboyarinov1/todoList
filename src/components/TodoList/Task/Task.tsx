@@ -8,7 +8,7 @@ import {
     changeTaskStatusAC,
     changeTaskTitleAC,
     getTasksTC,
-    deleteTaskAC, deleteTaskTC
+    deleteTaskAC, deleteTaskTC, updateTaskTC
 } from '../../../reducers/tasks-reducer/tasks-reducer';
 
 import {TaskStatuses, TaskType} from '../../../api/todolist-api';
@@ -21,11 +21,13 @@ type TasksPropsType = {
 
 export const Task: FC<TasksPropsType> = memo(({todolistId, task}) => {
     const dispatch = useAppDispatch()
-    const changeTaskStatus = useCallback((taskId: string, current: TaskStatuses) => dispatch(changeTaskStatusAC(taskId, current, todolistId)), [dispatch, todolistId])
+
+    const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses) => dispatch(updateTaskTC(todolistId, taskId, {status})), [dispatch, todolistId])
+
     const removeTask = useCallback(() => dispatch(deleteTaskTC(todolistId, task.id)), [dispatch, task.id, todolistId])
 
     const changeTaskTitle = useCallback((title: string) => {
-        dispatch(changeTaskTitleAC(task.id, title, todolistId))
+        dispatch(updateTaskTC(todolistId, task.id, {title}))
     }, [dispatch, task.id, todolistId])
 
     return (

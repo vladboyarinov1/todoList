@@ -4,41 +4,35 @@ import {EditableSpan} from '../EditableSpan/EditableSpan';
 import s from './TodoList.module.css'
 import {IconButton, Typography} from '@mui/material';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType, useAppDispatch} from '../../store/store';
-import {addTaskAC, createTaskTC, getTasksTC} from '../../reducers/tasks-reducer/tasks-reducer';
+import {useSelector} from 'react-redux';
+import {AppRootStateType, useAppDispatch, useAppSelector} from '../../store/store';
+import {createTaskTC, getTasksTC} from '../../reducers/tasks-reducer/tasks-reducer';
 import {
     changeTodolistFilterAC,
-    changeTodoListTitleAC,
+    changeTodoListTitleAC, deleteTodolistTC,
     FilterValueType,
-    removeTodolistAC,
-    TodolistDomainType
+    removeTodolistAC, updateTodolistTC,
 } from '../../reducers/todolist-reducer/todolists-reducer';
 import {ButtonWithMemo} from '../ButtonWithMemo/ButtonWithMemo';
 import {Task} from './Task/Task';
 import {TaskStatuses, TaskType, TodolistType} from '../../api/todolist-api';
-import {log} from 'util';
-
 
 type TodoListPropsType = {
     todolist: TodolistType
 }
-// type TodoListPropsType = {
-//
-// }
 
 export const TodoList: FC<TodoListPropsType> = memo(
     ({todolist}) => {
         const dispatch = useAppDispatch()
         const {id, title} = todolist
         const [filter, setFilter] = useState<FilterValueType>('all')
-        let tasks: TaskType[] = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
+        let tasks = useAppSelector<TaskType[]>(state => state.tasks[id])
 
         useEffect(() => {
             dispatch(getTasksTC(id))
-        }, [])
+        }, [dispatch, id])
 
-
+        const removeTodolist = () => dispatch(deleteTodolistTC(id))
         const onClickAllFilter = useCallback(() => {
             dispatch(changeTodolistFilterAC('all', id))
             setFilter('all')
@@ -57,7 +51,7 @@ export const TodoList: FC<TodoListPropsType> = memo(
         const addTask = useCallback((title: string) => dispatch(createTaskTC(id, title)), [dispatch, id])
 
         const changeTodoListTitle = useCallback((title: string) => {
-            dispatch(changeTodoListTitleAC(title, id))
+            dispatch(updateTodolistTC(id, title))
         }, [dispatch, id])
 
         const getFilterValues = useCallback((tasksList: Array<TaskType>, filterValue: FilterValueType) => {
@@ -71,25 +65,23 @@ export const TodoList: FC<TodoListPropsType> = memo(
             }
         }, [])
 
-        let filteredTasks: TaskType[] = getFilterValues(tasks, filter)
+        let tasksForRender: TaskType[] = getFilterValues(tasks, filter)
+
+        const tasksList = tasksForRender.length ? tasksForRender?.map(t => <Task key={t.id} todolistId={id}
+                                                                                 task={t}/>) :
+            <div className={s.emptyTasksText}>Task list is empty</div>
 
         return (
             <div className={s.todolist}>
                 <Typography variant="h5" align="center" fontWeight="bold" padding="10px 0">
                     <EditableSpan title={title} changeTitle={changeTodoListTitle}/>
-                    <IconButton onClick={() => {
-                        return dispatch(removeTodolistAC(id))
-                    }}
-                                size={'small'} sx={{}}><RestoreFromTrashIcon/></IconButton>
+                    <IconButton onClick={removeTodolist}
+                                size={'small'}><RestoreFromTrashIcon/></IconButton>
                 </Typography>
                 <AddItemForm addItem={addTask} label={'task name'}/>
                 {
-                    filteredTasks ? filteredTasks?.map(t => <Task key={t.id} todolistId={id} task={t}/>)
-                        :
-                        <div>
-                            Task list is empty</div>
+                    tasksList
                 }
-
                 <div className={s.btnFilterContainer}>
                     <ButtonWithMemo title={'all'} variant={'contained'} size={'small'}
                                     color={filter === 'all' ? 'secondary' : 'primary'}
@@ -105,7 +97,6 @@ export const TodoList: FC<TodoListPropsType> = memo(
             </div>
         );
     });
-
 // , (prevProps, nextProps) => {
 //     return (
 //         prevProps.todolist.id === nextProps.todolist.id &&

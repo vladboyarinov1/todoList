@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import './App.css';
 import {AddItemForm} from '../components/AddItemForm/AddItemForm';
-
+import '../fonts/Nunito/myfont.ttf'
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
@@ -19,11 +19,11 @@ import {
 import {ThemeProvider} from '@emotion/react';
 import {createTheme} from '@mui/material/styles';
 import {
-    addTodolistAC, getTodolistTC
+    addTodolistAC, addTodolistTC, getTodolistTC, TodolistDomainType
 } from '../reducers/todolist-reducer/todolists-reducer';
 
 import {useSelector} from 'react-redux';
-import {AppDispatchType, AppRootStateType, useAppDispatch} from '../store/store';
+import {AppDispatchType, AppRootStateType, useAppDispatch, useAppSelector} from '../store/store';
 import {TodoList} from '../components/TodoList/TodoList';
 import {TaskType, TodolistType} from '../api/todolist-api';
 
@@ -33,7 +33,7 @@ export type TasksStateType = { // стейт с тасками
 }
 
 const App = (): JSX.Element => {
-    let todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolists)
+    let todolists = useAppSelector<TodolistDomainType[]>(state => state.todolists)
     const dispatch: AppDispatchType = useAppDispatch()
 
     useEffect(() => {// диспатчим санку, она попадет в Redux
@@ -46,6 +46,9 @@ const App = (): JSX.Element => {
     const mode = isDark ? 'dark' : 'light'
 
     const customTheme = createTheme({
+        typography: {
+            fontFamily: 'Nunito'
+        },
         palette: {
             primary: {
                 main: '#1976d2',
@@ -58,7 +61,7 @@ const App = (): JSX.Element => {
     })
 
     const addNewTodoList = useCallback((title: string) => {
-        dispatch(addTodolistAC(title))
+        dispatch(addTodolistTC(title))
     }, [dispatch])
 
 
