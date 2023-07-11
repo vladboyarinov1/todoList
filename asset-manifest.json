@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/vladboyarinov1/todolist/static/css/main.5bdf69d6.css",
-    "main.js": "/vladboyarinov1/todolist/static/js/main.826e8af2.js",
+    "main.css": "/vladboyarinov1/todolist/static/css/main.882c4ac9.css",
+    "main.js": "/vladboyarinov1/todolist/static/js/main.77e82693.js",
     "static/js/787.97a945da.chunk.js": "/vladboyarinov1/todolist/static/js/787.97a945da.chunk.js",
+    "static/media/myfont.ttf": "/vladboyarinov1/todolist/static/media/myfont.4a3eef3e0a61b7eb3eda.ttf",
     "index.html": "/vladboyarinov1/todolist/index.html",
-    "main.5bdf69d6.css.map": "/vladboyarinov1/todolist/static/css/main.5bdf69d6.css.map",
-    "main.826e8af2.js.map": "/vladboyarinov1/todolist/static/js/main.826e8af2.js.map",
+    "main.882c4ac9.css.map": "/vladboyarinov1/todolist/static/css/main.882c4ac9.css.map",
+    "main.77e82693.js.map": "/vladboyarinov1/todolist/static/js/main.77e82693.js.map",
     "787.97a945da.chunk.js.map": "/vladboyarinov1/todolist/static/js/787.97a945da.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.5bdf69d6.css",
-    "static/js/main.826e8af2.js"
+    "static/css/main.882c4ac9.css",
+    "static/js/main.77e82693.js"
   ]
 }
