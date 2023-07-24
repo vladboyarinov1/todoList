@@ -3,7 +3,7 @@ import {tasksReducer} from '../reducers/tasks-reducer/tasks-reducer';
 import {todolistsReducer} from '../reducers/todolist-reducer/todolists-reducer';
 import thunk, {ThunkDispatch} from 'redux-thunk';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
-import {useState} from 'react';
+import {appReducer} from '../App/app-reducer';
 
 // объединяя reducer-ы с помощью combineReducers,
 //типизировали хук диспатч, по сути сделали свой хук и лучше его вынести отдельно
@@ -12,7 +12,8 @@ export const useAppDispatch = () => useDispatch<AppDispatchType>()
 // мы задаём структуру нашего единственного объекта-состояния
 const rootReducer = combineReducers({
     tasks: tasksReducer,
-    todolists: todolistsReducer
+    todolists: todolistsReducer,
+    app: appReducer
 })
 // непосредственно создаём store
 export const store = legacy_createStore(rootReducer, applyMiddleware(thunk))

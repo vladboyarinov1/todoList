@@ -7,6 +7,7 @@ import {
 import {TaskPriorities, TaskStatuses, TaskType, TodolistApi, UpdateTaskModelType} from '../../api/todolist-api';
 import {Dispatch} from 'redux';
 import {AppRootStateType} from '../../store/store';
+import {setErrorAC, SetErrorACType} from '../../App/app-reducer';
 
 export type RemoveTaskAT = ReturnType<typeof deleteTaskAC>//верни нам тип, то что вернет функция removeTaskAC
 export type AddTaskAT = ReturnType<typeof addTaskAC>
@@ -22,6 +23,7 @@ export type ActionType =
     | RemoveTodolistAT
     | SetTodolistAT
     | ReturnType<typeof setTasksAC>
+    | SetErrorACType
 
 type FlexType = {
     title?: string
@@ -32,9 +34,15 @@ type FlexType = {
     deadline?: string
 }
 
-const initialState = {}
+export enum ResultCode {
+    OK = 0,
+    ERROR = 1,
+    CAPTCHA = 10,
+}
 
-export const tasksReducer = (state: TasksStateType = initialState, action: ActionType): TasksStateType => {
+
+
+export const tasksReducer = (state: TasksStateType = {}, action: ActionType): TasksStateType => {
     switch (action.type) {
 
         case 'SET-TASKS':
@@ -123,9 +131,21 @@ export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: D
         .then(() => dispatch(deleteTaskAC(taskId, todolistId)))
 }
 
-export const createTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
+
+export const createTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch<ActionType>) => {
     TodolistApi.createTask(todolistId, title)
-        .then((res) => dispatch(addTaskAC(res.data.data.item)))
+
+        .then((res) => {
+            if (res.data.resultCode === ResultCode.OK) {
+                dispatch(addTaskAC(res.data.data.item))
+            } else {
+                if (res.data.messages.length) {
+                    dispatch(setErrorAC(res.data.messages[0]))
+                } else {
+                    dispatch(setErrorAC('Some error')) // на случай, если с бэка пришла пустая ошибка
+                }
+            }
+        })
 }
 
 export const updateTaskTC = (todolistId: string, taskId: string, data: FlexType) => (dispatch: Dispatch, getState: () => AppRootStateType) => {
