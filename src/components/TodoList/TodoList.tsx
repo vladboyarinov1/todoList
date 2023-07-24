@@ -16,13 +16,16 @@ import {
 import {ButtonWithMemo} from '../ButtonWithMemo/ButtonWithMemo';
 import {Task} from './Task/Task';
 import {TaskStatuses, TaskType, TodolistType} from '../../api/todolist-api';
+import {RequestStatusType} from '../../App/app-reducer';
+import {log} from 'util';
 
 type TodoListPropsType = {
     todolist: TodolistType
+    entityStatus: RequestStatusType
 }
 
 export const TodoList: FC<TodoListPropsType> = memo(
-    ({todolist}) => {
+    ({todolist, entityStatus}) => {
         const dispatch = useAppDispatch()
         const {id, title} = todolist
         const [filter, setFilter] = useState<FilterValueType>('all')
@@ -76,7 +79,8 @@ export const TodoList: FC<TodoListPropsType> = memo(
                 <Typography variant="h5" align="center" fontWeight="bold" padding="10px 0">
                     <EditableSpan title={title} changeTitle={changeTodoListTitle}/>
                     <IconButton onClick={removeTodolist}
-                                size={'small'}><RestoreFromTrashIcon/></IconButton>
+                                size={'small'}
+                                disabled={entityStatus === 'loading'}><RestoreFromTrashIcon/></IconButton>
                 </Typography>
                 <AddItemForm addItem={addTask} label={'task name'}/>
                 {

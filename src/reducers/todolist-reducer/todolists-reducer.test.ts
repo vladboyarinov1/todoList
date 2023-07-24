@@ -51,8 +51,8 @@ describe('todolistReducer', () => {
         const action = changeTodoListTitleAC('newTitleForTodolistWithID2', '2')
 
         const expectedState: TodolistDomainType[] = [
-            {id: '1', title: 'First Todo List', filter: 'all', addedDate: '', order: 0},
-            {id: '2', title: '1', filter: 'all', addedDate: '', order: 0}
+            {id: '1', title: 'First Todo List', filter: 'all', addedDate: '', order: 0, entityStatus: 'idle'},
+            {id: '2', title: '1', filter: 'all', addedDate: '', order: 0, entityStatus: 'idle'}
         ];
 
         const newState = todolistsReducer(expectedState, action);

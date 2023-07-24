@@ -74,7 +74,7 @@ const App = (): JSX.Element => {
         return (
             <Grid key={tl.id} item>
                 <Paper elevation={12}>
-                    <TodoList todolist={tl}/>
+                    <TodoList todolist={tl} entityStatus={tl.entityStatus}/>
                 </Paper>
             </Grid>
         )
