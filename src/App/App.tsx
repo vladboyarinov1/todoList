@@ -1,6 +1,5 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
-import {AddItemForm} from '../components/AddItemForm/AddItemForm';
 import '../fonts/Nunito/myfont.ttf'
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -10,32 +9,30 @@ import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Switch from '@mui/material/Switch';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import {ThemeProvider} from '@emotion/react';
 import {createTheme} from '@mui/material/styles';
 import {
-    addTodolistTC, getTodolistTC, TodolistDomainType
+    getTodolistTC
 } from '../reducers/todolist-reducer/todolists-reducer';
 
 import {AppDispatchType, useAppDispatch, useAppSelector} from '../store/store';
-import {TodoList} from '../components/TodoList/TodoList';
 import {TaskType} from '../api/todolist-api';
-import LinearProgress from '@mui/material/LinearProgress';
-import {RequestStatusType, setLoadingStatusAC} from './app-reducer';
+import {RequestStatusType} from './app-reducer';
 import {Box, CircularProgress} from '@mui/material';
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
-
+import {Navigate, Route, Routes} from 'react-router-dom';
+import {Login} from '../features/Login/Login';
+import {TodolistsList} from '../components/TodolistsList/TodolistsList';
+import {Error404} from '../components/ErrorPage/ErrorPage';
 
 export type TasksStateType = { // стейт с тасками
     [todoListId: string]: TaskType[]
 }
 
 const App = (): JSX.Element => {
-    let todolists = useAppSelector<TodolistDomainType[]>(state => state.todolists)
 
     let status = useAppSelector<RequestStatusType>(state => state.app.status)
 
@@ -44,7 +41,6 @@ const App = (): JSX.Element => {
     useEffect(() => {// диспатчим санку, она попадет в Redux
         dispatch(getTodolistTC())
     }, [])
-
 
     const [isDark, setDarkMode] = useState<boolean>(false)
 
@@ -63,21 +59,6 @@ const App = (): JSX.Element => {
             },
             mode: mode,
         },
-    })
-
-    const addNewTodoList = useCallback((title: string) => {
-        dispatch(addTodolistTC(title))
-    }, [dispatch])
-
-
-    const todoListsComponents = todolists.map(tl => {
-        return (
-            <Grid key={tl.id} item>
-                <Paper elevation={12}>
-                    <TodoList todolist={tl} entityStatus={tl.entityStatus}/>
-                </Paper>
-            </Grid>
-        )
     })
 
     return (
@@ -107,6 +88,7 @@ const App = (): JSX.Element => {
                             <Button color="inherit">Login</Button>
                         </Toolbar>
                     </AppBar>
+
                     {status === 'loading' ? <Box
                         sx={{
                             display: 'flex',
@@ -116,29 +98,20 @@ const App = (): JSX.Element => {
                         }}>
                         <CircularProgress sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}/>
                     </Box> : <Container fixed>
-                        <Grid container sx={{p: '15px 0'}}>
-                            <AddItemForm addItem={addNewTodoList} label="todolist name"/>
-                        </Grid>
-                        <Grid container spacing={4}>{todoListsComponents}</Grid>
+                        <Routes>
+                            <Route path={'/'} element={<TodolistsList/>}/>
+                            <Route path={'/login'} element={<Login/>}/>
+                            <Route path={'/404'} element={<Error404/>}/>
+                            <Route path={'*'} element={<Navigate to={'/404'}/>}/>
+                        </Routes>
                     </Container>
-
                     }
                     <ErrorSnackbar/>
 
                 </div>
             </ThemeProvider>
-
         </>
-
     );
 }
 
 export default App;
-
-
-// {
-//     status === 'loading' &&
-//     <Box sx={{display: 'flex', border: '1px solid red', justifyContent: 'center', alignItems: 'centre'}}>
-//         <CircularProgress/>
-//     </Box>
-// }

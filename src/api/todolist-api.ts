@@ -1,5 +1,6 @@
 import axios, {AxiosResponse} from 'axios';
 import {FilterValueType} from '../reducers/todolist-reducer/todolists-reducer';
+import {FormValuesType} from '../features/Login/Login';
 
 export type TodolistType = {
     id: string
@@ -62,6 +63,15 @@ const instance = axios.create({
     withCredentials: true
 })
 //первая точка входа данных
+export const AuthApi = {
+    login(data: FormValuesType) {
+        return instance.post<{ title: string }, AxiosResponse<ResponseType<{
+            userId: number
+        }>>, FormValuesType>(`auth/login`, data)
+    },
+}
+
+
 export const TodolistApi = {
     getTodolists() {
         // return axios.get(`${baseUrl}todo-lists`, settings) //сразу в состоянии pending

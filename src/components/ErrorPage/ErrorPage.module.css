@@ -1,0 +1,24 @@
+.error404 {
+    max-width: 100%; /* Сделать картинку адаптивной */
+    max-height: 100%; /* Сделать картинку адаптивной */
+    object-fit: contain; /* Сохранить пропорции картинки */
+
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+@media screen and (max-width: 760px) {
+    .container {
+
+    }
+
+    .error404 {
+
+    }
+}
