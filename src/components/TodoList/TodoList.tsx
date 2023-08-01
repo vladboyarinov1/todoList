@@ -82,7 +82,7 @@ export const TodoList: FC<TodoListPropsType> = memo(
                                 size={'small'}
                                 disabled={entityStatus === 'loading'}><RestoreFromTrashIcon/></IconButton>
                 </Typography>
-                <AddItemForm addItem={addTask} label={'task name'}/>
+                <AddItemForm addItem={addTask} label={'task name'} disabled={entityStatus === 'loading'}/>
                 {
                     tasksList
                 }

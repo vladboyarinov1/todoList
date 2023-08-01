@@ -8,7 +8,7 @@ export type TodolistType = {
     order: number
 }
 //T - Type, прилетает динамически
-type ResponseType<T = {}> = {
+export type ResponseType<T = {}> = {
     resultCode: number
     fieldsErrors: []
     messages: string[],

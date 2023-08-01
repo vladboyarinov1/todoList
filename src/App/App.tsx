@@ -25,7 +25,7 @@ import {AppDispatchType, useAppDispatch, useAppSelector} from '../store/store';
 import {TodoList} from '../components/TodoList/TodoList';
 import {TaskType} from '../api/todolist-api';
 import LinearProgress from '@mui/material/LinearProgress';
-import {RequestStatusType, setStatusAC} from './app-reducer';
+import {RequestStatusType, setLoadingStatusAC} from './app-reducer';
 import {Box, CircularProgress} from '@mui/material';
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 

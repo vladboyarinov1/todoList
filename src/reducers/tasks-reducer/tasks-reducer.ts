@@ -8,41 +8,9 @@ import {TaskPriorities, TaskStatuses, TaskType, TodolistApi, UpdateTaskModelType
 import {Dispatch} from 'redux';
 import {AppRootStateType} from '../../store/store';
 import {setErrorAC, SetErrorACType} from '../../App/app-reducer';
+import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 
-export type RemoveTaskAT = ReturnType<typeof deleteTaskAC>//верни нам тип, то что вернет функция removeTaskAC
-export type AddTaskAT = ReturnType<typeof addTaskAC>
-export type ChangeTaskStatusAT = ReturnType<typeof changeTaskStatusAC>
-export type ChangeTaskTitleAT = ReturnType<typeof changeTaskTitleAC>
-
-export type ActionType =
-    RemoveTaskAT
-    | AddTaskAT
-    | ChangeTaskStatusAT
-    | ChangeTaskTitleAT
-    | AddTodolistAT
-    | RemoveTodolistAT
-    | SetTodolistAT
-    | ReturnType<typeof setTasksAC>
-    | SetErrorACType
-
-type FlexType = {
-    title?: string
-    description?: string
-    priority?: TaskPriorities
-    status?: TaskStatuses
-    startDate?: string
-    deadline?: string
-}
-
-export enum ResultCode {
-    OK = 0,
-    ERROR = 1,
-    CAPTCHA = 10,
-}
-
-
-
-export const tasksReducer = (state: TasksStateType = {}, action: ActionType): TasksStateType => {
+export const tasksReducer = (state: TasksStateType = {}, action: TasksActionType): TasksStateType => {
     switch (action.type) {
 
         case 'SET-TASKS':
@@ -128,24 +96,28 @@ export const getTasksTC = (todolistId: string) => (dispatch: Dispatch) => Todoli
 
 export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch) => {
     TodolistApi.deleteTask(todolistId, taskId)
-        .then(() => dispatch(deleteTaskAC(taskId, todolistId)))
+        .then((res) => {
+            if (res.data.resultCode === ResultCode.OK) {
+                dispatch(deleteTaskAC(taskId, todolistId))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
+        })
+        .catch((e) => handleServerNetworkError(e, dispatch))
 }
 
 
-export const createTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch<ActionType>) => {
+export const createTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch<TasksActionType>) => {
     TodolistApi.createTask(todolistId, title)
 
         .then((res) => {
             if (res.data.resultCode === ResultCode.OK) {
                 dispatch(addTaskAC(res.data.data.item))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(setErrorAC(res.data.messages[0]))
-                } else {
-                    dispatch(setErrorAC('Some error')) // на случай, если с бэка пришла пустая ошибка
-                }
+                handleServerAppError(res.data, dispatch)
             }
         })
+        .catch((e) => handleServerNetworkError(e, dispatch))
 }
 
 export const updateTaskTC = (todolistId: string, taskId: string, data: FlexType) => (dispatch: Dispatch, getState: () => AppRootStateType) => {
@@ -161,9 +133,48 @@ export const updateTaskTC = (todolistId: string, taskId: string, data: FlexType)
             ...data
         }
         TodolistApi.updateTask(todolistId, taskId, model)
-            .then(() => {
-                dispatch(changeTaskStatusAC(taskId, model, todolistId))
+
+            .then((res) => {
+                if (res.data.resultCode === ResultCode.OK) {
+                    dispatch(changeTaskStatusAC(taskId, model, todolistId))
+                } else {
+                    handleServerAppError(res.data, dispatch)
+                }
             })
+            .catch((e) => handleServerNetworkError(e, dispatch))
     }
+}
+
+
+//types
+export type RemoveTaskAT = ReturnType<typeof deleteTaskAC>//верни нам тип, то что вернет функция removeTaskAC
+export type AddTaskAT = ReturnType<typeof addTaskAC>
+export type ChangeTaskStatusAT = ReturnType<typeof changeTaskStatusAC>
+export type ChangeTaskTitleAT = ReturnType<typeof changeTaskTitleAC>
+
+export type TasksActionType =
+    RemoveTaskAT
+    | AddTaskAT
+    | ChangeTaskStatusAT
+    | ChangeTaskTitleAT
+    | AddTodolistAT
+    | RemoveTodolistAT
+    | SetTodolistAT
+    | ReturnType<typeof setTasksAC>
+    | SetErrorACType
+
+type FlexType = {
+    title?: string
+    description?: string
+    priority?: TaskPriorities
+    status?: TaskStatuses
+    startDate?: string
+    deadline?: string
+}
+
+export enum ResultCode {
+    OK = 0,
+    ERROR = 1,
+    CAPTCHA = 10,
 }
 

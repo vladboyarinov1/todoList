@@ -1,14 +1,16 @@
 import React, {ChangeEvent, FC, memo, useState} from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import {IconButton, TextField} from '@mui/material';
+import {RequestStatusType} from '../../App/app-reducer';
 
 type AddItemFormProps = {
     addItem: (title: string) => void
     label: string
+    disabled?: boolean
 }
 
 export const AddItemForm: FC<AddItemFormProps> = memo((props) => {
-    const {addItem, label} = props
+    const {addItem, label, disabled} = props
 
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
@@ -42,8 +44,8 @@ export const AddItemForm: FC<AddItemFormProps> = memo((props) => {
             <TextField onChange={changeLocalTitle} value={title} onKeyDown={addItemEnter}
                        error={error} size={'small'}
                        onBlur={onBlurHandler}
-                       label={error ? errorMessage : label}/>
-            <IconButton onClick={addItemHandler} size={'small'} disabled={taskNotAdd}
+                       label={error ? errorMessage : label} disabled={disabled}/>
+            <IconButton onClick={addItemHandler} size={'small'} disabled={taskNotAdd || disabled}
                         style={{}}><AddIcon/></IconButton>
         </div>
     );
