@@ -2,7 +2,7 @@
   "name": "todolist",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://github.com/vladboyarinov1/todolist/",
+  "homepage": "https://vladboyarinov1.github.io/todolist/",
   "dependencies": {
     "@emotion/react": "^11.10.8",
     "@emotion/styled": "^11.10.8",
