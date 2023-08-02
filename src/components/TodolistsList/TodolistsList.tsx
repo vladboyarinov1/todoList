@@ -1,16 +1,27 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import Grid from '@mui/material/Grid';
 import {AddItemForm} from '../AddItemForm/AddItemForm';
 import Paper from '@mui/material/Paper';
 import {TodoList} from '../TodoList/TodoList';
 import {AppDispatchType, useAppDispatch, useAppSelector} from '../../store/store';
-import {addTodolistTC, TodolistDomainType} from '../../reducers/todolist-reducer/todolists-reducer';
+import {addTodolistTC, getTodolistTC, TodolistDomainType} from '../../reducers/todolist-reducer/todolists-reducer';
 import {Navigate} from 'react-router-dom';
+import {Box, CircularProgress} from '@mui/material';
+import {RequestStatusType} from '../../App/app-reducer';
 
 export const TodolistsList: FC = () => {
 
     let todolists = useAppSelector<TodolistDomainType[]>(state => state.todolists)
-    let isLogginIn = useAppSelector<any>(state => state.auth.isLoggedIn)
+    let isLoginIn = useAppSelector<any>(state => state.auth.isLoggedIn)
+
+    let status = useAppSelector<RequestStatusType>(state => state.app.status)
+
+
+    useEffect(() => {// диспатчим санку, она попадет в Redux
+        if (!isLoginIn) return
+        dispatch(getTodolistTC())
+    }, [])
+
 
     const dispatch: AppDispatchType = useAppDispatch()
 
@@ -28,15 +39,27 @@ export const TodolistsList: FC = () => {
         )
     })
 
-    if (!isLogginIn) {
+    if (!isLoginIn) {
         return <Navigate to={'/login'}/>
     }
 
     return (
         <>
-            <Grid container sx={{p: '15px 0'}}>
-                <AddItemForm addItem={addNewTodoList} label="todolist name"/>
-            </Grid>
-            <Grid container spacing={4}>{todoListsComponents}</Grid></>
+          {status === 'loading' ? <Box
+              sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  minHeight: `calc(100vh - ${65}px)`,
+                  alignItems: 'center'
+              }}>
+              <CircularProgress sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}/>
+          </Box> :
+              <>
+              <Grid container sx={{p: '15px 0'}}>
+                  <AddItemForm addItem={addNewTodoList} label="todolist name"/>
+              </Grid>
+              <Grid container spacing={4}>{todoListsComponents}</Grid>
+          </>}
+        </>
     );
 };

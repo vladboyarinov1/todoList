@@ -83,7 +83,7 @@ export const deleteTodolistTC = (id: string) => (dispatch: Dispatch<RootActionTy
         .then((res) => {
             if (res.data.resultCode === ResultCode.OK) {
                 dispatch(removeTodolistAC(id))
-                dispatch(setLoadingStatusAC('succeeded'))
+                // dispatch(setLoadingStatusAC('succeeded'))
             } else {
                 handleServerAppError(res.data, dispatch)
             }

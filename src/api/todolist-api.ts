@@ -69,6 +69,9 @@ export const AuthApi = {
             userId: number
         }>>, FormValuesType>(`auth/login`, data)
     },
+    me() {
+        return instance.get(`auth/me`)
+    }
 }
 
 

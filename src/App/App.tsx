@@ -27,6 +27,7 @@ import {Navigate, Route, Routes} from 'react-router-dom';
 import {Login} from '../features/Login/Login';
 import {TodolistsList} from '../components/TodolistsList/TodolistsList';
 import {Error404} from '../components/ErrorPage/ErrorPage';
+import {initializeAppTC, setIsInitializedAC} from '../reducers/auth-reducer/auth-reducer';
 
 export type TasksStateType = { // стейт с тасками
     [todoListId: string]: TaskType[]
@@ -34,13 +35,23 @@ export type TasksStateType = { // стейт с тасками
 
 const App = (): JSX.Element => {
 
-    let status = useAppSelector<RequestStatusType>(state => state.app.status)
+
+    let isInitialized = useAppSelector(state => state.auth.isInitialized)
 
     const dispatch: AppDispatchType = useAppDispatch()
 
-    useEffect(() => {// диспатчим санку, она попадет в Redux
-        dispatch(getTodolistTC())
-    }, [])
+    let isLoginIn = useAppSelector<any>(state => state.auth.isLoggedIn)
+
+    useEffect(() => {
+        dispatch(initializeAppTC())
+    }, []);
+
+    // useEffect(() => {// диспатчим санку, она попадет в Redux
+    //     if (!isLoginIn) {
+    //         return
+    //     }
+    //     dispatch(getTodolistTC())
+    // }, [])
 
     const [isDark, setDarkMode] = useState<boolean>(false)
 
@@ -60,6 +71,13 @@ const App = (): JSX.Element => {
             mode: mode,
         },
     })
+
+    if (!isInitialized) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
 
     return (
         <>
@@ -89,15 +107,16 @@ const App = (): JSX.Element => {
                         </Toolbar>
                     </AppBar>
 
-                    {status === 'loading' ? <Box
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            minHeight: `calc(100vh - ${customTheme.mixins.toolbar.minHeight}px)`,
-                            alignItems: 'center'
-                        }}>
-                        <CircularProgress sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}/>
-                    </Box> : <Container fixed>
+                    {/*{status === 'loading' ? <Box*/}
+                    {/*    sx={{*/}
+                    {/*        display: 'flex',*/}
+                    {/*        justifyContent: 'center',*/}
+                    {/*        minHeight: `calc(100vh - ${customTheme.mixins.toolbar.minHeight}px)`,*/}
+                    {/*        alignItems: 'center'*/}
+                    {/*    }}>*/}
+                    {/*    <CircularProgress sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}/>*/}
+                    {/*</Box> :*/}
+                    <Container fixed>
                         <Routes>
                             <Route path={'/'} element={<TodolistsList/>}/>
                             <Route path={'/login'} element={<Login/>}/>
@@ -105,7 +124,7 @@ const App = (): JSX.Element => {
                             <Route path={'*'} element={<Navigate to={'/404'}/>}/>
                         </Routes>
                     </Container>
-                    }
+                    {/*}*/}
                     <ErrorSnackbar/>
 
                 </div>
