@@ -14,9 +14,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import {ThemeProvider} from '@emotion/react';
 import {createTheme} from '@mui/material/styles';
-import {
-    getTodolistTC
-} from '../reducers/todolist-reducer/todolists-reducer';
 
 import {AppDispatchType, useAppDispatch, useAppSelector} from '../store/store';
 import {TaskType} from '../api/todolist-api';
@@ -27,7 +24,9 @@ import {Navigate, Route, Routes} from 'react-router-dom';
 import {Login} from '../features/Login/Login';
 import {TodolistsList} from '../components/TodolistsList/TodolistsList';
 import {Error404} from '../components/ErrorPage/ErrorPage';
-import {initializeAppTC, setIsInitializedAC} from '../reducers/auth-reducer/auth-reducer';
+import {initializeAppTC, logoutTC, setIsInitializedAC} from '../reducers/auth-reducer/auth-reducer';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
 
 export type TasksStateType = { // стейт с тасками
     [todoListId: string]: TaskType[]
@@ -45,6 +44,10 @@ const App = (): JSX.Element => {
     useEffect(() => {
         dispatch(initializeAppTC())
     }, []);
+
+    const logoutHandler = () => {
+        dispatch(logoutTC())
+    }
 
     // useEffect(() => {// диспатчим санку, она попадет в Redux
     //     if (!isLoginIn) {
@@ -103,7 +106,9 @@ const App = (): JSX.Element => {
                                     control={<Switch onChange={(e) => setDarkMode(e.currentTarget.checked)}/>}
                                     label={isDark ? 'dark mode' : 'light mode'}/>
                             </FormGroup>
-                            <Button color="inherit">Login</Button>
+                            {
+                                isLoginIn && <Button onClick={logoutHandler} color="inherit"><LogoutIcon /></Button>
+                            }
                         </Toolbar>
                     </AppBar>
 

@@ -15,6 +15,7 @@ import {AuthApi} from '../../api/todolist-api';
 import {loginTC} from '../../reducers/auth-reducer/auth-reducer';
 import {Navigate} from 'react-router-dom';
 
+
 export type FormValuesType = {
     email: string
     password: string
@@ -48,9 +49,8 @@ export const Login = () => {
         return <Navigate to={'/'}/>
     }
 
-    return <Grid container display={'flex'} justifyContent={'center'} alignItems={'center'} minHeight={'100vh'}
-                 marginTop={'-64px'}>
-        <Grid item justifyContent={'center'}>
+    return <Grid container display={'flex'} justifyContent={'center'} alignItems={'center'} >
+        <Grid item justifyContent={'center'} paddingTop='100px' >
             <form onSubmit={formik.handleSubmit}>
                 <FormControl>
                     <FormLabel>

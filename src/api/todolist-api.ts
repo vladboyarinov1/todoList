@@ -71,6 +71,9 @@ export const AuthApi = {
     },
     me() {
         return instance.get(`auth/me`)
+    },
+    logout() {
+        return instance.delete(`auth/login`)
     }
 }
 

@@ -58,6 +58,22 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
         .finally(() => dispatch(setIsInitializedAC(true)))
 }
 
+export const logoutTC = () => (dispatch: Dispatch<ActionsType>) => {
+    dispatch(setLoadingStatusAC('loading'))
+    AuthApi.logout()
+        .then(res => {
+            if (res.data.resultCode === 0) {
+                dispatch(setIsLoggedInAC(false))
+                dispatch(setLoadingStatusAC('succeeded'))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
+        })
+        .catch((error) => {
+            handleServerNetworkError(error, dispatch)
+        })
+}
+
 // types
 type ActionsType =
     ReturnType<typeof setIsLoggedInAC>
