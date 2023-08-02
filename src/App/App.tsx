@@ -111,16 +111,6 @@ const App = (): JSX.Element => {
                             }
                         </Toolbar>
                     </AppBar>
-
-                    {/*{status === 'loading' ? <Box*/}
-                    {/*    sx={{*/}
-                    {/*        display: 'flex',*/}
-                    {/*        justifyContent: 'center',*/}
-                    {/*        minHeight: `calc(100vh - ${customTheme.mixins.toolbar.minHeight}px)`,*/}
-                    {/*        alignItems: 'center'*/}
-                    {/*    }}>*/}
-                    {/*    <CircularProgress sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}/>*/}
-                    {/*</Box> :*/}
                     <Container fixed>
                         <Routes>
                             <Route path={'/'} element={<TodolistsList/>}/>

@@ -73,10 +73,9 @@ export const AuthApi = {
         return instance.get(`auth/me`)
     },
     logout() {
-        return instance.delete(`auth/login`)
+        return instance.delete<ResponseType>(`auth/login`)
     }
 }
-
 
 export const TodolistApi = {
     getTodolists() {
