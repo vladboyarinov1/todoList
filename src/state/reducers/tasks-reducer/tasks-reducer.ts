@@ -1,14 +1,14 @@
-import {TasksStateType} from '../../App/App';
+import {TasksStateType} from '../../../App/App';
 import {
     AddTodolistAT,
     RemoveTodolistAT,
     SetTodolistAT,
 } from '../todolist-reducer/todolists-reducer';
-import {TaskPriorities, TaskStatuses, TaskType, TodolistApi, UpdateTaskModelType} from '../../api/todolist-api';
+import {TaskPriorities, TaskStatuses, TaskType, TodolistApi, UpdateTaskModelType} from '../../../api/todolist-api';
 import {Dispatch} from 'redux';
-import {AppRootStateType} from '../../store/store';
-import {setErrorAC, SetErrorACType} from '../../App/app-reducer';
-import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
+import {AppRootStateType, RootActionType} from '../../store/store';
+import {SetErrorACType} from '../app-reducer/app-reducer';
+import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
 
 export const tasksReducer = (state: TasksStateType = {}, action: TasksActionType): TasksStateType => {
     switch (action.type) {
@@ -52,10 +52,7 @@ export const tasksReducer = (state: TasksStateType = {}, action: TasksActionType
                 } : t)
             }
         case 'ADD-TODOLIST':
-            return {
-                ...state,
-                [action.todolistId]: []
-            }
+            return {...state, [action.todolistId]: []}
         case 'REMOVE-TODOLIST':
             const copyState = {...state}
             delete copyState[action.id]
@@ -68,33 +65,30 @@ export const tasksReducer = (state: TasksStateType = {}, action: TasksActionType
     }
 }
 
+//actions
 export const deleteTaskAC = (taskId: string, todolistId: string) => ({
     type: 'REMOVE-TASK',
     payload: {taskId, todolistId}
 } as const)
-
 export const addTaskAC = (task: TaskType) => ({
     type: 'ADD-TASK',
     task
 } as const)
-
 export const changeTaskStatusAC = (taskId: string, model: FlexType, todolistId: string) => ({
     type: 'CHANGE-TASK-STATUS', payload: {taskId, model, todolistId}
 } as const)
-
 export const changeTaskTitleAC = (taskId: string, title: string, todolistId: string) => ({
     type: 'CHANGE-TASK-TITLE',
     payload: {taskId, title, todolistId}
 } as const)
 export const setTasksAC = (todolistId: string, tasks: TaskType[]) => ({type: 'SET-TASKS', todolistId, tasks} as const)
 
-export const getTasksTC = (todolistId: string) => (dispatch: Dispatch) => TodolistApi.getTasks(todolistId)
+//thunks
+export const getTasksTC = (todolistId: string) => (dispatch: Dispatch<RootActionType>) => TodolistApi.getTasks(todolistId)
     .then((res) => {
         dispatch(setTasksAC(todolistId, res.data.items))
     })
-
-
-export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch) => {
+export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch<RootActionType>) => {
     TodolistApi.deleteTask(todolistId, taskId)
         .then((res) => {
             if (res.data.resultCode === ResultCode.OK) {
@@ -105,9 +99,7 @@ export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: D
         })
         .catch((e) => handleServerNetworkError(e, dispatch))
 }
-
-
-export const createTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch<TasksActionType>) => {
+export const createTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch<RootActionType>) => {
     TodolistApi.createTask(todolistId, title)
 
         .then((res) => {
@@ -119,8 +111,7 @@ export const createTaskTC = (todolistId: string, title: string) => (dispatch: Di
         })
         .catch((e) => handleServerNetworkError(e, dispatch))
 }
-
-export const updateTaskTC = (todolistId: string, taskId: string, data: FlexType) => (dispatch: Dispatch, getState: () => AppRootStateType) => {
+export const updateTaskTC = (todolistId: string, taskId: string, data: FlexType) => (dispatch: Dispatch<RootActionType>, getState: () => AppRootStateType) => {
     const task = getState().tasks[todolistId].find(t => t.id === taskId)
     if (task) {
         const model: UpdateTaskModelType = {
@@ -145,22 +136,16 @@ export const updateTaskTC = (todolistId: string, taskId: string, data: FlexType)
     }
 }
 
-
 //types
-export type RemoveTaskAT = ReturnType<typeof deleteTaskAC>//верни нам тип, то что вернет функция removeTaskAC
-export type AddTaskAT = ReturnType<typeof addTaskAC>
-export type ChangeTaskStatusAT = ReturnType<typeof changeTaskStatusAC>
-export type ChangeTaskTitleAT = ReturnType<typeof changeTaskTitleAC>
-
 export type TasksActionType =
-    RemoveTaskAT
-    | AddTaskAT
-    | ChangeTaskStatusAT
-    | ChangeTaskTitleAT
+    | ReturnType<typeof deleteTaskAC>
+    | ReturnType<typeof addTaskAC>
+    | ReturnType<typeof changeTaskStatusAC>
+    | ReturnType<typeof changeTaskTitleAC>
+    | ReturnType<typeof setTasksAC>
     | AddTodolistAT
     | RemoveTodolistAT
     | SetTodolistAT
-    | ReturnType<typeof setTasksAC>
     | SetErrorACType
 
 type FlexType = {

@@ -3,11 +3,11 @@ import Grid from '@mui/material/Grid';
 import {AddItemForm} from '../AddItemForm/AddItemForm';
 import Paper from '@mui/material/Paper';
 import {TodoList} from '../TodoList/TodoList';
-import {AppDispatchType, useAppDispatch, useAppSelector} from '../../store/store';
-import {addTodolistTC, getTodolistTC, TodolistDomainType} from '../../reducers/todolist-reducer/todolists-reducer';
+import {AppDispatchType, useAppDispatch, useAppSelector} from '../../state/store/store';
+import {addTodolistTC, getTodolistTC, TodolistDomainType} from '../../state/reducers/todolist-reducer/todolists-reducer';
 import {Navigate} from 'react-router-dom';
 import {Box, CircularProgress} from '@mui/material';
-import {RequestStatusType} from '../../App/app-reducer';
+import {RequestStatusType} from '../../state/reducers/app-reducer/app-reducer';
 
 export const TodolistsList: FC = () => {
 

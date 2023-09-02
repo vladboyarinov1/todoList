@@ -5,18 +5,18 @@ import s from './TodoList.module.css'
 import {IconButton, Typography} from '@mui/material';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import {useSelector} from 'react-redux';
-import {AppRootStateType, useAppDispatch, useAppSelector} from '../../store/store';
-import {createTaskTC, getTasksTC} from '../../reducers/tasks-reducer/tasks-reducer';
+import {AppRootStateType, useAppDispatch, useAppSelector} from '../../state/store/store';
+import {createTaskTC, getTasksTC} from '../../state/reducers/tasks-reducer/tasks-reducer';
 import {
     changeTodolistFilterAC,
     changeTodoListTitleAC, deleteTodolistTC,
     FilterValueType,
     removeTodolistAC, updateTodolistTC,
-} from '../../reducers/todolist-reducer/todolists-reducer';
+} from '../../state/reducers/todolist-reducer/todolists-reducer';
 import {ButtonWithMemo} from '../ButtonWithMemo/ButtonWithMemo';
 import {Task} from './Task/Task';
 import {TaskStatuses, TaskType, TodolistType} from '../../api/todolist-api';
-import {RequestStatusType} from '../../App/app-reducer';
+import {RequestStatusType} from '../../state/reducers/app-reducer/app-reducer';
 import {log} from 'util';
 
 type TodoListPropsType = {

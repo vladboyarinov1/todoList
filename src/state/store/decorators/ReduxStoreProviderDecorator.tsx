@@ -5,8 +5,8 @@ import {combineReducers, legacy_createStore} from 'redux';
 import {tasksReducer} from '../../reducers/tasks-reducer/tasks-reducer';
 import {v1} from 'uuid';
 import {TodolistDomainType, todolistsReducer} from '../../reducers/todolist-reducer/todolists-reducer';
-import {TasksStateType} from '../../App/App';
-import {TaskPriorities, TaskStatuses} from '../../api/todolist-api';
+import {TasksStateType} from '../../../App/App';
+import {TaskPriorities, TaskStatuses} from '../../../api/todolist-api';
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,

@@ -1,8 +1,8 @@
 import {Dispatch} from 'redux'
-import {SetErrorACType, setLoadingStatusAC} from '../../App/app-reducer';
+import {SetErrorACType, setLoadingStatusAC} from '../app-reducer/app-reducer';
 import {RootActionType} from '../../store/store';
-import {AuthApi} from '../../api/todolist-api';
-import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
+import {AuthApi} from '../../../api/todolist-api';
+import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
 import {ResultCode} from '../tasks-reducer/tasks-reducer';
 
 const initialState = {
@@ -10,7 +10,6 @@ const initialState = {
     isInitialized: false
 }
 type InitialStateType = typeof initialState
-
 
 export const authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
@@ -23,13 +22,14 @@ export const authReducer = (state: InitialStateType = initialState, action: Acti
     }
 }
 
+// actions
 export const setIsLoggedInAC = (value: boolean) =>
     ({type: 'login/SET-IS-LOGGED-IN', value} as const)
 
 export const setIsInitializedAC = (value: boolean) =>
     ({type: 'login/SET-IS-INITIALIZED', value} as const)
 
-
+// thunks
 export const loginTC = (data: any) => (dispatch: Dispatch<ActionsType>) => {
     // dispatch(setLoadingStatusAC('loading'))
     AuthApi.login(data)
@@ -44,7 +44,6 @@ export const loginTC = (data: any) => (dispatch: Dispatch<ActionsType>) => {
         })
         .catch((e) => handleServerNetworkError(e, dispatch))
 }
-
 export const initializeAppTC = () => (dispatch: Dispatch) => {
     AuthApi.me().then(res => {
         if (res.data.resultCode === 0) {
@@ -57,7 +56,6 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
         .catch((e) => handleServerNetworkError(e, dispatch))
         .finally(() => dispatch(setIsInitializedAC(true)))
 }
-
 export const logoutTC = () => (dispatch: Dispatch<ActionsType>) => {
     dispatch(setLoadingStatusAC('loading'))
     AuthApi.logout()

@@ -9,10 +9,10 @@ import {
     changeTaskTitleAC,
     getTasksTC,
     deleteTaskAC, deleteTaskTC, updateTaskTC
-} from '../../../reducers/tasks-reducer/tasks-reducer';
+} from '../../../state/reducers/tasks-reducer/tasks-reducer';
 
 import {TaskStatuses, TaskType} from '../../../api/todolist-api';
-import {useAppDispatch} from '../../../store/store';
+import {useAppDispatch} from '../../../state/store/store';
 
 type TasksPropsType = {
     todolistId: string

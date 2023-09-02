@@ -3,8 +3,9 @@ import {TasksActionType, tasksReducer} from '../reducers/tasks-reducer/tasks-red
 import {TodolistsActionType, todolistsReducer} from '../reducers/todolist-reducer/todolists-reducer';
 import thunk, {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
-import {AppActionsType, appReducer} from '../App/app-reducer';
+import {AppActionsType, appReducer} from '../reducers/app-reducer/app-reducer';
 import {authReducer} from '../reducers/auth-reducer/auth-reducer';
+
 
 // объединяя reducer-ы с помощью combineReducers,
 //типизировали хук диспатч, по сути сделали свой хук и лучше его вынести отдельно

@@ -6,7 +6,7 @@ import {
     setTodolistAC, TodolistDomainType, todolistsReducer
 
 } from './todolists-reducer';
-import {TodolistType} from '../../api/todolist-api';
+import {TodolistType} from '../../../api/todolist-api';
 import {v1} from 'uuid';
 
 describe('todolistReducer', () => {

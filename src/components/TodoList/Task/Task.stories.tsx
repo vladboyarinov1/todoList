@@ -2,8 +2,8 @@ import type {Meta} from '@storybook/react';
 import React from 'react';
 import {Task} from './Task';
 import {Provider, useSelector} from 'react-redux';
-import {AppRootStateType} from '../../../store/store';
-import {ReduxStoreProviderDecorator, storyBookStore} from '../../../store/decorators/ReduxStoreProviderDecorator';
+import {AppRootStateType} from '../../../state/store/store';
+import {ReduxStoreProviderDecorator, storyBookStore} from '../../../state/store/decorators/ReduxStoreProviderDecorator';
 import {action} from '@storybook/addon-actions';
 import {TaskPriorities, TaskStatuses, TaskType} from '../../../api/todolist-api';
 

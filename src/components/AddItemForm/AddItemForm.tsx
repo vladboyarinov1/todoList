@@ -1,7 +1,7 @@
 import React, {ChangeEvent, FC, memo, useState} from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import {IconButton, TextField} from '@mui/material';
-import {RequestStatusType} from '../../App/app-reducer';
+import {RequestStatusType} from '../../state/reducers/app-reducer/app-reducer';
 
 type AddItemFormProps = {
     addItem: (title: string) => void
