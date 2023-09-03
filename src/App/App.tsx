@@ -97,7 +97,7 @@ const App = (): JSX.Element => {
                                     label={isDark ? 'dark mode' : 'light mode'}/>
                             </FormGroup>
                             {
-                                isLoginIn && <Button onClick={logoutHandler} color="inherit"><LogoutIcon /></Button>
+                                isLoginIn && <Button onClick={logoutHandler} color="inherit"><LogoutIcon/></Button>
                             }
                         </Toolbar>
                     </AppBar>

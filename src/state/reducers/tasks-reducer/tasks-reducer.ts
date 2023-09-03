@@ -113,7 +113,10 @@ export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: D
                 handleServerAppError(res.data, dispatch)
             }
         })
-        .catch((e) => handleServerNetworkError(e, dispatch))
+        .catch((e) => {
+            handleServerNetworkError(e, dispatch)
+            dispatch(changeEntityStatus(todolistId, taskId, TaskEntityStatus.Prepared))
+        })
 }
 export const createTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch<RootActionType>) => {
     TodolistApi.createTask(todolistId, title)
@@ -149,7 +152,10 @@ export const updateTaskTC = (todolistId: string, taskId: string, data: FlexType)
                     handleServerAppError(res.data, dispatch)
                 }
             })
-            .catch((e) => handleServerNetworkError(e, dispatch))
+            .catch((e) => {
+                handleServerNetworkError(e, dispatch)
+                dispatch(changeEntityStatus(todolistId, taskId, TaskEntityStatus.Prepared))
+            })
     }
 }
 

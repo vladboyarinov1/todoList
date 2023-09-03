@@ -33,7 +33,6 @@ export const TodoList: FC<TodoListPropsType> = memo(
         // console.log(tasks[0]?.entityStatus)
 
 
-
         useEffect(() => {
             dispatch(getTasksTC(id))
         }, [dispatch, id])
@@ -73,17 +72,18 @@ export const TodoList: FC<TodoListPropsType> = memo(
 
         let tasksForRender: TaskType[] = getFilterValues(tasks, filter)
 
-        const tasksList = tasksForRender.length ? tasksForRender?.map(t => <Task key={t.id} todolistId={id} entityStatus={t.entityStatus}
+        const tasksList = tasksForRender.length ? tasksForRender?.map(t => <Task key={t.id} todolistId={id}
+                                                                                 entityStatus={t.entityStatus}
                                                                                  task={t}/>) :
             <div className={s.emptyTasksText}>Task list is empty</div>
 
         return (
-            <div className={s.todolist}>
+            <div className={entityStatus === 'loading' ? `${s.todolist} ${s.disabledTodos}` : s.todolist}>
                 <Typography variant="h5" align="center" fontWeight="bold" padding="10px 0">
                     <EditableSpan title={title} changeTitle={changeTodoListTitle}/>
                     <IconButton onClick={removeTodolist}
                                 size={'small'}
-                                disabled={entityStatus === 'loading'}><RestoreFromTrashIcon/></IconButton>
+                    ><RestoreFromTrashIcon/></IconButton>
                 </Typography>
                 <AddItemForm addItem={addTask} label={'task name'} disabled={entityStatus === 'loading'}/>
                 {

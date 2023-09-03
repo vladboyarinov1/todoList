@@ -47,6 +47,7 @@ export const loginTC = (data: any) => (dispatch: Dispatch<ActionsType>) => {
 export const initializeAppTC = () => (dispatch: Dispatch) => {
     AuthApi.me().then(res => {
         if (res.data.resultCode === 0) {
+            //значит залогинины
             dispatch(setIsLoggedInAC(true));
             dispatch(setIsInitializedAC(true))
         } else {

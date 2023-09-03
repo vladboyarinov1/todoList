@@ -71,7 +71,10 @@ export const deleteTodolistTC = (id: string) => (dispatch: Dispatch<RootActionTy
                 handleServerAppError(res.data, dispatch)
             }
         })
-        .catch((e) => handleServerNetworkError(e, dispatch))
+        .catch((e) => {
+            handleServerNetworkError(e, dispatch)
+            dispatch(changeTodosEntityStatus(id, 'idle'))
+        })
 }
 export const addTodolistTC = (title: string): AppThunkType => (dispatch: Dispatch<RootActionType>) => {
     TodolistApi.createTodolist(title)
@@ -87,7 +90,14 @@ export const addTodolistTC = (title: string): AppThunkType => (dispatch: Dispatc
 }
 export const updateTodolistTC = (id: string, title: string) => (dispatch: Dispatch<RootActionType>) => {
     TodolistApi.updateTodolistTitle(id, title)
-        .then(() => dispatch(changeTodoListTitleAC(title, id)))
+        .then((res) => {
+            if (res.data.resultCode === ResultCode.OK) {
+                dispatch(changeTodoListTitleAC(title, id))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
+        })
+        .catch((e) => handleServerNetworkError(e, dispatch))
 }
 
 // types
