@@ -1,7 +1,7 @@
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC, tasksReducer} from './tasks-reducer'
 import {TasksStateType} from '../../../App/App';
 import {addTodolistAC, removeTodolistAC, setTodolistAC} from '../todolist-reducer/todolists-reducer';
-import {TaskPriorities, TaskStatuses} from '../../../api/todolist-api';
+import {TaskEntityStatus, TaskPriorities, TaskStatuses} from '../../../api/todolist-api';
 
 describe('todolistReducer', () => {
     let startState: TasksStateType;
@@ -17,6 +17,7 @@ describe('todolistReducer', () => {
                     priority: TaskPriorities.Low,
                     todoListId: 'todolistId1',
                     description: '',
+                    entityStatus: TaskEntityStatus.Expectation
                 },
             ],
             'todolistId2': [
@@ -29,6 +30,7 @@ describe('todolistReducer', () => {
                     priority: TaskPriorities.Low,
                     todoListId: 'todolistId2',
                     description: '',
+                    entityStatus: TaskEntityStatus.Expectation
                 },
             ]
         }
@@ -54,6 +56,7 @@ describe('todolistReducer', () => {
             priority: TaskPriorities.Low,
             todoListId: 'todolistId1',
             description: '',
+            entityStatus: TaskEntityStatus.Expectation
         })
         const endState = tasksReducer(startState, action)
 

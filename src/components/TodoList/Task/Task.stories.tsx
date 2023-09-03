@@ -5,7 +5,7 @@ import {Provider, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../../state/store/store';
 import {ReduxStoreProviderDecorator, storyBookStore} from '../../../state/store/decorators/ReduxStoreProviderDecorator';
 import {action} from '@storybook/addon-actions';
-import {TaskPriorities, TaskStatuses, TaskType} from '../../../api/todolist-api';
+import {TaskEntityStatus, TaskPriorities, TaskStatuses, TaskType} from '../../../api/todolist-api';
 
 const meta: Meta<typeof Task> = {
     title: 'TODOLISTS/Task',
@@ -35,6 +35,7 @@ export const TaskStory = () => {
     return (
         <Task
             todolistId={'todolistId1'}
+          entityStatus={1}
             task={task ? task : {
                 id: 'Default',
                 title: 'Default',
@@ -45,7 +46,9 @@ export const TaskStory = () => {
                 deadline: '',
                 todoListId: '',
                 order: 0,
-                addedDate: ''
+                addedDate: '',
+                entityStatus: TaskEntityStatus.Expectation
+
             }}
         />
     );

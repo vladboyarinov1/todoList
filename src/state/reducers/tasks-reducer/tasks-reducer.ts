@@ -1,10 +1,13 @@
 import {TasksStateType} from '../../../App/App';
+import {AddTodolistAT, RemoveTodolistAT, SetTodolistAT,} from '../todolist-reducer/todolists-reducer';
 import {
-    AddTodolistAT,
-    RemoveTodolistAT,
-    SetTodolistAT,
-} from '../todolist-reducer/todolists-reducer';
-import {TaskPriorities, TaskStatuses, TaskType, TodolistApi, UpdateTaskModelType} from '../../../api/todolist-api';
+    TaskEntityStatus,
+    TaskPriorities,
+    TaskStatuses,
+    TaskType,
+    TodolistApi,
+    UpdateTaskModelType
+} from '../../../api/todolist-api';
 import {Dispatch} from 'redux';
 import {AppRootStateType, RootActionType} from '../../store/store';
 import {SetErrorACType} from '../app-reducer/app-reducer';
@@ -59,7 +62,15 @@ export const tasksReducer = (state: TasksStateType = {}, action: TasksActionType
             return copyState
         // const {[action.id]: [], ...rest} = state
         // return rest
-
+        case 'TASKS/CHANGE-ENTITY-STATUS':
+            return {
+                ...state,
+                [action.payload.todolistId]: state[action.payload.todolistId].map(t => t.id === action.payload.taskId ? {
+                        ...t,
+                        entityStatus: action.payload.entityStatus
+                    } : t
+                )
+            }
         default:
             return state
     }
@@ -82,6 +93,10 @@ export const changeTaskTitleAC = (taskId: string, title: string, todolistId: str
     payload: {taskId, title, todolistId}
 } as const)
 export const setTasksAC = (todolistId: string, tasks: TaskType[]) => ({type: 'SET-TASKS', todolistId, tasks} as const)
+export const changeEntityStatus = (todolistId: string, taskId: string, entityStatus: TaskEntityStatus) => ({
+    type: 'TASKS/CHANGE-ENTITY-STATUS',
+    payload: {taskId, entityStatus, todolistId}
+} as const)
 
 //thunks
 export const getTasksTC = (todolistId: string) => (dispatch: Dispatch<RootActionType>) => TodolistApi.getTasks(todolistId)
@@ -89,6 +104,7 @@ export const getTasksTC = (todolistId: string) => (dispatch: Dispatch<RootAction
         dispatch(setTasksAC(todolistId, res.data.items))
     })
 export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch<RootActionType>) => {
+    dispatch(changeEntityStatus(todolistId, taskId, TaskEntityStatus.Expectation))
     TodolistApi.deleteTask(todolistId, taskId)
         .then((res) => {
             if (res.data.resultCode === ResultCode.OK) {
@@ -101,7 +117,6 @@ export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: D
 }
 export const createTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch<RootActionType>) => {
     TodolistApi.createTask(todolistId, title)
-
         .then((res) => {
             if (res.data.resultCode === ResultCode.OK) {
                 dispatch(addTaskAC(res.data.data.item))
@@ -112,6 +127,7 @@ export const createTaskTC = (todolistId: string, title: string) => (dispatch: Di
         .catch((e) => handleServerNetworkError(e, dispatch))
 }
 export const updateTaskTC = (todolistId: string, taskId: string, data: FlexType) => (dispatch: Dispatch<RootActionType>, getState: () => AppRootStateType) => {
+    dispatch(changeEntityStatus(todolistId, taskId, TaskEntityStatus.Expectation))
     const task = getState().tasks[todolistId].find(t => t.id === taskId)
     if (task) {
         const model: UpdateTaskModelType = {
@@ -128,6 +144,7 @@ export const updateTaskTC = (todolistId: string, taskId: string, data: FlexType)
             .then((res) => {
                 if (res.data.resultCode === ResultCode.OK) {
                     dispatch(changeTaskStatusAC(taskId, model, todolistId))
+                    dispatch(changeEntityStatus(todolistId, taskId, TaskEntityStatus.Prepared))
                 } else {
                     handleServerAppError(res.data, dispatch)
                 }
@@ -143,6 +160,7 @@ export type TasksActionType =
     | ReturnType<typeof changeTaskStatusAC>
     | ReturnType<typeof changeTaskTitleAC>
     | ReturnType<typeof setTasksAC>
+    | ReturnType<typeof changeEntityStatus>
     | AddTodolistAT
     | RemoveTodolistAT
     | SetTodolistAT

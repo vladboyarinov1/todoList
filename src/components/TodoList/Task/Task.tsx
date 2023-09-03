@@ -11,16 +11,20 @@ import {
     deleteTaskAC, deleteTaskTC, updateTaskTC
 } from '../../../state/reducers/tasks-reducer/tasks-reducer';
 
-import {TaskStatuses, TaskType} from '../../../api/todolist-api';
-import {useAppDispatch} from '../../../state/store/store';
+import {TaskEntityStatus, TaskStatuses, TaskType} from '../../../api/todolist-api';
+import {useAppDispatch, useAppSelector} from '../../../state/store/store';
+import s from './Task.module.css'
 
 type TasksPropsType = {
     todolistId: string
     task: TaskType
+    entityStatus: TaskEntityStatus
 }
 
-export const Task: FC<TasksPropsType> = memo(({todolistId, task}) => {
+export const Task: FC<TasksPropsType> = memo(({todolistId, task, entityStatus}) => {
     const dispatch = useAppDispatch()
+    console.log(entityStatus)
+
 
     const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses) => dispatch(updateTaskTC(todolistId, taskId, {status})), [dispatch, todolistId])
 
@@ -31,7 +35,8 @@ export const Task: FC<TasksPropsType> = memo(({todolistId, task}) => {
     }, [dispatch, task.id, todolistId])
 
     return (
-        <ListItem key={task.id} id={task.id} divider disablePadding
+        <ListItem className={entityStatus === TaskEntityStatus.Expectation ? s.disabledTask : ''} key={task.id}
+                  id={task.id} divider disablePadding
                   secondaryAction={<IconButton onClick={removeTask}
                                                size={'small'}><ClearIcon/></IconButton>}>
 

@@ -67,13 +67,21 @@ export type ResponseType<T = {}> = {
     fieldsErrors: []
     messages: string[],
     data: T
+    entityStatus: TaskEntityStatus
 }
+
 export enum TaskStatuses {
     New,
     InProgress,
     Completed,
     Draft
 }
+
+export enum TaskEntityStatus {
+    Prepared,
+    Expectation,
+}
+
 export enum TaskPriorities {
     Low,
     Middle,
@@ -81,6 +89,7 @@ export enum TaskPriorities {
     Urgently,
     Later
 }
+
 export type TaskType = {
     description: string
     title: string
@@ -92,6 +101,7 @@ export type TaskType = {
     todoListId: string
     order: number
     addedDate: string
+    entityStatus: TaskEntityStatus
 }
 export type UpdateTaskModelType = {
     title: string
