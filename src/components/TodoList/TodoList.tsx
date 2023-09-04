@@ -30,7 +30,6 @@ export const TodoList: FC<TodoListPropsType> = memo(
         const {id, title} = todolist
         const [filter, setFilter] = useState<FilterValueType>('all')
         let tasks = useAppSelector<TaskType[]>(state => state.tasks[id])
-        // console.log(tasks[0]?.entityStatus)
 
 
         useEffect(() => {
@@ -39,17 +38,17 @@ export const TodoList: FC<TodoListPropsType> = memo(
 
         const removeTodolist = () => dispatch(deleteTodolistTC(id))
         const onClickAllFilter = useCallback(() => {
-            dispatch(changeTodolistFilterAC('all', id))
+            dispatch(changeTodolistFilterAC({filter: 'all', id}))
             setFilter('all')
         }, [dispatch, id])
 
         const onClickActiveFilter = useCallback(() => {
-            dispatch(changeTodolistFilterAC('active', id))
+            dispatch(changeTodolistFilterAC({filter: 'active', id}))
             setFilter('active')
         }, [dispatch, id])
 
         const onClickCompleteFilter = useCallback(() => {
-            dispatch(changeTodolistFilterAC('complete', id))
+            dispatch(changeTodolistFilterAC({filter: 'complete', id}))
             setFilter('complete')
         }, [dispatch, id])
 
@@ -62,19 +61,18 @@ export const TodoList: FC<TodoListPropsType> = memo(
         const getFilterValues = useCallback((tasksList: Array<TaskType>, filterValue: FilterValueType) => {
             switch (filterValue) {
                 case 'active':
-                    return tasksList.filter(t => t.status === TaskStatuses.New)
+                    return tasksList?.filter(t => t.status === TaskStatuses.New)
                 case 'complete':
-                    return tasksList.filter(t => t.status === TaskStatuses.Completed)
+                    return tasksList?.filter(t => t.status === TaskStatuses.Completed)
                 default:
                     return tasksList
             }
         }, [])
 
         let tasksForRender: TaskType[] = getFilterValues(tasks, filter)
-
-        const tasksList = tasksForRender.length ? tasksForRender?.map(t => <Task key={t.id} todolistId={id}
-                                                                                 entityStatus={t.entityStatus}
-                                                                                 task={t}/>) :
+        const tasksList = tasksForRender?.map(t => <Task key={t.id} todolistId={id}
+                                                         entityStatus={t.entityStatus}
+                                                         task={t}/>) ||
             <div className={s.emptyTasksText}>Task list is empty</div>
 
         return (

@@ -32,7 +32,7 @@ export type TasksStateType = { // стейт с тасками
 //Кастомные хуки 1) это функция, которая начинается со слова use. 2) Внутри кастомных хуков можно использовать React хуки либо другие кастомные хуки. 
 
 const App = (): JSX.Element => {
-    let isInitialized = useAppSelector(state => state.auth.isInitialized)
+    let isInitialized = useAppSelector(state => state.app.isInitialized)
 
     const dispatch: AppDispatchType = useAppDispatch()
 

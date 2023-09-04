@@ -23,8 +23,6 @@ type TasksPropsType = {
 
 export const Task: FC<TasksPropsType> = memo(({todolistId, task, entityStatus}) => {
     const dispatch = useAppDispatch()
-    console.log(entityStatus)
-
 
     const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses) => dispatch(updateTaskTC(todolistId, taskId, {status})), [dispatch, todolistId])
 
