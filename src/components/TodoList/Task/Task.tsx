@@ -7,7 +7,7 @@ import {useDispatch} from 'react-redux';
 import {
     changeTaskStatusAC,
     changeTaskTitleAC,
-    getTasksTC,
+    fetchTasks,
     deleteTaskAC, deleteTaskTC, updateTaskTC
 } from '../../../state/reducers/tasks-reducer/tasks-reducer';
 

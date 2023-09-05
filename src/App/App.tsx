@@ -24,7 +24,7 @@ import {TodolistsList} from '../components/TodolistsList/TodolistsList';
 import {Error404} from '../components/ErrorPage/ErrorPage';
 import {initializeAppTC, logoutTC} from '../state/reducers/auth-reducer/auth-reducer';
 import LogoutIcon from '@mui/icons-material/Logout';
-
+//optimize import con opt o
 export type TasksStateType = { // стейт с тасками
     [todoListId: string]: TaskType[]
 }

@@ -6,7 +6,7 @@ import {IconButton, Typography} from '@mui/material';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import {useSelector} from 'react-redux';
 import {AppRootStateType, useAppDispatch, useAppSelector} from '../../state/store/store';
-import {createTaskTC, getTasksTC} from '../../state/reducers/tasks-reducer/tasks-reducer';
+import {createTaskTC, fetchTasks} from '../../state/reducers/tasks-reducer/tasks-reducer';
 import {
     changeTodolistFilterAC,
     changeTodoListTitleAC, deleteTodolistTC,
@@ -33,7 +33,7 @@ export const TodoList: FC<TodoListPropsType> = memo(
 
 
         useEffect(() => {
-            dispatch(getTasksTC(id))
+            dispatch(fetchTasks(id))
         }, [dispatch, id])
 
         const removeTodolist = () => dispatch(deleteTodolistTC(id))
