@@ -22,8 +22,9 @@ import {Navigate, Route, Routes} from 'react-router-dom';
 import {Login} from '../features/Login/Login';
 import {TodolistsList} from '../components/TodolistsList/TodolistsList';
 import {Error404} from '../components/ErrorPage/ErrorPage';
-import {initializeAppTC, logoutTC} from '../state/reducers/auth-reducer/auth-reducer';
+import {logoutTC} from '../state/reducers/auth-reducer/auth-reducer';
 import LogoutIcon from '@mui/icons-material/Logout';
+import {initializeAppTC} from '../state/reducers/app-reducer/app-reducer';
 //optimize import con opt o
 export type TasksStateType = { // стейт с тасками
     [todoListId: string]: TaskType[]

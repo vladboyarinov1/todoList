@@ -52,7 +52,7 @@ export const TodoList: FC<TodoListPropsType> = memo(
             setFilter('complete')
         }, [dispatch, id])
 
-        const addTask = useCallback((title: string) => dispatch(createTaskTC(id, title)), [dispatch, id])
+        const addTask = useCallback((title: string) => dispatch(createTaskTC({todolistId: id, title})), [dispatch, id])
 
         const changeTodoListTitle = useCallback((title: string) => {
             dispatch(updateTodolistTC(id, title))

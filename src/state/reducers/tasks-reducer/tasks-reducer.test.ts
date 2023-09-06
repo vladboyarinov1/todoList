@@ -1,10 +1,9 @@
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskTC, tasksReducer} from './tasks-reducer'
-import {TasksStateType} from '../../../App/App';
+import {changeTaskTitleAC, createTaskTC, removeTaskTC, tasksReducer} from './tasks-reducer'
 import {addTodolistAC, removeTodolistAC, setTodolistAC} from '../todolist-reducer/todolists-reducer';
 import {TaskEntityStatus, TaskPriorities, TaskStatuses} from '../../../api/todolist-api';
 
 describe('todolistReducer', () => {
-    let startState: TasksStateType;
+    let startState: any;
     beforeEach(() => {
         startState = {
             'todolistId1': [
@@ -40,7 +39,7 @@ describe('todolistReducer', () => {
     test('correct task should be deleted from correct array', () => {
         let param = {taskId: '1', todolistId: 'todolistId2'}
 
-        const action = removeTaskTC.fulfilled(param, '',{taskId: '1', todolistId: 'todolistId2'}, '', )
+        const action = removeTaskTC.fulfilled(param, '', {taskId: '1', todolistId: 'todolistId2'}, '',)
 
 
         const endState = tasksReducer(startState, action)
@@ -48,25 +47,33 @@ describe('todolistReducer', () => {
         expect(endState['todolistId2'].length).toBeFalsy()
     })
     test('correct task should be added to correct array', () => {
-
-        const action = addTaskAC({
-            task: {
-                id: '4', title: 'juce', status: TaskStatuses.New,
-                startDate: '',
-                deadline: '',
-                addedDate: '',
-                order: 0,
-                priority: TaskPriorities.Low,
-                todoListId: 'todolistId1',
-                description: '',
-                entityStatus: TaskEntityStatus.Expectation
+        const action = createTaskTC.fulfilled(
+            {
+                task: {
+                    id: '4',
+                    title: 'juce',
+                    status: TaskStatuses.New,
+                    startDate: '',
+                    deadline: '',
+                    addedDate: '',
+                    order: 0,
+                    priority: TaskPriorities.Low,
+                    todoListId: 'todolistId1',
+                    description: '',
+                    entityStatus: TaskEntityStatus.Expectation
+                }
+            },
+            '',
+            {
+                todolistId: 'todolistId1',
+                title: 'juce'
             }
-        })
-        const endState = tasksReducer(startState, action)
+        );
+        const endState = tasksReducer(startState, action);
 
-        expect(endState['todolistId1'][0].title).toBe('juce')
-        expect(endState['todolistId2'][0].status).toBe(TaskStatuses.New)
-    })
+        expect(endState['todolistId1'][0].title).toBe('juce');
+        expect(endState['todolistId2'][0].status).toBe(TaskStatuses.New);
+    });
     test('status of specified task should be changed', () => {
         const action = changeTaskStatusAC({taskId: '2', model: {status: TaskStatuses.New}, todolistId: 'todolistId2'})
 
