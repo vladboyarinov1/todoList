@@ -20,24 +20,42 @@ import {SetErrorACType} from '../app-reducer/app-reducer';
 import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-export const fetchTasks = createAsyncThunk('tasks/fetchTasks', (todolistId: string, thunkAPI) => {
-
-    return TodolistApi.getTasks(todolistId)
-        .then((res) => {
-            return {todolistId, tasks: res.data.items}
-        })
+export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (todolistId: string) => {
+    let res = await TodolistApi.getTasks(todolistId);
+    return {todolistId, tasks: res.data.items}
 })
+export const removeTaskTC = createAsyncThunk('tasks/removeTask',
+    async (param: { todolistId: string, taskId: string }, thunkAPI) => {
+        thunkAPI.dispatch(changeEntityStatus({
+            todolistId: param.todolistId,
+            taskId: param.taskId,
+            entityStatus: TaskEntityStatus.Expectation
+        }))
+        try {
+            let res = await TodolistApi.deleteTask(param.todolistId, param.taskId);
+            if (res.data.resultCode === ResultCode.OK) {
+                return {taskId: param.taskId, todolistId: param.todolistId}
+            } else {
+                handleServerAppError(res.data, thunkAPI.dispatch)
+            }
+        } catch (e: any) {
+            handleServerNetworkError(e, thunkAPI.dispatch)
+            thunkAPI.dispatch(changeEntityStatus({
+                todolistId: param.todolistId,
+                taskId: param.taskId,
+                entityStatus: TaskEntityStatus.Prepared
+            }))
+        }
+    })
 
 const initialState: TasksStateType = {}
 const slice = createSlice({
     name: 'tasks',
     initialState,
     reducers: {
-        deleteTaskAC(state, action: PayloadAction<{ taskId: string, todolistId: string }>) {
-            const tasks = state[action.payload.todolistId];
-            const index = tasks.findIndex(t => t.id === action.payload.taskId)
-            tasks.splice(index, 1)
-        },
+        // deleteTaskAC(state, action: PayloadAction<{ taskId: string, todolistId: string }>) {
+        //
+        // },
         addTaskAC(state, action: PayloadAction<{ task: TaskType }>) {
             state[action.payload.task.todoListId].unshift(action.payload.task)
         },
@@ -52,9 +70,6 @@ const slice = createSlice({
             const index = tasks.findIndex(t => t.id === action.payload.taskId)
             tasks[index] = {...tasks[index], title: action.payload.title}
         },
-        // fetchTasksSuccess(state, action: PayloadAction<{ todolistId: string, tasks: TaskType[] }>) {
-        //     state[action.payload.todolistId] = action.payload.tasks
-        // },
         changeEntityStatus(state, action: PayloadAction<{
             todolistId: string,
             taskId: string,
@@ -82,32 +97,22 @@ const slice = createSlice({
         builder.addCase(fetchTasks.fulfilled, (state, action) => {
             state[action.payload.todolistId] = action.payload.tasks
         });
+        builder.addCase(removeTaskTC.fulfilled, (state, action: any) => {
+            const tasks = state[action.payload.todolistId];
+            const index = tasks.findIndex(t => t.id === action.payload.taskId)
+            tasks.splice(index, 1)
+        });
     }
 })
 
 export const tasksReducer = slice.reducer
 export const {
-    deleteTaskAC,
     addTaskAC, changeTaskStatusAC, changeTaskTitleAC, changeEntityStatus
 } = slice.actions
 
 //thunks
 
-export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch<RootActionType>) => {
-    dispatch(changeEntityStatus({todolistId, taskId, entityStatus: TaskEntityStatus.Expectation}))
-    TodolistApi.deleteTask(todolistId, taskId)
-        .then((res) => {
-            if (res.data.resultCode === ResultCode.OK) {
-                dispatch(deleteTaskAC({taskId, todolistId}))
-            } else {
-                handleServerAppError(res.data, dispatch)
-            }
-        })
-        .catch((e) => {
-            handleServerNetworkError(e, dispatch)
-            dispatch(changeEntityStatus({todolistId, taskId, entityStatus: TaskEntityStatus.Prepared}))
-        })
-}
+
 export const createTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch<RootActionType>) => {
     TodolistApi.createTask(todolistId, title)
         .then((res) => {
@@ -150,7 +155,6 @@ export const updateTaskTC = (todolistId: string, taskId: string, data: FlexType)
 
 //types
 export type TasksActionType =
-    | ReturnType<typeof deleteTaskAC>
     | ReturnType<typeof addTaskAC>
     | ReturnType<typeof changeTaskStatusAC>
     | ReturnType<typeof changeTaskTitleAC>

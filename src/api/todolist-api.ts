@@ -64,7 +64,7 @@ export type TodolistType = {
 //T - Type, прилетает динамически
 export type ResponseType<T = {}> = {
     resultCode: number
-    fieldsErrors: []
+    fieldsErrors?: {field: string, error: string}[]
     messages: string[],
     data: T
     entityStatus: TaskEntityStatus

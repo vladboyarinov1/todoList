@@ -1,4 +1,4 @@
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC, tasksReducer} from './tasks-reducer'
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskTC, tasksReducer} from './tasks-reducer'
 import {TasksStateType} from '../../../App/App';
 import {addTodolistAC, removeTodolistAC, setTodolistAC} from '../todolist-reducer/todolists-reducer';
 import {TaskEntityStatus, TaskPriorities, TaskStatuses} from '../../../api/todolist-api';
@@ -38,8 +38,9 @@ describe('todolistReducer', () => {
     });
 
     test('correct task should be deleted from correct array', () => {
+        let param = {taskId: '1', todolistId: 'todolistId2'}
 
-        const action = deleteTaskAC({taskId: '1', todolistId: 'todolistId2'})
+        const action = removeTaskTC.fulfilled(param, '',{taskId: '1', todolistId: 'todolistId2'}, '', )
 
 
         const endState = tasksReducer(startState, action)

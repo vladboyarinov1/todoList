@@ -3,15 +3,33 @@ import {setIsInitializedAC, setLoadingStatusAC} from '../app-reducer/app-reducer
 import {AuthApi} from '../../../api/todolist-api';
 import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
 import {ResultCode} from '../tasks-reducer/tasks-reducer';
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {AxiosError} from 'axios';
 
-const initialState = {
-    isLoggedIn: false,
-}
+export const loginTC = createAsyncThunk('auth/login', async (param: any, thunkAPI) => {
+    thunkAPI.dispatch(setLoadingStatusAC({status: 'loading'}))
+    try {
+        let res = await AuthApi.login(param)
+        if (res.data.resultCode === ResultCode.OK) {
+            thunkAPI.dispatch(setLoadingStatusAC({status: 'succeeded'}))
+            return {value: true};
+
+        } else {
+            handleServerAppError(res.data, thunkAPI.dispatch)
+            return thunkAPI.rejectWithValue({errors: res.data.messages, fieldsErrors: res.data.fieldsErrors})
+        }
+    } catch (e) {
+        handleServerNetworkError(e, thunkAPI.dispatch)
+        return thunkAPI.rejectWithValue({errors: [e.errors], fieldsErrors: undefined})
+    }
+
+})
 
 const slice = createSlice({
     name: 'auth',
-    initialState: initialState,
+    initialState: {
+        isLoggedIn: false,
+    },
     reducers: {
         setIsLoggedInAC(state, action: PayloadAction<{ value: boolean }>) {
             state.isLoggedIn = action.payload.value
@@ -24,20 +42,7 @@ export const {setIsLoggedInAC} = slice.actions
 
 
 // thunks
-export const loginTC = (data: any) => (dispatch: Dispatch) => {
-    // dispatch(setLoadingStatusAC('loading'))
-    AuthApi.login(data)
-        .then((res) => {
-            if (res.data.resultCode === ResultCode.OK) {
-                dispatch(setIsLoggedInAC({value: true}))
-                dispatch(setLoadingStatusAC({status: 'succeeded'}))
 
-            } else {
-                handleServerAppError(res.data, dispatch)
-            }
-        })
-        .catch((e) => handleServerNetworkError(e, dispatch))
-}
 export const initializeAppTC = () => (dispatch: Dispatch) => {
     AuthApi.me().then(res => {
         if (res.data.resultCode === 0) {
