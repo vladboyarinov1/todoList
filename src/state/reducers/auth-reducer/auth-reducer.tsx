@@ -1,24 +1,25 @@
 import {Dispatch} from 'redux'
 import {setIsInitializedAC, setLoadingStatusAC} from '../app-reducer/app-reducer';
-import {AuthApi} from '../../../api/todolist-api';
+import {AuthApi, FieldErrorType, ResponseType} from '../../../api/todolist-api';
 import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
 import {ResultCode} from '../tasks-reducer/tasks-reducer';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {AxiosError} from 'axios';
+import {FormValuesType} from '../../../features/Login/Login';
 
-export const loginTC = createAsyncThunk('auth/login', async (param: any, thunkAPI) => {
+export const loginTC = createAsyncThunk<{ value: boolean }, FormValuesType, {
+    rejectValue: { errors: string[], fieldsErrors?: FieldErrorType[] }
+}>('auth/login', async (param: FormValuesType, thunkAPI) => {
     thunkAPI.dispatch(setLoadingStatusAC({status: 'loading'}))
     try {
         let res = await AuthApi.login(param)
         if (res.data.resultCode === ResultCode.OK) {
             thunkAPI.dispatch(setLoadingStatusAC({status: 'succeeded'}))
             return {value: true};
-
         } else {
             handleServerAppError(res.data, thunkAPI.dispatch)
             return thunkAPI.rejectWithValue({errors: res.data.messages, fieldsErrors: res.data.fieldsErrors})
         }
-    } catch (e) {
+    } catch (e: any) {
         handleServerNetworkError(e, thunkAPI.dispatch)
         return thunkAPI.rejectWithValue({errors: [e.errors], fieldsErrors: undefined})
     }
@@ -34,6 +35,11 @@ const slice = createSlice({
         setIsLoggedInAC(state, action: PayloadAction<{ value: boolean }>) {
             state.isLoggedIn = action.payload.value
         }
+    },
+    extraReducers: builder => {
+        builder.addCase(loginTC.fulfilled, (state, action) => {
+            state.isLoggedIn = action.payload.value
+        })
     }
 })
 

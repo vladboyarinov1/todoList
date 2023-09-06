@@ -70,9 +70,9 @@ export const TodoList: FC<TodoListPropsType> = memo(
         }, [])
 
         let tasksForRender: TaskType[] = getFilterValues(tasks, filter)
-        const tasksList = tasksForRender?.map(t => <Task key={t.id} todolistId={id}
-                                                         entityStatus={t.entityStatus}
-                                                         task={t}/>) ||
+        const tasksList = tasksForRender?.length ? tasksForRender?.map(t => <Task key={t.id} todolistId={id}
+                                                                                  entityStatus={t.entityStatus}
+                                                                                  task={t}/>) :
             <div className={s.emptyTasksText}>Task list is empty</div>
 
         return (

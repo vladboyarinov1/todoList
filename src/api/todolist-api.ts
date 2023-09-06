@@ -61,10 +61,12 @@ export type TodolistType = {
     addedDate: string
     order: number
 }
+export type FieldErrorType = { field: string, error: string };
+
 //T - Type, прилетает динамически
 export type ResponseType<T = {}> = {
     resultCode: number
-    fieldsErrors?: {field: string, error: string}[]
+    fieldsErrors?: FieldErrorType[]
     messages: string[],
     data: T
     entityStatus: TaskEntityStatus

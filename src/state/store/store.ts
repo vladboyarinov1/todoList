@@ -33,6 +33,7 @@ export const store = configureStore({
 // определить автоматически тип всего объекта состояния
 export const useAppSelector: TypedUseSelectorHook<AppRootStateType> = useSelector
 
+
 // @ts-ignore
 window.store = store
 

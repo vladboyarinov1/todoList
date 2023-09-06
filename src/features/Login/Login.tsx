@@ -7,7 +7,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {useFormik} from 'formik';
+import {ErrorMessage, FormikHelpers, useFormik} from 'formik';
 import {validate} from './validate';
 import {useAppDispatch, useAppSelector} from '../../state/store/store';
 import {loginTC} from '../../state/reducers/auth-reducer/auth-reducer';
@@ -31,12 +31,21 @@ export const Login = () => {
             rememberMe: false
         },
         validate,
-        onSubmit: values => {
-            dispatch(loginTC(values))
-            formik.resetForm();//отчищаем форму
+        onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
+            const action = await dispatch(loginTC(values));
+            if (loginTC.rejected.match(action)) {
+                if (action.payload?.fieldsErrors?.length) {
+                    const error = action.payload?.fieldsErrors[0];
+                    formikHelpers.setFieldError(error.field, error.error)
+                }
+            } else  {
+                formik.resetForm();
+            }
 
         },
     });
+
+    //{status: boolean}, any , {rejectValue: {errors: string[], fieldsErrors?: FieldErrorType[]}
     //flow
     //происходит ввод с помощью onChange={formik.handleChange} значение помещается в объект initialValues
     //нажимается кнопка submit вызывается onSubmit={formik.handleSubmit}
@@ -47,8 +56,8 @@ export const Login = () => {
         return <Navigate to={'/'}/>
     }
 
-    return <Grid container display={'flex'} justifyContent={'center'} alignItems={'center'} >
-        <Grid item justifyContent={'center'} paddingTop='100px' >
+    return <Grid container display={'flex'} justifyContent={'center'} alignItems={'center'}>
+        <Grid item justifyContent={'center'} paddingTop="100px">
             <form onSubmit={formik.handleSubmit}>
                 <FormControl>
                     <FormLabel>
@@ -62,7 +71,7 @@ export const Login = () => {
                         <p>Password: free</p>
                     </FormLabel>
                     <FormGroup>
-                        <TextField label="Email" margin="normal"
+                        <TextField label="email" margin="normal"
                                    helperText={formik.touched.email && formik.errors.email && formik.errors.email}
                                    {...formik.getFieldProps('email')}/>
                         <TextField type="password" label="Password"
