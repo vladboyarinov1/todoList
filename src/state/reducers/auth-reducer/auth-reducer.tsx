@@ -1,6 +1,5 @@
-import {Dispatch} from 'redux'
 import {setLoadingStatusAC} from '../app-reducer/app-reducer';
-import {AuthApi, FieldErrorType, ResponseType} from '../../../api/todolist-api';
+import {AuthApi, FieldErrorType} from '../../../api/todolist-api';
 import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
 import {ResultCode} from '../tasks-reducer/tasks-reducer';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
@@ -32,7 +31,7 @@ export const logoutTC = createAsyncThunk('auth/logout', async (param, thunkAPI) 
         let res = await AuthApi.logout()
         if (res.data.resultCode === 0) {
             thunkAPI.dispatch(setLoadingStatusAC({status: 'succeeded'}))
-            return
+            return {isLoggedIn: false}
         } else {
             handleServerAppError(res.data, thunkAPI.dispatch)
             return thunkAPI.rejectWithValue({})
@@ -43,7 +42,6 @@ export const logoutTC = createAsyncThunk('auth/logout', async (param, thunkAPI) 
     }
 
 })
-
 
 // export const initializeAppTC = () => (dispatch: Dispatch) => {
 //     AuthApi.me().then(res => {
@@ -58,10 +56,6 @@ export const logoutTC = createAsyncThunk('auth/logout', async (param, thunkAPI) 
 //         .catch((e) => handleServerNetworkError(e, dispatch))
 //         .finally(() => dispatch(setIsInitializedAC({isInitialized: true})))
 // }
-
-
-
-
 const slice = createSlice({
     name: 'auth',
     initialState: {
@@ -76,7 +70,7 @@ const slice = createSlice({
         builder.addCase(loginTC.fulfilled, (state) => {
             state.isLoggedIn = true
         });
-        builder.addCase(logoutTC.fulfilled, (state) => {
+        builder.addCase(logoutTC.fulfilled, (state) => {debugger
             state.isLoggedIn = false
         });
 

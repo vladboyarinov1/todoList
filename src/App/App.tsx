@@ -65,7 +65,6 @@ const App = (): JSX.Element => {
             mode: mode,
         },
     })
-
     if (!isInitialized) {
         return <div
             style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>

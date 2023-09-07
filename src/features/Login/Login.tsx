@@ -51,7 +51,6 @@ export const Login = () => {
     //нажимается кнопка submit вызывается onSubmit={formik.handleSubmit}
     //этот объект помещается в onSubmit в values
     //дальнейшая логика
-
     if (isLogginIn) {
         return <Navigate to={'/'}/>
     }

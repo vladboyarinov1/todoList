@@ -1,13 +1,12 @@
 import {
-    addTodolistAC,
-    AddTodolistAT, changeTodoListTitleAC,
-    removeTodolistAC,
-    RemoveTodolistAT,
-    setTodolistAC, TodolistDomainType, todolistsReducer
-
+    addTodolistTC,
+    deleteTodolistTC,
+    fetchTodolists,
+    TodolistDomainType,
+    todolistsReducer,
+    updateTodolistTC
 } from './todolists-reducer';
 import {TodolistType} from '../../../api/todolist-api';
-import {v1} from 'uuid';
 
 describe('todolistReducer', () => {
     let initialState: TodolistType[] | any;
@@ -19,7 +18,7 @@ describe('todolistReducer', () => {
     });
 
     test('todolists should be set', () => {
-        const action = setTodolistAC({todos: initialState})
+        const action = fetchTodolists.fulfilled({todos: initialState}, '')
 
         const endState: TodolistDomainType[] = todolistsReducer(initialState, action)
 
@@ -29,7 +28,7 @@ describe('todolistReducer', () => {
 
     test('should remove a todolist from the state', () => {
 
-        const action: RemoveTodolistAT = removeTodolistAC({id: '2'});
+        const action = deleteTodolistTC.fulfilled({id: '2'}, '', '2');
         const expectedState = [
             {id: '1', title: 'First Todo List', filter: 'all', addedDate: '', order: 0},
         ];
@@ -40,15 +39,26 @@ describe('todolistReducer', () => {
     });
 
     test('should add a new todolist to the state', () => {
-        const action: AddTodolistAT = addTodolistAC({title: 'New Todo List', todolistId: v1()});
+        const todolist: TodolistType = {
+            title: 'new todos',
+            id: '12',
+            addedDate: '',
+            order: 0
+
+        }
+        const action = addTodolistTC.fulfilled({todolist}, '', todolist.title);
+
         const newState: TodolistDomainType[] = todolistsReducer([], action);
 
         expect(newState.length).toBe(1)
-        expect(newState[0].title).toBe('New Todo List')
+        expect(newState[0].title).toBe('new todos')
     });
     test('todolist should change the title', () => {
 
-        const action = changeTodoListTitleAC({title: 'newTitleForTodolistWithID2', id: '2'})
+        const action = updateTodolistTC.fulfilled({title: 'newTitleForTodolistWithID2', id: '2'}, '', {
+            id: '2',
+            title: 'newTitleForTodolistWithID2'
+        })
 
         const expectedState: TodolistDomainType[] | any = [
             {id: '1', title: 'First Todo List', filter: 'all', addedDate: '', order: 0, entityStatus: 'idle'},

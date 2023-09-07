@@ -18,10 +18,11 @@ type TasksPropsType = {
 export const Task: FC<TasksPropsType> = memo(({todolistId, task, entityStatus}) => {
     const dispatch = useAppDispatch()
 
-    const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses) => dispatch(updateTaskTC({
+    const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses) => dispatch
+    (updateTaskTC({
         todolistId,
         taskId,
-        data: status
+        model: {status}
     })), [dispatch, todolistId])
 
     const removeTask = useCallback((todolistId: string, taskId: string) => dispatch(removeTaskTC({
@@ -30,7 +31,7 @@ export const Task: FC<TasksPropsType> = memo(({todolistId, task, entityStatus}) 
     })), [dispatch, task.id, todolistId])
 
     const changeTaskTitle = useCallback((title: string) => {
-        dispatch(updateTaskTC({todolistId, taskId: task.id, data: title}))
+        dispatch(updateTaskTC({todolistId, taskId: task.id, model: {title}}))
     }, [dispatch, task.id, todolistId])
 
     return (

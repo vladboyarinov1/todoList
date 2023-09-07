@@ -1,5 +1,5 @@
-import {changeTaskTitleAC, createTaskTC, removeTaskTC, tasksReducer} from './tasks-reducer'
-import {addTodolistAC, removeTodolistAC, setTodolistAC} from '../todolist-reducer/todolists-reducer';
+import {createTaskTC, removeTaskTC, tasksReducer, updateTaskTC} from './tasks-reducer'
+import {addTodolistTC, deleteTodolistTC} from '../todolist-reducer/todolists-reducer';
 import {TaskEntityStatus, TaskPriorities, TaskStatuses} from '../../../api/todolist-api';
 
 describe('todolistReducer', () => {
@@ -75,16 +75,18 @@ describe('todolistReducer', () => {
         expect(endState['todolistId2'][0].status).toBe(TaskStatuses.New);
     });
     test('status of specified task should be changed', () => {
-        const action = changeTaskStatusAC({taskId: '2', model: {status: TaskStatuses.New}, todolistId: 'todolistId2'})
+        const data = {taskId: '2', model: {status: TaskStatuses.New}, todolistId: 'todolistId2'}
+        const action = updateTaskTC.fulfilled(data, '', data);
 
-        const endState = tasksReducer(startState, action)
+        const endState = tasksReducer(startState, action);
 
-        expect(endState['todolistId2'][0].status).toBeFalsy()
-        expect(endState['todolistId1'][0].status).toBeFalsy()
-    })
+        expect(endState['todolistId2'][0].status).toBeFalsy();
+        expect(endState['todolistId1'][0].status).toBeFalsy();
+    });
 
     test('title of specified task should be changed', () => {
-        const action = changeTaskTitleAC({taskId: '1', title: 'newTitle', todolistId: 'todolistId1'})
+        const data = {taskId: '1', model: {title: 'newTitle'}, todolistId: 'todolistId1'}
+        const action = updateTaskTC.fulfilled(data, '', data)
 
 
         const endState = tasksReducer(startState, action)
@@ -93,9 +95,15 @@ describe('todolistReducer', () => {
         expect(endState['todolistId2'][0].title).toBe('bread')
     })
     test('new array should be added when new todolist is added', () => {
-        const action = addTodolistAC({title: 'new title', todolistId: '123'})
+        const payload = {
+            todolist: {
+                id: '1',
+                title: 'T1', addedDate: '', order: 0
+            }
+        }
+        const action = addTodolistTC.fulfilled(payload,'','newTL')
 
-        const endState = tasksReducer(startState, action)
+        const endState = tasksReducer({}, action)
 
         const keys = Object.keys(endState)
         const newKey = keys.find(k => k != 'todolistId1' && k != 'todolistId2')
@@ -103,12 +111,12 @@ describe('todolistReducer', () => {
             throw Error('new key should be added')
         }
 
-        expect(keys.length).toBe(3)
+        expect(keys.length).toBe(1)
         expect(endState[newKey]).toEqual([])
     })
 
     test('property with todolistId should be deleted', () => {
-        const action = removeTodolistAC({id: 'todolistId2'})
+        const action = deleteTodolistTC.fulfilled({id: 'todolistId2'}, '', 'todolistId2')
 
         const endState = tasksReducer(startState, action)
         const keys = Object.keys(endState)
@@ -116,19 +124,19 @@ describe('todolistReducer', () => {
         expect(endState['todolistId2']).not.toBeDefined()
     })
     test('empty arrays should be added when we set todolist', () => {
+        const payload = {
+            todolist: {
+                id: '1',
+                title: 'T1', addedDate: '', order: 0
+            }
+        }
+        const action = addTodolistTC.fulfilled(payload, '', payload.todolist.title)
 
-        const action = setTodolistAC({
-            todos: [
-                {id: '1', title: 'T1', addedDate: '', order: 0},
-                {id: '2', title: 'T2', addedDate: '', order: 1},
-            ]
-        })
-
-        const endState = tasksReducer({}, action)
+        const endState = tasksReducer(startState, action)
         const keys = Object.keys(endState)
 
-        expect(keys.length).toBe(2)
+        expect(keys.length).toBe(3)
         expect(endState['1']).toStrictEqual([])
-        expect(endState['2']).toStrictEqual([])
+        expect(endState['1']).toStrictEqual([])
     })
 })

@@ -3,7 +3,19 @@ import {AuthApi} from '../../../api/todolist-api';
 import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
 import {setIsLoggedInAC} from '../auth-reducer/auth-reducer';
 
-
+// export const initializeAppTC = () => (dispatch: Dispatch) => {
+//     AuthApi.me().then(res => {
+//         if (res.data.resultCode === 0) {
+//             //значит залогинины
+//             dispatch(setIsLoggedInAC({value: true}));
+//             dispatch(setIsInitializedAC({isInitialized: true}))
+//         } else {
+//             handleServerAppError(res.data, dispatch)
+//         }
+//     })
+//         .catch((e) => handleServerNetworkError(e, dispatch))
+//         .finally(() => dispatch(setIsInitializedAC({isInitialized: true})))
+// }
 export const initializeAppTC = createAsyncThunk('app/initializeApp', async (param, {dispatch}) => {
     dispatch(setLoadingStatusAC({status: 'loading'}))
     try {
@@ -11,7 +23,7 @@ export const initializeAppTC = createAsyncThunk('app/initializeApp', async (para
         if (res.data.resultCode === 0) {
             //значит залогинины
             dispatch(setIsLoggedInAC({value: true}));
-            return
+            return;
         } else {
             handleServerAppError(res.data, dispatch)
         }
@@ -21,6 +33,7 @@ export const initializeAppTC = createAsyncThunk('app/initializeApp', async (para
     // finally {
     //     return {isInitialized: true}
     // }
+    // return {isInitialized: true}
 
 })
 
