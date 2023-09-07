@@ -43,19 +43,6 @@ export const logoutTC = createAsyncThunk('auth/logout', async (param, thunkAPI) 
 
 })
 
-// export const initializeAppTC = () => (dispatch: Dispatch) => {
-//     AuthApi.me().then(res => {
-//         if (res.data.resultCode === 0) {
-//             //значит залогинины
-//             dispatch(setIsLoggedInAC({value: true}));
-//             dispatch(setIsInitializedAC({isInitialized: true}))
-//         } else {
-//             handleServerAppError(res.data, dispatch)
-//         }
-//     })
-//         .catch((e) => handleServerNetworkError(e, dispatch))
-//         .finally(() => dispatch(setIsInitializedAC({isInitialized: true})))
-// }
 const slice = createSlice({
     name: 'auth',
     initialState: {
@@ -70,7 +57,7 @@ const slice = createSlice({
         builder.addCase(loginTC.fulfilled, (state) => {
             state.isLoggedIn = true
         });
-        builder.addCase(logoutTC.fulfilled, (state) => {debugger
+        builder.addCase(logoutTC.fulfilled, (state) => {
             state.isLoggedIn = false
         });
 
