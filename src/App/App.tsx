@@ -14,26 +14,28 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import {ThemeProvider} from '@emotion/react';
 import {createTheme} from '@mui/material/styles';
-import {AppDispatchType, useAppDispatch, useAppSelector} from '../state/store/store';
+import {AppDispatchType, AppRootStateType, useAppDispatch, useAppSelector} from '../state/store/store';
 import {TaskType} from '../api/todolist-api';
 import {CircularProgress} from '@mui/material';
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 import {Navigate, Route, Routes} from 'react-router-dom';
-import {Login} from '../features/Login/Login';
-import {TodolistsList} from '../components/TodolistsList/TodolistsList';
+import {Auth} from '../features/Auth/Auth';
+import {TodoListsList} from '../components/TodolistsList/TodolistsList';
 import {Error404} from '../components/ErrorPage/ErrorPage';
 import {logoutTC} from '../state/reducers/auth-reducer/auth-reducer';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {initializeAppTC} from '../state/reducers/app-reducer/app-reducer';
-//optimize import con opt o
+import {appSelectors} from './index';
+
 export type TasksStateType = { // стейт с тасками
     [todoListId: string]: TaskType[]
 }
 
 //Кастомные хуки 1) это функция, которая начинается со слова use. 2) Внутри кастомных хуков можно использовать React хуки либо другие кастомные хуки. 
 
+
 const App = (): JSX.Element => {
-    let isInitialized = useAppSelector(state => state.app.isInitialized)
+    let isInitialized = useAppSelector(appSelectors.selectIsInitialized)
 
     const dispatch: AppDispatchType = useAppDispatch()
 
@@ -103,8 +105,8 @@ const App = (): JSX.Element => {
                     </AppBar>
                     <Container fixed>
                         <Routes>
-                            <Route path={'/'} element={<TodolistsList/>}/>
-                            <Route path={'/login'} element={<Login/>}/>
+                            <Route path={'/'} element={<TodoListsList/>}/>
+                            <Route path={'/auth'} element={<Auth/>}/>
                             <Route path={'/404'} element={<Error404/>}/>
                             <Route path={'*'} element={<Navigate to={'/404'}/>}/>
                         </Routes>

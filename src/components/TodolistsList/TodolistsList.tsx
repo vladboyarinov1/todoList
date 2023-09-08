@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import {AddItemForm} from '../AddItemForm/AddItemForm';
 import Paper from '@mui/material/Paper';
 import {TodoList} from '../TodoList/TodoList';
-import {AppDispatchType, useAppDispatch, useAppSelector} from '../../state/store/store';
+import {AppDispatchType, AppRootStateType, useAppDispatch, useAppSelector} from '../../state/store/store';
 import {
     addTodolistTC,
     fetchTodolists,
@@ -12,18 +12,23 @@ import {
 import {Navigate} from 'react-router-dom';
 import {Box, CircularProgress} from '@mui/material';
 import {RequestStatusType} from '../../state/reducers/app-reducer/app-reducer';
+import {authSelectors} from '../../features/Auth';
+import {todoListsSelector} from './selectors';
 
-export const TodolistsList: FC = () => {
 
-    let todolists = useAppSelector<TodolistDomainType[]>(state => state.todolists)
-    let isLoginIn = useAppSelector<any>(state => state.auth.isLoggedIn)
+export const TodoListsList: FC = () => {
+
+
+    let todoLists = useAppSelector<TodolistDomainType[]>(todoListsSelector)
+
+    let isLoggedIn = useAppSelector<any>(authSelectors.selectIsLoggedIn)
 
 
     let status = useAppSelector<RequestStatusType>(state => state.app.status)
 
 
     useEffect(() => {// диспатчим санку, она попадет в Redux
-        if (!isLoginIn) return
+        if (!isLoggedIn) return
         dispatch(fetchTodolists())
     }, [])
 
@@ -34,7 +39,7 @@ export const TodolistsList: FC = () => {
         dispatch(addTodolistTC(title))
     }, [dispatch])
 
-    const todoListsComponents = todolists.map(tl => {
+    const todoListsComponents = todoLists.map(tl => {
         return (
             <Grid key={tl.id} item>
                 <Paper elevation={12}>
@@ -44,8 +49,8 @@ export const TodolistsList: FC = () => {
         )
     })
 
-    if (!isLoginIn) {
-        return <Navigate to={'/login'}/>
+    if (!isLoggedIn) {
+        return <Navigate to={'/auth'}/>
     }
 
     return (

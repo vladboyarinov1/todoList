@@ -7,11 +7,12 @@ import FormGroup from '@mui/material/FormGroup';
 import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {ErrorMessage, FormikHelpers, useFormik} from 'formik';
+import {FormikHelpers, useFormik} from 'formik';
 import {validate} from './validate';
 import {useAppDispatch, useAppSelector} from '../../state/store/store';
 import {loginTC} from '../../state/reducers/auth-reducer/auth-reducer';
 import {Navigate} from 'react-router-dom';
+import {authSelectors} from './index';
 
 
 export type FormValuesType = {
@@ -20,9 +21,9 @@ export type FormValuesType = {
     rememberMe: boolean
 }
 
-export const Login = () => {
+export const Auth = () => {
     const dispatch = useAppDispatch()
-    let isLogginIn = useAppSelector<any>(state => state.auth.isLoggedIn)
+    let isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
 
     const formik = useFormik({
         initialValues: {
@@ -38,7 +39,7 @@ export const Login = () => {
                     const error = action.payload?.fieldsErrors[0];
                     formikHelpers.setFieldError(error.field, error.error)
                 }
-            } else  {
+            } else {
                 formik.resetForm();
             }
 
@@ -51,7 +52,7 @@ export const Login = () => {
     //нажимается кнопка submit вызывается onSubmit={formik.handleSubmit}
     //этот объект помещается в onSubmit в values
     //дальнейшая логика
-    if (isLogginIn) {
+    if (isLoggedIn) {
         return <Navigate to={'/'}/>
     }
 

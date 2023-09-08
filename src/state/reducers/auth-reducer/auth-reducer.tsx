@@ -3,7 +3,7 @@ import {AuthApi, FieldErrorType} from '../../../api/todolist-api';
 import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
 import {ResultCode} from '../tasks-reducer/tasks-reducer';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {FormValuesType} from '../../../features/Login/Login';
+import {FormValuesType} from '../../../features/Auth/Auth';
 
 export const loginTC = createAsyncThunk<undefined, FormValuesType, {
     rejectValue: { errors: string[], fieldsErrors?: FieldErrorType[] }

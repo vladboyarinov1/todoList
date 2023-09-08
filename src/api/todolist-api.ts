@@ -1,5 +1,5 @@
 import axios, {AxiosResponse} from 'axios';
-import {FormValuesType} from '../features/Login/Login';
+import {FormValuesType} from '../features/Auth/Auth';
 
 //все тот же axios.method просто со значениями по умолчанию
 const instance = axios.create({
