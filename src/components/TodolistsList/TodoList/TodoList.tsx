@@ -28,11 +28,9 @@ export const TodoList: FC<TodoListPropsType> = memo(
         const {id, title} = todolist
         const [filter, setFilter] = useState<FilterValueType>('all')
         let tasks = useAppSelector<TaskType[]>(state => state.tasks[id])
-
         const {fetchTasks, addTaskTC,} = useActions(tasksActions)
 
         const {deleteTodolistTC, changeTodolistFilter, updateTodolistTC} = useActions(todolistsActions)
-
 
         useEffect(() => {
             fetchTasks(id)
@@ -40,19 +38,9 @@ export const TodoList: FC<TodoListPropsType> = memo(
 
         const removeTodolist = () => deleteTodolistTC(id)
 
-        const onClickAllFilter = useCallback(() => {
-            changeTodolistFilter({filter: 'all', id})
-            setFilter('all')
-        }, [dispatch, id])
-
-        const onClickActiveFilter = useCallback(() => {
-            changeTodolistFilter({filter: 'active', id})
-            setFilter('active')
-        }, [dispatch, id])
-
-        const onClickCompleteFilter = useCallback(() => {
-            changeTodolistFilter({filter: 'complete', id})
-            setFilter('complete')
+        const onClickChangeFilter = useCallback((filter: FilterValueType) => {
+            changeTodolistFilter({filter, id})
+            setFilter(filter)
         }, [dispatch, id])
 
         const addTask = useCallback((title: string) => addTaskTC({todolistId: id, title}), [id])
@@ -72,6 +60,12 @@ export const TodoList: FC<TodoListPropsType> = memo(
             }
         }, [])
 
+        const renderFilterButton = (title: string, currenFilter: FilterValueType,) => {
+            return (<ButtonWithMemo title={title} variant={'contained'} size={'small'}
+                                    color={filter === currenFilter ? 'secondary' : 'primary'}
+                                    onClick={() => onClickChangeFilter(currenFilter)}/>)
+        }
+
         let tasksForRender: TaskType[] = getFilterValues(tasks, filter)
         const tasksList = tasksForRender?.length ? tasksForRender?.map(t => <Task key={t.id} todolistId={id}
                                                                                   entityStatus={t.entityStatus}
@@ -80,36 +74,27 @@ export const TodoList: FC<TodoListPropsType> = memo(
 
         return (
             <div className={entityStatus === 'loading' ? `${s.todolist} ${s.disabledTodos}` : s.todolist}>
-                <Typography variant="h5" align="center" fontWeight="bold" padding="10px 0">
+                <Typography variant="h5" align="center" fontWeight="bold" padding="10px 0"
+                            style={{width: '300px', wordWrap: 'break-word'}}>
                     <EditableSpan title={title} changeTitle={changeTodoListTitle}/>
                     <IconButton onClick={removeTodolist}
                                 size={'small'}
                     ><RestoreFromTrashIcon/></IconButton>
                 </Typography>
-                <AddItemForm addItem={addTask} label={'task name'} disabled={entityStatus === 'loading'}/>
-                {
-                    tasksList
-                }
-                <div className={s.btnFilterContainer}>
-                    <ButtonWithMemo title={'all'} variant={'contained'} size={'small'}
-                                    color={filter === 'all' ? 'secondary' : 'primary'}
-                                    onClick={onClickAllFilter}/>
-                    <ButtonWithMemo title={'active'} variant={'contained'} size={'small'}
-                                    color={filter === 'active' ? 'secondary' : 'primary'}
-                                    onClick={onClickActiveFilter}/>
-                    <ButtonWithMemo title={'complete'} variant={'contained'} size={'small'}
-                                    color={filter === 'complete' ? 'secondary' : 'primary'}
-                                    onClick={onClickCompleteFilter}/>
+               <div className={s.addItemFormWrapper}>
+                   <AddItemForm addItem={addTask} label={'task name'} disabled={entityStatus === 'loading'}/>
+               </div>
 
+                <div className={s.tasksListContainer}>
+                    {tasksList}
+                </div>
+
+                <div className={s.btnFilterContainer}>
+                    {renderFilterButton('All', 'all')}
+                    {renderFilterButton('Active', 'active')}
+                    {renderFilterButton('Complete', 'complete')}
                 </div>
             </div>
         );
     });
-// , (prevProps, nextProps) => {
-//     return (
-//         prevProps.todolist.id === nextProps.todolist.id &&
-//         prevProps.todolist.filter === nextProps.todolist.filter &&
-//         prevProps.todolist.title === nextProps.todolist.title
-//     );
-// }
 

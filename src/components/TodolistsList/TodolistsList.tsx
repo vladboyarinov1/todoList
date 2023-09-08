@@ -30,7 +30,7 @@ export const TodoListsList: FC = () => {
 
     const todoListsComponents = todoLists.map(tl => {
         return (
-            <Grid key={tl.id} item>
+            <Grid key={tl.id} item >
                 <Paper elevation={12}>
                     <TodoList todolist={tl} entityStatus={tl.entityStatus}/>
                 </Paper>
@@ -54,7 +54,7 @@ export const TodoListsList: FC = () => {
                     <CircularProgress sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}/>
                 </Box> :
                 <>
-                    <Grid container sx={{p: '15px 0'}}>
+                    <Grid container sx={{p: '15px 0'}} style={{width: '300px'}}>
                         <AddItemForm addItem={addNewTodoList} label="todolist name"/>
                     </Grid>
                     <Grid container spacing={4}>{todoListsComponents}</Grid>

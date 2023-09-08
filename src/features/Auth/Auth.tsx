@@ -12,7 +12,8 @@ import {validate} from './validate';
 import {useAppDispatch, useAppSelector} from '../../state/store/store';
 import {loginTC} from './auth-reducer/auth-reducer';
 import {Navigate} from 'react-router-dom';
-import {authSelectors} from './index';
+import {authAction, authSelectors} from './index';
+import {useActions} from '../../hooks/useActions/useActions';
 
 
 export type FormValuesType = {
@@ -22,8 +23,9 @@ export type FormValuesType = {
 }
 
 export const Auth = () => {
-    const dispatch = useAppDispatch()
     let isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
+    const dispatch = useAppDispatch()
+    const {loginTC, logoutTC} = useActions(authAction)
 
     const formik = useFormik({
         initialValues: {
@@ -33,7 +35,7 @@ export const Auth = () => {
         },
         validate,
         onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
-            const action = await dispatch(loginTC(values));
+            const action = await dispatch(authAction.loginTC(values));
             if (loginTC.rejected.match(action)) {
                 if (action.payload?.fieldsErrors?.length) {
                     const error = action.payload?.fieldsErrors[0];

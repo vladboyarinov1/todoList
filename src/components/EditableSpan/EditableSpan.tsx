@@ -23,14 +23,12 @@ export const EditableSpan: FC<EditableSpanPropsType> = memo(({title, changeTitle
         changeTitle(localTitle)// передаем новое название в функцию
     }
 
-
     return (
         editMode
-            ? <TextField onChange={changeLocalTitle}
+            ? <TextField  onChange={changeLocalTitle}
                          onBlur={offEditMode}
-                         value={localTitle} size="small" variant="standard"/>// title но уже пропущенный через локальный стейт
-            : <span onDoubleClick={onEditMode}>{title}</span>
+                         value={localTitle} size="small" variant="standard" multiline/>// title но уже пропущенный через локальный стейт
+            : <span style={{maxWidth: '210px',wordWrap: 'break-word'}} onDoubleClick={onEditMode}>{title}</span>
     );
 });
 
-//кликаем по названию таски - появляется форма для редактирования

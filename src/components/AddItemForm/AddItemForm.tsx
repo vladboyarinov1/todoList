@@ -15,7 +15,7 @@ export const AddItemForm: FC<AddItemFormProps> = memo((props) => {
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
 
-    const maxTaskLength = title.length > 15
+    const maxTaskLength = title.length > 100
     const taskNotAdd = !title.length || maxTaskLength
     const errorMessage = 'Error: enter the correct value!'
 
@@ -40,7 +40,7 @@ export const AddItemForm: FC<AddItemFormProps> = memo((props) => {
 
 
     return (
-        <div>
+        <div style={{display: 'flex', justifyContent: 'space-between', width: '80%'}}>
             <TextField onChange={changeLocalTitle} value={title} onKeyDown={addItemEnter}
                        error={error} size={'small'}
                        onBlur={onBlurHandler}

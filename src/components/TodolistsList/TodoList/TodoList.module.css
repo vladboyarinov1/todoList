@@ -13,6 +13,12 @@
     align-items: center;
 
 }
+.tasksListContainer {
+    width: 100%;
+    max-height: 200px;
+    overflow: auto;
+}
+
 .disabledTodos {
     opacity: 0.5;
     pointer-events: none;
@@ -22,6 +28,14 @@
     font-weight: 500;
     font-size: 24px;
     padding: 20px 0 10px 0;
+    display: flex;
+    justify-content: center;
+}
+.addItemFormWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 0px 0px 10px 0;
 }
 
 .btnFilterContainer {
