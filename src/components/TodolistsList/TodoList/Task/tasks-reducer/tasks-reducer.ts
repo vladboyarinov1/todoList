@@ -1,11 +1,11 @@
-import {TasksStateType} from '../../../App/App';
-import {SetTodolistAT,} from '../todolist-reducer/todolists-reducer';
-import {TaskEntityStatus, TaskPriorities, TaskStatuses, TodolistApi} from '../../../api/todolist-api';
-import {SetErrorACType} from '../app-reducer/app-reducer';
+import {TasksStateType} from '../../../../../App/App';
+import {SetTodolistAT,} from '../../../todolists-reducer/todolists-reducer';
+import {TaskEntityStatus, TaskPriorities, TaskStatuses, TodolistApi} from '../../../../../api/todolist-api';
+import {SetErrorACType} from '../../../../../App/app-reducer/app-reducer';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {AppRootStateType} from '../../store/store';
-import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
-import {asyncActions as asyncTodolistsActions} from '../todolist-reducer/todolists-reducer'
+import {AppRootStateType} from '../../../../../state/store/store';
+import {handleServerAppError, handleServerNetworkError} from '../../../../../utils/error-utils';
+import {asyncActions as asyncTodolistsActions} from '../../../todolists-reducer/todolists-reducer'
 
 
 const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (todolistId: string) => {

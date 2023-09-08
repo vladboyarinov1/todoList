@@ -1,9 +1,9 @@
-import {setLoadingStatusAC} from '../app-reducer/app-reducer';
+import {setLoadingStatusAC} from '../../../App/app-reducer/app-reducer';
 import {AuthApi, FieldErrorType} from '../../../api/todolist-api';
 import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
-import {ResultCode} from '../tasks-reducer/tasks-reducer';
+import {ResultCode} from '../../../components/TodolistsList/TodoList/Task/tasks-reducer/tasks-reducer';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {FormValuesType} from '../../../features/Auth/Auth';
+import {FormValuesType} from '../Auth';
 
 export const loginTC = createAsyncThunk<undefined, FormValuesType, {
     rejectValue: { errors: string[], fieldsErrors?: FieldErrorType[] }

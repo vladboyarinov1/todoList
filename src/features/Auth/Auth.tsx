@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 import {FormikHelpers, useFormik} from 'formik';
 import {validate} from './validate';
 import {useAppDispatch, useAppSelector} from '../../state/store/store';
-import {loginTC} from '../../state/reducers/auth-reducer/auth-reducer';
+import {loginTC} from './auth-reducer/auth-reducer';
 import {Navigate} from 'react-router-dom';
 import {authSelectors} from './index';
 

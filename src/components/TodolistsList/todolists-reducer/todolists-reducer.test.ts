@@ -4,7 +4,7 @@ import {
 } from './todolists-reducer';
 import {TodolistType} from '../../../api/todolist-api';
 import {asyncActions as todolistsAsyncActions} from './todolists-reducer';
-import {todolistsActions} from '../../../components/TodolistsList';
+import {todolistsActions} from '../index';
 
 describe('todolistReducer', () => {
     let initialState: TodolistType[] | any;

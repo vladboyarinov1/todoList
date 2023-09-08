@@ -1,13 +1,13 @@
 import React, {FC, memo, useCallback} from 'react';
-import {EditableSpan} from '../../EditableSpan/EditableSpan';
+import {EditableSpan} from '../../../EditableSpan/EditableSpan';
 import {IconButton, ListItem} from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
-import {SuperCheckBox} from '../../SuperCheckBox/SuperCheckBox';
-import {TaskEntityStatus, TaskStatuses, TaskType} from '../../../api/todolist-api';
-import {useAppDispatch} from '../../../state/store/store';
+import {SuperCheckBox} from '../../../SuperCheckBox/SuperCheckBox';
+import {TaskEntityStatus, TaskStatuses, TaskType} from '../../../../api/todolist-api';
+import {useAppDispatch} from '../../../../state/store/store';
 import s from './Task.module.css'
-import {useActions} from '../../../hooks/useActions/useActions';
-import {tasksActions} from '../../TodolistsList';
+import {useActions} from '../../../../hooks/useActions/useActions';
+import {tasksActions} from '../../index';
 
 type TasksPropsType = {
     todolistId: string

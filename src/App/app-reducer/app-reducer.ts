@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {AuthApi} from '../../../api/todolist-api';
-import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
-import {setIsLoggedInAC} from '../auth-reducer/auth-reducer';
+import {AuthApi} from '../../api/todolist-api';
+import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
+import {setIsLoggedInAC} from '../../features/Auth/auth-reducer/auth-reducer';
 
 // export const initializeAppTC = () => (dispatch: Dispatch) => {
 //     AuthApi.me().then(res => {

@@ -21,9 +21,9 @@ import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 import {Navigate, Route, Routes} from 'react-router-dom';
 import {TodoListsList} from '../components/TodolistsList/TodolistsList';
 import {Error404} from '../components/ErrorPage/ErrorPage';
-import {logoutTC} from '../state/reducers/auth-reducer/auth-reducer';
+import {logoutTC} from '../features/Auth/auth-reducer/auth-reducer';
 import LogoutIcon from '@mui/icons-material/Logout';
-import {initializeAppTC} from '../state/reducers/app-reducer/app-reducer';
+import {initializeAppTC} from './app-reducer/app-reducer';
 import {appSelectors} from './index';
 import { Auth } from '../features/Auth';
 

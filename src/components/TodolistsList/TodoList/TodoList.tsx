@@ -1,20 +1,20 @@
 import React, {FC, memo, useCallback, useEffect, useState} from 'react';
-import {AddItemForm} from '../AddItemForm/AddItemForm';
-import {EditableSpan} from '../EditableSpan/EditableSpan';
+import {AddItemForm} from '../../AddItemForm/AddItemForm';
+import {EditableSpan} from '../../EditableSpan/EditableSpan';
 import s from './TodoList.module.css'
 import {IconButton, Typography} from '@mui/material';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
-import {useAppDispatch, useAppSelector} from '../../state/store/store';
+import {useAppDispatch, useAppSelector} from '../../../state/store/store';
 import {
     FilterValueType,
-} from '../../state/reducers/todolist-reducer/todolists-reducer';
-import {ButtonWithMemo} from '../ButtonWithMemo/ButtonWithMemo';
+} from '../todolists-reducer/todolists-reducer';
+import {ButtonWithMemo} from '../../ButtonWithMemo/ButtonWithMemo';
 import {Task} from './Task/Task';
-import {TaskStatuses, TaskType, TodolistType} from '../../api/todolist-api';
-import {RequestStatusType} from '../../state/reducers/app-reducer/app-reducer';
+import {TaskStatuses, TaskType, TodolistType} from '../../../api/todolist-api';
+import {RequestStatusType} from '../../../App/app-reducer/app-reducer';
 
-import {useActions} from '../../hooks/useActions/useActions';
-import {tasksActions, todolistsActions} from '../TodolistsList';
+import {useActions} from '../../../hooks/useActions/useActions';
+import {tasksActions, todolistsActions} from '../index';
 
 
 type TodoListPropsType = {

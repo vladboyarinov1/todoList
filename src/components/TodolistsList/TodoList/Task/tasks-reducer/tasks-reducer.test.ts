@@ -1,7 +1,7 @@
 import {tasksReducer} from './tasks-reducer'
-import {TaskEntityStatus, TaskPriorities, TaskStatuses} from '../../../api/todolist-api';
+import {TaskEntityStatus, TaskPriorities, TaskStatuses} from '../../../../../api/todolist-api';
 import {asyncActions as tasksAsyncActions} from './tasks-reducer';
-import {asyncActions as todolistsAsyncActions} from '../todolist-reducer/todolists-reducer';
+import {asyncActions as todolistsAsyncActions} from '../../../todolists-reducer/todolists-reducer';
 
 describe('todolistReducer', () => {
     let startState: any;

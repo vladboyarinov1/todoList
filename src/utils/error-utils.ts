@@ -4,7 +4,7 @@ import {
     SetErrorACType,
     setLoadingStatusAC,
     SetLoadingStatusACType
-} from '../state/reducers/app-reducer/app-reducer';
+} from '../App/app-reducer/app-reducer';
 import {ResponseType} from '../api/todolist-api';
 
 type ErrorUtilsDispatchType = Dispatch<SetErrorACType | SetLoadingStatusACType>

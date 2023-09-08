@@ -1,8 +1,8 @@
-import {tasksReducer} from '../tasks-reducer/tasks-reducer';
-import {TodolistDomainType, todolistsReducer} from '../todolist-reducer/todolists-reducer';
+import {tasksReducer} from '../../../components/TodolistsList/TodoList/Task/tasks-reducer/tasks-reducer';
+import {TodolistDomainType, todolistsReducer} from '../../../components/TodolistsList/todolists-reducer/todolists-reducer';
 import {TasksStateType,} from '../../../App/App';
 import {TodolistType} from '../../../api/todolist-api';
-import {asyncActions as todolistsAsyncActions} from '../todolist-reducer/todolists-reducer';
+import {asyncActions as todolistsAsyncActions} from '../../../components/TodolistsList/todolists-reducer/todolists-reducer';
 
 test('ids should be equals', () => {
     const startTasksState: TasksStateType = {}
