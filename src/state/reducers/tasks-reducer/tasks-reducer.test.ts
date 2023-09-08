@@ -1,6 +1,6 @@
 import {tasksReducer} from './tasks-reducer'
 import {TaskEntityStatus, TaskPriorities, TaskStatuses} from '../../../api/todolist-api';
-import {createTaskTC, removeTaskTC, updateTaskTC} from './tasks-actions';
+import {addTaskTC, removeTaskTC, updateTaskTC} from './tasks-actions';
 import {addTodolistTC, deleteTodolistTC} from '../todolist-reducer/todolists-actions';
 
 describe('todolistReducer', () => {
@@ -48,7 +48,7 @@ describe('todolistReducer', () => {
         expect(endState['todolistId2'].length).toBeFalsy()
     })
     test('correct task should be added to correct array', () => {
-        const action = createTaskTC.fulfilled(
+        const action = addTaskTC.fulfilled(
             {
                 task: {
                     id: '4',

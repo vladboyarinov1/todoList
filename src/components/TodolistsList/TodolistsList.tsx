@@ -24,12 +24,9 @@ export const TodoListsList: FC = () => {
         fetchTodolists()
     }, [])
 
-
-    const dispatch: AppDispatchType = useAppDispatch()
-
     const addNewTodoList = useCallback((title: string) => {
         addTodolistTC(title)
-    }, [dispatch])
+    }, [])
 
     const todoListsComponents = todoLists.map(tl => {
         return (

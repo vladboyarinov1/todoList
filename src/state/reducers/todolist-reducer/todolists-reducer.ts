@@ -1,14 +1,14 @@
-import {TodolistApi, TodolistType} from '../../../api/todolist-api';
-import {RequestStatusType, setLoadingStatusAC, SetLoadingStatusACType} from '../app-reducer/app-reducer';
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {TodolistType} from '../../../api/todolist-api';
+import {RequestStatusType, SetLoadingStatusACType} from '../app-reducer/app-reducer';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {addTodolistTC, deleteTodolistTC, fetchTodolists, updateTodolistTC} from './todolists-actions';
 
 const initialState: TodolistDomainType[] = []
-const slice = createSlice({
+export const slice = createSlice({
     name: 'todolists',
     initialState: initialState,
     reducers: {
-        changeTodolistFilterAC(state, action: PayloadAction<{
+        changeTodolistFilter(state, action: PayloadAction<{
             filter: FilterValueType,
             id: string
         }>) {
@@ -51,8 +51,7 @@ const slice = createSlice({
 
 export const todolistsReducer = slice.reducer
 export const {
-    // changeTodoListTitleAC,
-    changeTodolistFilterAC,
+    changeTodolistFilter,
     changeTodosEntityStatus
 } = slice.actions
 
@@ -60,14 +59,10 @@ export const {
 export type SetTodolistAT = ReturnType<typeof fetchTodolists.fulfilled>
 
 export  type TodolistsActionType =
-// | RemoveTodolistAT
-// | AddTodolistAT
     | SetTodolistAT
     | SetLoadingStatusACType
-    // | ReturnType<typeof changeTodoListTitleAC>
-    | ReturnType<typeof changeTodolistFilterAC>
+    | ReturnType<typeof changeTodolistFilter>
     | ReturnType<typeof changeTodosEntityStatus>
-
 
 export type FilterValueType = 'all' | 'active' | 'complete'
 

@@ -77,7 +77,7 @@ export const removeTaskTC = createAsyncThunk('tasks/removeTask',
             }))
         }
     })
-export const createTaskTC = createAsyncThunk('tasks/addTask',
+export const addTaskTC = createAsyncThunk('tasks/addTask',
     async (param: { todolistId: string, title: string }, {dispatch, rejectWithValue}) => {
         const res = await TodolistApi.createTask(param.todolistId, param.title)
         try {

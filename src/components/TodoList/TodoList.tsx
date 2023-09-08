@@ -6,7 +6,7 @@ import {IconButton, Typography} from '@mui/material';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import {useAppDispatch, useAppSelector} from '../../state/store/store';
 import {
-    changeTodolistFilterAC,
+    changeTodolistFilter,
     FilterValueType,
 
 } from '../../state/reducers/todolist-reducer/todolists-reducer';
@@ -14,9 +14,9 @@ import {ButtonWithMemo} from '../ButtonWithMemo/ButtonWithMemo';
 import {Task} from './Task/Task';
 import {TaskStatuses, TaskType, TodolistType} from '../../api/todolist-api';
 import {RequestStatusType} from '../../state/reducers/app-reducer/app-reducer';
-import {createTaskTC, fetchTasks} from '../../state/reducers/tasks-reducer/tasks-actions';
+import {addTaskTC, fetchTasks} from '../../state/reducers/tasks-reducer/tasks-actions';
 import {useActions} from '../../hooks/useActions/useActions';
-import {tasksActions} from '../TodolistsList';
+import {tasksActions, todolistsActions} from '../TodolistsList';
 import {deleteTodolistTC, updateTodolistTC} from '../../state/reducers/todolist-reducer/todolists-actions';
 
 type TodoListPropsType = {
@@ -30,34 +30,38 @@ export const TodoList: FC<TodoListPropsType> = memo(
         const {id, title} = todolist
         const [filter, setFilter] = useState<FilterValueType>('all')
         let tasks = useAppSelector<TaskType[]>(state => state.tasks[id])
-        const {fetchTasks, createTaskTC} = useActions(tasksActions)
+
+        const {fetchTasks, addTaskTC,} = useActions(tasksActions)
+
+        const {deleteTodolistTC, changeTodolistFilter, updateTodolistTC} = useActions(todolistsActions)
 
 
         useEffect(() => {
             fetchTasks(id)
         }, [dispatch, id])
 
-        const removeTodolist = () => dispatch(deleteTodolistTC(id))
+        const removeTodolist = () => deleteTodolistTC(id)
+
         const onClickAllFilter = useCallback(() => {
-            dispatch(changeTodolistFilterAC({filter: 'all', id}))
+            changeTodolistFilter({filter: 'all', id})
             setFilter('all')
         }, [dispatch, id])
 
         const onClickActiveFilter = useCallback(() => {
-            dispatch(changeTodolistFilterAC({filter: 'active', id}))
+            changeTodolistFilter({filter: 'active', id})
             setFilter('active')
         }, [dispatch, id])
 
         const onClickCompleteFilter = useCallback(() => {
-            dispatch(changeTodolistFilterAC({filter: 'complete', id}))
+            changeTodolistFilter({filter: 'complete', id})
             setFilter('complete')
         }, [dispatch, id])
 
-        const addTask = useCallback((title: string) => createTaskTC({todolistId: id, title}), [dispatch, id])
+        const addTask = useCallback((title: string) => addTaskTC({todolistId: id, title}), [id])
 
         const changeTodoListTitle = useCallback((title: string) => {
-            dispatch(updateTodolistTC({id, title}))
-        }, [dispatch, id])
+       updateTodolistTC({id, title})
+        }, [id])
 
         const getFilterValues = useCallback((tasksList: Array<TaskType>, filterValue: FilterValueType) => {
             switch (filterValue) {

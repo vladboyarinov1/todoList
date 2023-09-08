@@ -3,7 +3,7 @@ import {SetTodolistAT,} from '../todolist-reducer/todolists-reducer';
 import {TaskEntityStatus, TaskPriorities, TaskStatuses} from '../../../api/todolist-api';
 import {SetErrorACType} from '../app-reducer/app-reducer';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {createTaskTC, fetchTasks, removeTaskTC, updateTaskTC} from './tasks-actions';
+import {addTaskTC, fetchTasks, removeTaskTC, updateTaskTC} from './tasks-actions';
 import {addTodolistTC, deleteTodolistTC} from '../todolist-reducer/todolists-actions';
 
 const initialState: TasksStateType = {}
@@ -24,7 +24,7 @@ const slice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(createTaskTC.fulfilled, (state, action) => {
+        builder.addCase(addTaskTC.fulfilled, (state, action) => {
             state[action.payload.task.todoListId].unshift(action.payload.task)
         });
         builder.addCase(updateTaskTC.fulfilled, (state, action) => {
