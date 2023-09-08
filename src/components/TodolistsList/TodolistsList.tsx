@@ -49,16 +49,16 @@ export const TodoListsList: FC = () => {
                         display: 'flex',
                         justifyContent: 'center',
                         minHeight: `calc(100vh - ${65}px)`,
-                        alignItems: 'center'
+                        alignItems: 'center',
                     }}>
                     <CircularProgress sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}/>
                 </Box> :
-                <>
-                    <Grid container sx={{p: '15px 0'}} style={{width: '300px'}}>
+                <div style={{paddingBottom: '20px'}}>
+                    <Grid container sx={{p: '15px 0'}} style={{width: '300px'}} >
                         <AddItemForm addItem={addNewTodoList} label="todolist name"/>
                     </Grid>
                     <Grid container spacing={4}>{todoListsComponents}</Grid>
-                </>}
+                </div>}
         </>
     );
 };

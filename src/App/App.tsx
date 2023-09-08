@@ -104,7 +104,7 @@ const App = (): JSX.Element => {
                             }
                         </Toolbar>
                     </AppBar>
-                    <Container fixed>
+                    <Container fixed >
                         <Routes>
                             <Route path={'/'} element={<TodoListsList/>}/>
                             <Route path={'/auth'} element={<Auth/>}/>
