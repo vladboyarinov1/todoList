@@ -6,18 +6,16 @@ import {IconButton, Typography} from '@mui/material';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import {useAppDispatch, useAppSelector} from '../../state/store/store';
 import {
-    changeTodolistFilter,
     FilterValueType,
-
 } from '../../state/reducers/todolist-reducer/todolists-reducer';
 import {ButtonWithMemo} from '../ButtonWithMemo/ButtonWithMemo';
 import {Task} from './Task/Task';
 import {TaskStatuses, TaskType, TodolistType} from '../../api/todolist-api';
 import {RequestStatusType} from '../../state/reducers/app-reducer/app-reducer';
-import {addTaskTC, fetchTasks} from '../../state/reducers/tasks-reducer/tasks-actions';
+
 import {useActions} from '../../hooks/useActions/useActions';
 import {tasksActions, todolistsActions} from '../TodolistsList';
-import {deleteTodolistTC, updateTodolistTC} from '../../state/reducers/todolist-reducer/todolists-actions';
+
 
 type TodoListPropsType = {
     todolist: TodolistType
@@ -60,7 +58,7 @@ export const TodoList: FC<TodoListPropsType> = memo(
         const addTask = useCallback((title: string) => addTaskTC({todolistId: id, title}), [id])
 
         const changeTodoListTitle = useCallback((title: string) => {
-       updateTodolistTC({id, title})
+            updateTodolistTC({id, title})
         }, [id])
 
         const getFilterValues = useCallback((tasksList: Array<TaskType>, filterValue: FilterValueType) => {

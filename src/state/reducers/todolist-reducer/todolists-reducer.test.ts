@@ -3,7 +3,8 @@ import {
     todolistsReducer
 } from './todolists-reducer';
 import {TodolistType} from '../../../api/todolist-api';
-import {addTodolistTC, deleteTodolistTC, fetchTodolists, updateTodolistTC} from './todolists-actions';
+import {asyncActions as todolistsAsyncActions} from './todolists-reducer';
+import {todolistsActions} from '../../../components/TodolistsList';
 
 describe('todolistReducer', () => {
     let initialState: TodolistType[] | any;
@@ -15,7 +16,7 @@ describe('todolistReducer', () => {
     });
 
     test('todolists should be set', () => {
-        const action = fetchTodolists.fulfilled({todos: initialState}, '')
+        const action = todolistsAsyncActions.fetchTodolists.fulfilled({todos: initialState}, '')
 
         const endState: TodolistDomainType[] = todolistsReducer(initialState, action)
 
@@ -25,7 +26,7 @@ describe('todolistReducer', () => {
 
     test('should remove a todolist from the state', () => {
 
-        const action = deleteTodolistTC.fulfilled({id: '2'}, '', '2');
+        const action = todolistsActions.deleteTodolistTC.fulfilled({id: '2'}, '', '2');
         const expectedState = [
             {id: '1', title: 'First Todo List', filter: 'all', addedDate: '', order: 0},
         ];
@@ -43,7 +44,7 @@ describe('todolistReducer', () => {
             order: 0
 
         }
-        const action = addTodolistTC.fulfilled({todolist}, '', todolist.title);
+        const action = todolistsAsyncActions.addTodolistTC.fulfilled({todolist}, '', todolist.title);
 
         const newState: TodolistDomainType[] = todolistsReducer([], action);
 
@@ -52,7 +53,7 @@ describe('todolistReducer', () => {
     });
     test('todolist should change the title', () => {
 
-        const action = updateTodolistTC.fulfilled({title: 'newTitleForTodolistWithID2', id: '2'}, '', {
+        const action = todolistsActions.updateTodolistTC.fulfilled({title: 'newTitleForTodolistWithID2', id: '2'}, '', {
             id: '2',
             title: 'newTitleForTodolistWithID2'
         })

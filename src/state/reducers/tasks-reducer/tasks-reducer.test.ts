@@ -1,7 +1,7 @@
 import {tasksReducer} from './tasks-reducer'
 import {TaskEntityStatus, TaskPriorities, TaskStatuses} from '../../../api/todolist-api';
-import {addTaskTC, removeTaskTC, updateTaskTC} from './tasks-actions';
-import {addTodolistTC, deleteTodolistTC} from '../todolist-reducer/todolists-actions';
+import {asyncActions as tasksAsyncActions} from './tasks-reducer';
+import {asyncActions as todolistsAsyncActions} from '../todolist-reducer/todolists-reducer';
 
 describe('todolistReducer', () => {
     let startState: any;
@@ -40,7 +40,7 @@ describe('todolistReducer', () => {
     test('correct task should be deleted from correct array', () => {
         let param = {taskId: '1', todolistId: 'todolistId2'}
 
-        const action = removeTaskTC.fulfilled(param, '', {taskId: '1', todolistId: 'todolistId2'}, '',)
+        const action = tasksAsyncActions.removeTaskTC.fulfilled(param, '', {taskId: '1', todolistId: 'todolistId2'}, '',)
 
 
         const endState = tasksReducer(startState, action)
@@ -48,7 +48,7 @@ describe('todolistReducer', () => {
         expect(endState['todolistId2'].length).toBeFalsy()
     })
     test('correct task should be added to correct array', () => {
-        const action = addTaskTC.fulfilled(
+        const action = tasksAsyncActions.addTaskTC.fulfilled(
             {
                 task: {
                     id: '4',
@@ -77,7 +77,7 @@ describe('todolistReducer', () => {
     });
     test('status of specified task should be changed', () => {
         const data = {taskId: '2', model: {status: TaskStatuses.New}, todolistId: 'todolistId2'}
-        const action = updateTaskTC.fulfilled(data, '', data);
+        const action = tasksAsyncActions.updateTaskTC.fulfilled(data, '', data);
 
         const endState = tasksReducer(startState, action);
 
@@ -87,7 +87,7 @@ describe('todolistReducer', () => {
 
     test('title of specified task should be changed', () => {
         const data = {taskId: '1', model: {title: 'newTitle'}, todolistId: 'todolistId1'}
-        const action = updateTaskTC.fulfilled(data, '', data)
+        const action = tasksAsyncActions.updateTaskTC.fulfilled(data, '', data)
 
 
         const endState = tasksReducer(startState, action)
@@ -102,7 +102,7 @@ describe('todolistReducer', () => {
                 title: 'T1', addedDate: '', order: 0
             }
         }
-        const action = addTodolistTC.fulfilled(payload,'','newTL')
+        const action = todolistsAsyncActions.addTodolistTC.fulfilled(payload,'','newTL')
 
         const endState = tasksReducer({}, action)
 
@@ -117,7 +117,7 @@ describe('todolistReducer', () => {
     })
 
     test('property with todolistId should be deleted', () => {
-        const action = deleteTodolistTC.fulfilled({id: 'todolistId2'}, '', 'todolistId2')
+        const action = todolistsAsyncActions.deleteTodolistTC.fulfilled({id: 'todolistId2'}, '', 'todolistId2')
 
         const endState = tasksReducer(startState, action)
         const keys = Object.keys(endState)
@@ -131,7 +131,7 @@ describe('todolistReducer', () => {
                 title: 'T1', addedDate: '', order: 0
             }
         }
-        const action = addTodolistTC.fulfilled(payload, '', payload.todolist.title)
+        const action = todolistsAsyncActions.addTodolistTC.fulfilled(payload, '', payload.todolist.title)
 
         const endState = tasksReducer(startState, action)
         const keys = Object.keys(endState)
