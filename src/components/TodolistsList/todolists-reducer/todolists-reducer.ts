@@ -1,5 +1,10 @@
 import {TodolistApi, TodolistType} from '../../../api/todolist-api';
-import {RequestStatusType, setLoadingStatusAC, SetLoadingStatusACType} from '../../../App/app-reducer/app-reducer';
+import {
+    RequestStatusType,
+    setLinearProgressAC,
+    setLoadingStatusAC,
+    SetLoadingStatusACType
+} from '../../../App/app-reducer/app-reducer';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {ResultCode} from '../TodoList/Task/tasks-reducer/tasks-reducer';
 import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
@@ -16,46 +21,51 @@ const fetchTodolists = createAsyncThunk('todolists/fetchTodolists', async (param
 })
 
 const addTodolistTC = createAsyncThunk('todolists/addTodolist', async (title: string, {dispatch}) => {
+    dispatch(setLinearProgressAC({value: true}))
     try {
         const res = await TodolistApi.createTodolist(title)
         if (res.data.resultCode === ResultCode.OK) {
+            dispatch(setLinearProgressAC({value: false}))
             return {todolist: res.data.data.item}
-            // return {title: res.data.data.item.title, todolistId: res.data.data.item.id}
-            // dispatch(setLoadingStatusAC('succeeded'))
         } else {
             handleServerAppError(res.data, dispatch)
         }
     } catch (e: any) {
         handleServerNetworkError(e, dispatch)
+        dispatch(setLinearProgressAC({value: false}))
     }
 })
 const deleteTodolistTC = createAsyncThunk('todolists/deleteTodolist', async (id: string, {dispatch}) => {
     dispatch(changeTodosEntityStatus({id, status: 'loading'}))
-    const res = await TodolistApi.deleteTodolist(id)
+    dispatch(setLinearProgressAC({value: true}))
     try {
+        const res = await TodolistApi.deleteTodolist(id)
         if (res.data.resultCode === ResultCode.OK) {
             dispatch(changeTodosEntityStatus({id, status: 'succeeded'}))
+            dispatch(setLinearProgressAC({value: false}))
             return {id}
         } else {
             handleServerAppError(res.data, dispatch)
         }
     } catch (e: any) {
         handleServerNetworkError(e, dispatch)
-        dispatch(changeTodosEntityStatus({id, status: 'idle'}))
     }
 })
 const updateTodolistTC = createAsyncThunk('todolists/updateTodolist', async (param: {
     id: string,
     title: string
 }, {dispatch}) => {
+    dispatch(setLinearProgressAC({value: true}))
     try {
         const res = await TodolistApi.updateTodolistTitle(param.id, param.title)
         if (res.data.resultCode === ResultCode.OK) {
+            dispatch(setLinearProgressAC({value: false}))
             return {title: param.title, id: param.id}
         } else {
             handleServerAppError(res.data, dispatch)
         }
     } catch (e: any) {
+        dispatch(setLinearProgressAC({value: false}))
         handleServerNetworkError(e, dispatch)
     }
 })

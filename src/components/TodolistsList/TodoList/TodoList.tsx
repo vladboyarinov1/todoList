@@ -34,7 +34,7 @@ export const TodoList: FC<TodoListPropsType> = memo(
 
         useEffect(() => {
             fetchTasks(id)
-        }, [dispatch, id])
+        }, [])
 
         const removeTodolist = () => deleteTodolistTC(id)
 
@@ -81,9 +81,9 @@ export const TodoList: FC<TodoListPropsType> = memo(
                                 size={'small'}
                     ><RestoreFromTrashIcon/></IconButton>
                 </Typography>
-               <div className={s.addItemFormWrapper}>
-                   <AddItemForm addItem={addTask} label={'task name'} disabled={entityStatus === 'loading'}/>
-               </div>
+                <div className={s.addItemFormWrapper}>
+                    <AddItemForm addItem={addTask} label={'task name'} disabled={entityStatus === 'loading'}/>
+                </div>
 
                 <div className={s.tasksListContainer}>
                     {tasksList}

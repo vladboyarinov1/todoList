@@ -3,19 +3,6 @@ import {AuthApi} from '../../api/todolist-api';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 import {setIsLoggedInAC} from '../../features/Auth/auth-reducer/auth-reducer';
 
-// export const initializeAppTC = () => (dispatch: Dispatch) => {
-//     AuthApi.me().then(res => {
-//         if (res.data.resultCode === 0) {
-//             //значит залогинины
-//             dispatch(setIsLoggedInAC({value: true}));
-//             dispatch(setIsInitializedAC({isInitialized: true}))
-//         } else {
-//             handleServerAppError(res.data, dispatch)
-//         }
-//     })
-//         .catch((e) => handleServerNetworkError(e, dispatch))
-//         .finally(() => dispatch(setIsInitializedAC({isInitialized: true})))
-// }
 export const initializeAppTC = createAsyncThunk('app/initializeApp', async (param, {dispatch}) => {
     dispatch(setLoadingStatusAC({status: 'loading'}))
     try {
@@ -30,11 +17,6 @@ export const initializeAppTC = createAsyncThunk('app/initializeApp', async (para
     } catch (e: any) {
         handleServerNetworkError(e, dispatch)
     }
-    // finally {
-    //     return {isInitialized: true}
-    // }
-    // return {isInitialized: true}
-
 })
 
 const slice = createSlice({
@@ -42,7 +24,8 @@ const slice = createSlice({
     initialState: {
         error: null as string | null,// errorIsActive
         status: 'loading' as RequestStatusType,
-        isInitialized: false
+        isInitialized: false,
+        isLinearProgress: false
     } as InitialStateType,
     reducers: {
         setLoadingStatusAC(state, action: PayloadAction<{
@@ -52,7 +35,10 @@ const slice = createSlice({
         },
         setErrorAC(state, action: PayloadAction<{ error: string | null }>) {
             state.error = action.payload.error
-        }
+        },
+        setLinearProgressAC(state: InitialStateType, action: PayloadAction<{ value: boolean }>) {
+            state.isLinearProgress = action.payload.value
+        },
     },
     extraReducers: builder => {
         builder.addCase(initializeAppTC.fulfilled, (state) => {
@@ -62,7 +48,7 @@ const slice = createSlice({
 })
 
 export const appReducer = slice.reducer
-export const {setLoadingStatusAC, setErrorAC} = slice.actions
+export const {setLoadingStatusAC, setErrorAC, setLinearProgressAC} = slice.actions
 
 //types
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
@@ -73,6 +59,7 @@ type InitialStateType = {
     status: RequestStatusType
     error: string | null
     isInitialized: boolean
+    isLinearProgress: boolean
 }
 export type SetLoadingStatusACType = ReturnType<typeof setLoadingStatusAC>
 export type SetErrorACType = ReturnType<typeof setErrorAC>

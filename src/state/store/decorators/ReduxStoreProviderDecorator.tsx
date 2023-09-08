@@ -72,7 +72,8 @@ const initialGlobalState: AppRootStateType = {
     app: {
         error: null,
         status: 'succeeded',
-        isInitialized: true
+        isInitialized: true,
+        isLinearProgress: false
     },
     auth: {
         isLoggedIn: true

@@ -19,7 +19,8 @@ export const TodoListsList: FC = () => {
     let isLoggedIn = useAppSelector<any>(authSelectors.selectIsLoggedIn)
     let status = useAppSelector<RequestStatusType>(state => state.app.status)
 
-    useEffect(() => {// диспатчим санку, она попадет в Redux
+
+    useEffect(() => {
         if (!isLoggedIn) return
         fetchTodolists()
     }, [])

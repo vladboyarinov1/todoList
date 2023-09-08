@@ -31,7 +31,7 @@ export const logoutTC = createAsyncThunk('auth/logout', async (param, thunkAPI) 
         let res = await AuthApi.logout()
         if (res.data.resultCode === 0) {
             thunkAPI.dispatch(setLoadingStatusAC({status: 'succeeded'}))
-            return {isLoggedIn: false}
+            return
         } else {
             handleServerAppError(res.data, thunkAPI.dispatch)
             return thunkAPI.rejectWithValue({})

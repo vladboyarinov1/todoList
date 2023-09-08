@@ -16,7 +16,7 @@ import {ThemeProvider} from '@emotion/react';
 import {createTheme} from '@mui/material/styles';
 import {AppDispatchType, AppRootStateType, useAppDispatch, useAppSelector} from '../state/store/store';
 import {TaskType} from '../api/todolist-api';
-import {CircularProgress} from '@mui/material';
+import {CircularProgress, LinearProgress} from '@mui/material';
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 import {Navigate, Route, Routes} from 'react-router-dom';
 import {TodoListsList} from '../components/TodolistsList/TodolistsList';
@@ -25,7 +25,7 @@ import {logoutTC} from '../features/Auth/auth-reducer/auth-reducer';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {initializeAppTC} from './app-reducer/app-reducer';
 import {appSelectors} from './index';
-import { Auth } from '../features/Auth';
+import {Auth} from '../features/Auth';
 
 
 export type TasksStateType = { // стейт с тасками
@@ -41,6 +41,7 @@ const App = (): JSX.Element => {
     const dispatch: AppDispatchType = useAppDispatch()
 
     let isLoginIn = useAppSelector<any>(state => state.auth.isLoggedIn)
+    const isLinearProgress = useAppSelector(appSelectors.selectIsLinearProgress)
 
     useEffect(() => {
         dispatch(initializeAppTC())
@@ -104,7 +105,8 @@ const App = (): JSX.Element => {
                             }
                         </Toolbar>
                     </AppBar>
-                    <Container fixed >
+                    {isLinearProgress && <LinearProgress/>}
+                    <Container fixed>
                         <Routes>
                             <Route path={'/'} element={<TodoListsList/>}/>
                             <Route path={'/auth'} element={<Auth/>}/>
