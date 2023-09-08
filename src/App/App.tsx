@@ -19,13 +19,14 @@ import {TaskType} from '../api/todolist-api';
 import {CircularProgress} from '@mui/material';
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 import {Navigate, Route, Routes} from 'react-router-dom';
-import {Auth} from '../features/Auth/Auth';
 import {TodoListsList} from '../components/TodolistsList/TodolistsList';
 import {Error404} from '../components/ErrorPage/ErrorPage';
 import {logoutTC} from '../state/reducers/auth-reducer/auth-reducer';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {initializeAppTC} from '../state/reducers/app-reducer/app-reducer';
 import {appSelectors} from './index';
+import { Auth } from '../features/Auth';
+
 
 export type TasksStateType = { // стейт с тасками
     [todoListId: string]: TaskType[]

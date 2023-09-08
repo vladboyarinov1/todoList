@@ -1,5 +1,7 @@
 import * as authSelectors from './selectors'
+import  {Auth} from './Auth'
 
 export {
-    authSelectors
+    authSelectors,
+    Auth
 }
