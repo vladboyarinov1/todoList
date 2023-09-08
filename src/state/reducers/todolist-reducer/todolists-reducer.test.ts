@@ -1,12 +1,9 @@
 import {
-    addTodolistTC,
-    deleteTodolistTC,
-    fetchTodolists,
     TodolistDomainType,
-    todolistsReducer,
-    updateTodolistTC
+    todolistsReducer
 } from './todolists-reducer';
 import {TodolistType} from '../../../api/todolist-api';
+import {addTodolistTC, deleteTodolistTC, fetchTodolists, updateTodolistTC} from './todolists-actions';
 
 describe('todolistReducer', () => {
     let initialState: TodolistType[] | any;

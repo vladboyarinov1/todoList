@@ -1,6 +1,7 @@
-import {createTaskTC, removeTaskTC, tasksReducer, updateTaskTC} from './tasks-reducer'
-import {addTodolistTC, deleteTodolistTC} from '../todolist-reducer/todolists-reducer';
+import {tasksReducer} from './tasks-reducer'
 import {TaskEntityStatus, TaskPriorities, TaskStatuses} from '../../../api/todolist-api';
+import {createTaskTC, removeTaskTC, updateTaskTC} from './tasks-actions';
+import {addTodolistTC, deleteTodolistTC} from '../todolist-reducer/todolists-actions';
 
 describe('todolistReducer', () => {
     let startState: any;

@@ -5,17 +5,19 @@ import s from './TodoList.module.css'
 import {IconButton, Typography} from '@mui/material';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import {useAppDispatch, useAppSelector} from '../../state/store/store';
-import {createTaskTC, fetchTasks} from '../../state/reducers/tasks-reducer/tasks-reducer';
 import {
     changeTodolistFilterAC,
-    deleteTodolistTC,
     FilterValueType,
-    updateTodolistTC,
+
 } from '../../state/reducers/todolist-reducer/todolists-reducer';
 import {ButtonWithMemo} from '../ButtonWithMemo/ButtonWithMemo';
 import {Task} from './Task/Task';
 import {TaskStatuses, TaskType, TodolistType} from '../../api/todolist-api';
 import {RequestStatusType} from '../../state/reducers/app-reducer/app-reducer';
+import {createTaskTC, fetchTasks} from '../../state/reducers/tasks-reducer/tasks-actions';
+import {useActions} from '../../hooks/useActions/useActions';
+import {tasksActions} from '../TodolistsList';
+import {deleteTodolistTC, updateTodolistTC} from '../../state/reducers/todolist-reducer/todolists-actions';
 
 type TodoListPropsType = {
     todolist: TodolistType
@@ -28,10 +30,11 @@ export const TodoList: FC<TodoListPropsType> = memo(
         const {id, title} = todolist
         const [filter, setFilter] = useState<FilterValueType>('all')
         let tasks = useAppSelector<TaskType[]>(state => state.tasks[id])
+        const {fetchTasks, createTaskTC} = useActions(tasksActions)
 
 
         useEffect(() => {
-            dispatch(fetchTasks(id))
+            fetchTasks(id)
         }, [dispatch, id])
 
         const removeTodolist = () => dispatch(deleteTodolistTC(id))
@@ -50,7 +53,7 @@ export const TodoList: FC<TodoListPropsType> = memo(
             setFilter('complete')
         }, [dispatch, id])
 
-        const addTask = useCallback((title: string) => dispatch(createTaskTC({todolistId: id, title})), [dispatch, id])
+        const addTask = useCallback((title: string) => createTaskTC({todolistId: id, title}), [dispatch, id])
 
         const changeTodoListTitle = useCallback((title: string) => {
             dispatch(updateTodolistTC({id, title}))

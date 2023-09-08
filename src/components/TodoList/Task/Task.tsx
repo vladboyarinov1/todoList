@@ -3,11 +3,11 @@ import {EditableSpan} from '../../EditableSpan/EditableSpan';
 import {IconButton, ListItem} from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import {SuperCheckBox} from '../../SuperCheckBox/SuperCheckBox';
-import {removeTaskTC, updateTaskTC} from '../../../state/reducers/tasks-reducer/tasks-reducer';
-
 import {TaskEntityStatus, TaskStatuses, TaskType} from '../../../api/todolist-api';
 import {useAppDispatch} from '../../../state/store/store';
 import s from './Task.module.css'
+import {useActions} from '../../../hooks/useActions/useActions';
+import {tasksActions} from '../../TodolistsList';
 
 type TasksPropsType = {
     todolistId: string
@@ -18,21 +18,22 @@ type TasksPropsType = {
 export const Task: FC<TasksPropsType> = memo(({todolistId, task, entityStatus}) => {
     const dispatch = useAppDispatch()
 
-    const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses) => dispatch
-    (updateTaskTC({
+    const {updateTaskTC, removeTaskTC,} = useActions(tasksActions)
+
+    const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses) => updateTaskTC({
         todolistId,
         taskId,
         model: {status}
-    })), [dispatch, todolistId])
-
-    const removeTask = useCallback((todolistId: string, taskId: string) => dispatch(removeTaskTC({
-        todolistId,
-        taskId
-    })), [dispatch, task.id, todolistId])
+    }), [dispatch, todolistId])
 
     const changeTaskTitle = useCallback((title: string) => {
-        dispatch(updateTaskTC({todolistId, taskId: task.id, model: {title}}))
+        updateTaskTC({todolistId, taskId: task.id, model: {title}})
     }, [dispatch, task.id, todolistId])
+
+    const removeTask = useCallback((todolistId: string, taskId: string) => removeTaskTC({
+        todolistId,
+        taskId
+    }), [dispatch, task.id, todolistId])
 
     return (
         <ListItem className={entityStatus === TaskEntityStatus.Expectation ? s.disabledTask : ''} key={task.id}
