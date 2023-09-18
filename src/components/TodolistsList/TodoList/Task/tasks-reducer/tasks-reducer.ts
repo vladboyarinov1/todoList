@@ -1,18 +1,16 @@
 import {TasksStateType} from '../../../../../App/App';
-import {SetTodolistAT,} from '../../../todolists-reducer/todolists-reducer';
+import {asyncActions as asyncTodolistsActions, SetTodolistAT,} from '../../../todolists-reducer/todolists-reducer';
 import {
     FieldErrorType,
     TaskEntityStatus,
     TaskPriorities,
-    TaskStatuses, TaskType,
-    TodolistApi, UpdateTaskModelType
+    TaskStatuses,
+    TodolistApi
 } from '../../../../../api/todolist-api';
 import {SetErrorACType, setLinearProgressAC} from '../../../../../App/app-reducer/app-reducer';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {AppRootStateType} from '../../../../../state/store/store';
 import {handleServerAppError, handleServerNetworkError} from '../../../../../utils/error-utils';
-import {asyncActions as asyncTodolistsActions} from '../../../todolists-reducer/todolists-reducer'
-import {FormValuesType} from '../../../../../features/Auth/Auth';
 
 
 const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (todolistId: string, {dispatch, rejectWithValue}) => {
@@ -25,9 +23,7 @@ const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (todolistId: strin
         handleServerNetworkError(e, dispatch)
         dispatch(setLinearProgressAC({value: false}))
         return rejectWithValue(null)
-
     }
-
 })
 const updateTaskTC = createAsyncThunk('tasks/updateTask', async (param: {
     todolistId: string,
@@ -172,7 +168,6 @@ const slice = createSlice({
 
     }
 })
-
 export const tasksReducer = slice.reducer
 export const {
     changeEntityStatus

@@ -28,13 +28,13 @@ export const TodoList: FC<TodoListPropsType> = memo(
         const {id, title} = todolist
         const [filter, setFilter] = useState<FilterValueType>('all')
         let tasks = useAppSelector<TaskType[]>(state => state.tasks[id])
-        const {fetchTasks, addTaskTC,} = useActions(tasksActions)
+        const {fetchTasks,} = useActions(tasksActions)
 
         const {deleteTodolistTC, changeTodolistFilter, updateTodolistTC} = useActions(todolistsActions)
 
         useEffect(() => {
             fetchTasks(id)
-        }, [])
+        }, [id])
 
         const removeTodolist = () => deleteTodolistTC(id)
 
