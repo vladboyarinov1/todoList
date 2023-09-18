@@ -9,16 +9,22 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {ResultCode} from '../TodoList/Task/tasks-reducer/tasks-reducer';
 import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
 
-const fetchTodolists = createAsyncThunk('todolists/fetchTodolists', async (param, {dispatch}) => {
+const fetchTodolists = createAsyncThunk('todolists/fetchTodolists', async (param, {dispatch, rejectWithValue}) => {
     dispatch(setLoadingStatusAC({status: 'loading'}))
     try {
         const res = await TodolistApi.getTodolists()
-        dispatch(setLoadingStatusAC({status: 'succeeded'}))
-        return {todos: res.data}
-    } catch (e) {
-        throw new Error('error in getTodolistTC')
-    } finally {
-        dispatch(setLoadingStatusAC({status: 'succeeded'}))
+        if (res.data) {
+            dispatch(setLoadingStatusAC({status: 'succeeded'}))
+            return {todos: res.data}
+        } else {
+            handleServerAppError(res.data, dispatch)
+            return rejectWithValue({
+                errors: 'error loading todo lists, try changing browser',
+                fieldsErrors: 'error loading todo lists, try changing browser'
+            })
+        }
+    } catch (e: any) {
+        handleServerNetworkError(e, dispatch)
     }
 })
 
