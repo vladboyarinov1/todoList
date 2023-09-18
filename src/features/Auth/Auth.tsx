@@ -29,8 +29,8 @@ export const Auth = () => {
 
     const formik = useFormik({
         initialValues: {
-            email: '',
-            password: '',
+            email: 'free@samuraijs.com',
+            password: 'free',
             rememberMe: false
         },
         validate,
@@ -73,7 +73,7 @@ export const Auth = () => {
                         <p>Password: free</p>
                     </FormLabel>
                     <FormGroup>
-                        <TextField label="email" margin="normal"
+                        <TextField  label="email" margin="normal" placeholder={'free@samuraijs.com'}
                                    helperText={formik.touched.email && formik.errors.email && formik.errors.email}
                                    {...formik.getFieldProps('email')}/>
                         <TextField type="password" label="Password"
