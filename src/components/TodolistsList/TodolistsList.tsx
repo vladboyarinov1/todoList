@@ -11,13 +11,16 @@ import {RequestStatusType} from '../../App/app-reducer/app-reducer';
 import {authSelectors} from '../../features/Auth';
 import {todoListsSelector} from './selectors';
 import {useActions} from '../../hooks/useActions/useActions';
-import {todolistsActions} from './index';
+import {tasksActions, todolistsActions} from './index';
 
 export const TodoListsList: FC = () => {
-    const {addTodolistTC, fetchTodolists} = useActions(todolistsActions)
+    const { fetchTodolists} = useActions(todolistsActions)
     let todoLists = useAppSelector<TodolistDomainType[]>(todoListsSelector)
     let isLoggedIn = useAppSelector<any>(authSelectors.selectIsLoggedIn)
     let status = useAppSelector<RequestStatusType>(state => state.app.status)
+
+    const dispatch = useAppDispatch()
+
 
 
     useEffect(() => {
@@ -25,13 +28,26 @@ export const TodoListsList: FC = () => {
         fetchTodolists()
     }, [])
 
-    const addNewTodoList = useCallback((title: string) => {
-        addTodolistTC(title)
+    const addNewTodoList = useCallback(async (title: string) => {
+        let thunk = todolistsActions.addTodolistTC(title)
+        const resultActions = await dispatch(thunk)
+
+        if (todolistsActions.addTodolistTC.rejected.match(resultActions)) {
+            if (resultActions.payload?.errors?.length) {
+                const errorMessage = resultActions.payload?.errors[0];
+                throw new Error(errorMessage)
+            } else {
+                throw new Error('Some error occured')
+            }
+        }
+        else {
+
+        }
     }, [])
 
     const todoListsComponents = todoLists.map(tl => {
         return (
-            <Grid key={tl.id} item >
+            <Grid key={tl.id} item>
                 <Paper elevation={12}>
                     <TodoList todolist={tl} entityStatus={tl.entityStatus}/>
                 </Paper>
@@ -55,7 +71,7 @@ export const TodoListsList: FC = () => {
                     <CircularProgress sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}/>
                 </Box> :
                 <div style={{paddingBottom: '20px'}}>
-                    <Grid container sx={{p: '15px 0'}} style={{width: '300px'}} >
+                    <Grid container sx={{p: '15px 0'}} style={{width: '300px'}}>
                         <AddItemForm addItem={addNewTodoList} label="todolist name"/>
                     </Grid>
                     <Grid container spacing={4}>{todoListsComponents}</Grid>

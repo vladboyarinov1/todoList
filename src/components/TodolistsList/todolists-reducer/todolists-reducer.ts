@@ -1,4 +1,4 @@
-import {TodolistApi, TodolistType} from '../../../api/todolist-api';
+import {FieldErrorType, TodolistApi, TodolistType} from '../../../api/todolist-api';
 import {
     RequestStatusType,
     setLinearProgressAC,
@@ -20,7 +20,9 @@ const fetchTodolists = createAsyncThunk('todolists/fetchTodolists', async (param
     }
 })
 
-const addTodolistTC = createAsyncThunk('todolists/addTodolist', async (title: string, {dispatch}) => {
+const addTodolistTC = createAsyncThunk<any, string, {
+    rejectValue: { errors: string[], fieldsErrors?: FieldErrorType[] }
+}>('todolists/addTodolist', async (title: string, {dispatch, rejectWithValue}) => {
     dispatch(setLinearProgressAC({value: true}))
     try {
         const res = await TodolistApi.createTodolist(title)
@@ -29,9 +31,12 @@ const addTodolistTC = createAsyncThunk('todolists/addTodolist', async (title: st
             return {todolist: res.data.data.item}
         } else {
             handleServerAppError(res.data, dispatch)
+            return rejectWithValue({errors: res.data.messages, fieldsErrors: res.data.fieldsErrors})
         }
     } catch (e: any) {
         handleServerNetworkError(e, dispatch)
+        return rejectWithValue({errors: [e.errors], fieldsErrors: undefined})
+    } finally {
         dispatch(setLinearProgressAC({value: false}))
     }
 })
@@ -49,6 +54,7 @@ const deleteTodolistTC = createAsyncThunk('todolists/deleteTodolist', async (id:
         }
     } catch (e: any) {
         handleServerNetworkError(e, dispatch)
+
     }
 })
 const updateTodolistTC = createAsyncThunk('todolists/updateTodolist', async (param: {

@@ -16,11 +16,13 @@ export const handleServerAppError = <T>(data: ResponseType<T>, dispatch: ErrorUt
         dispatch(setErrorAC({error: 'Some error occurred'}))
     }
     dispatch(setLoadingStatusAC({status: 'failed'}))
+
 }
 
 export const handleServerNetworkError = (error: { message: string }, dispatch: ErrorUtilsDispatchType) => {
     dispatch(setErrorAC({error: error.message || 'Some error'}))
     dispatch(setLoadingStatusAC({status: 'failed'}))
+
 }
 
 

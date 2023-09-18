@@ -1,11 +1,18 @@
 import {TasksStateType} from '../../../../../App/App';
 import {SetTodolistAT,} from '../../../todolists-reducer/todolists-reducer';
-import {TaskEntityStatus, TaskPriorities, TaskStatuses, TodolistApi} from '../../../../../api/todolist-api';
+import {
+    FieldErrorType,
+    TaskEntityStatus,
+    TaskPriorities,
+    TaskStatuses, TaskType,
+    TodolistApi, UpdateTaskModelType
+} from '../../../../../api/todolist-api';
 import {SetErrorACType, setLinearProgressAC} from '../../../../../App/app-reducer/app-reducer';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {AppRootStateType} from '../../../../../state/store/store';
 import {handleServerAppError, handleServerNetworkError} from '../../../../../utils/error-utils';
 import {asyncActions as asyncTodolistsActions} from '../../../todolists-reducer/todolists-reducer'
+import {FormValuesType} from '../../../../../features/Auth/Auth';
 
 
 const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (todolistId: string, {dispatch, rejectWithValue}) => {
@@ -14,8 +21,7 @@ const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (todolistId: strin
         let res = await TodolistApi.getTasks(todolistId);
         dispatch(setLinearProgressAC({value: false}))
         return {todolistId, tasks: res.data.items}
-    }
-    catch (e: any) {
+    } catch (e: any) {
         handleServerNetworkError(e, dispatch)
         dispatch(setLinearProgressAC({value: false}))
         return rejectWithValue(null)
@@ -97,8 +103,10 @@ const removeTaskTC = createAsyncThunk('tasks/removeTask',
             }))
         }
     })
-const addTaskTC = createAsyncThunk('tasks/addTask',
-    async (param: { todolistId: string, title: string }, {dispatch, rejectWithValue}) => {
+const addTaskTC = createAsyncThunk<any, { todolistId: string, title: string }, {
+    rejectValue: { errors: string[], fieldsErrors?: FieldErrorType[] }
+}>('tasks/addTask',
+    async (param, {dispatch, rejectWithValue}) => {
         dispatch(setLinearProgressAC({value: true}))
         try {
             const res = await TodolistApi.createTask(param.todolistId, param.title)
@@ -107,11 +115,13 @@ const addTaskTC = createAsyncThunk('tasks/addTask',
                 return {task: res.data.data.item}
             } else {
                 handleServerAppError(res.data, dispatch)
-                return rejectWithValue(null)
+                return rejectWithValue({errors: res.data.messages, fieldsErrors: res.data.fieldsErrors})
             }
         } catch (e: any) {
             handleServerNetworkError(e, dispatch)
-            return rejectWithValue(null)
+            return rejectWithValue({errors: [e.errors], fieldsErrors: undefined})
+        } finally {
+            dispatch(setLinearProgressAC({value: false}))
         }
     })
 

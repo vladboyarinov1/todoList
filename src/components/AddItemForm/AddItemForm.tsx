@@ -1,10 +1,9 @@
 import React, {ChangeEvent, FC, memo, useState} from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import {IconButton, TextField} from '@mui/material';
-import {RequestStatusType} from '../../App/app-reducer/app-reducer';
 
 type AddItemFormProps = {
-    addItem: (title: string) => void
+    addItem: (title: string) => Promise<any>
     label: string
     disabled?: boolean
 }
@@ -13,40 +12,58 @@ export const AddItemForm: FC<AddItemFormProps> = memo((props) => {
     const {addItem, label, disabled} = props
 
     const [title, setTitle] = useState<string>('')
-    const [error, setError] = useState<boolean>(false)
+    const [error, setError] = useState<any>('')
 
-    const maxTaskLength = title.length > 100
-    const taskNotAdd = !title.length || maxTaskLength
-    const errorMessage = 'Error: enter the correct value!'
+    // const maxTaskLength = title.length > 100
+    const taskNotAdd = !title.length
+    // const taskNotAdd = !title.length || maxTaskLength
+    // const errorMessage = 'Error: enter the correct value!'
 
     const changeLocalTitle = (e: ChangeEvent<HTMLInputElement>) => {
-        error && setError(false) // если была ошибка, то снимаем ее
+        error && setError(null) // если была ошибка, то снимаем ее
         setTitle(e.currentTarget.value)
     }
-    const addItemHandler = () => {
-        if (title.trim()) {
-            addItem(title)
+    const addItemHandler = async () => {
+        if (title.trim() !== '') {
+            try {
+                if (title.trim()) {
+                    await addItem(title)
+                    setTitle('')
+                }
+            } catch (error: any) {
+                setError(error.message)
+            }
         } else {
-            setError(true)
+            // setError(true)
+
         }
-        setTitle('')
     }
 
     const addItemEnter = taskNotAdd ? undefined : (e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && addItemHandler()
 
     const onBlurHandler = () => {
-        setError(false)
+        setError(null)
     }
 
 
     return (
+        // <div style={{display: 'flex', justifyContent: 'space-between', width: '80%'}}>
+        //     <TextField onChange={changeLocalTitle} value={title} onKeyDown={addItemEnter}
+        //                error={error} size={'small'}
+        //                onBlur={onBlurHandler}
+        //                label={error ? errorMessage : label} disabled={disabled}/>
+        //     <IconButton onClick={addItemHandler} size={'small'} disabled={taskNotAdd || disabled}
+        //                 style={{}}><AddIcon/></IconButton>
+        // </div>
         <div style={{display: 'flex', justifyContent: 'space-between', width: '80%'}}>
-            <TextField onChange={changeLocalTitle} value={title} onKeyDown={addItemEnter}
-                       error={error} size={'small'}
-                       onBlur={onBlurHandler}
-                       label={error ? errorMessage : label} disabled={disabled}/>
-            <IconButton onClick={addItemHandler} size={'small'} disabled={taskNotAdd || disabled}
+                <TextField onChange={changeLocalTitle}  error={error} value={title} onKeyDown={addItemEnter}
+                           size={'small'}
+                           onBlur={onBlurHandler}
+                           helperText={error}
+                />
+            <IconButton onClick={addItemHandler} size={'small'}
                         style={{}}><AddIcon/></IconButton>
+
         </div>
     );
 });

@@ -14,7 +14,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import {ThemeProvider} from '@emotion/react';
 import {createTheme} from '@mui/material/styles';
-import {AppDispatchType, AppRootStateType, useAppDispatch, useAppSelector} from '../state/store/store';
+import {AppDispatchType, useAppDispatch, useAppSelector} from '../state/store/store';
 import {TaskType} from '../api/todolist-api';
 import {CircularProgress, LinearProgress} from '@mui/material';
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
@@ -114,7 +114,6 @@ const App = (): JSX.Element => {
                             <Route path={'*'} element={<Navigate to={'/404'}/>}/>
                         </Routes>
                     </Container>
-                    {/*}*/}
                     <ErrorSnackbar/>
 
                 </div>

@@ -43,7 +43,19 @@ export const TodoList: FC<TodoListPropsType> = memo(
             setFilter(filter)
         }, [dispatch, id])
 
-        const addTask = useCallback((title: string) => addTaskTC({todolistId: id, title}), [id])
+        const addTask = useCallback(async (title: string) => {
+            let thunk = tasksActions.addTaskTC({todolistId: id, title})
+            const resultActions = await dispatch(thunk);
+            // addTaskTC({todolistId: id, title})
+            if (tasksActions.addTaskTC.rejected.match(resultActions)) {
+                if (resultActions.payload?.errors?.length) {
+                    const errorMessage = resultActions.payload?.errors[0];
+                    throw new Error(errorMessage)
+                } else {
+                    throw new Error('Some error occured')
+                }
+            }
+        }, [id])
 
         const changeTodoListTitle = useCallback((title: string) => {
             updateTodolistTC({id, title})
