@@ -17,6 +17,8 @@ const fetchTodolists = createAsyncThunk('todolists/fetchTodolists', async (param
         return {todos: res.data}
     } catch (e) {
         throw new Error('error in getTodolistTC')
+    } finally {
+        dispatch(setLoadingStatusAC({status: 'succeeded'}))
     }
 })
 
