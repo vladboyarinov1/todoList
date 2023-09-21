@@ -9,7 +9,6 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {ResultCode} from '../TodoList/Task/tasks-reducer/tasks-reducer';
 import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
 
-
 const fetchTodolists = createAsyncThunk('todolists/fetchTodolists', async (param, {dispatch}) => {
     dispatch(setLoadingStatusAC({status: 'loading'}))
     try {
