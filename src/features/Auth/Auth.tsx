@@ -15,7 +15,6 @@ import {Navigate} from 'react-router-dom';
 import {authAction, authSelectors} from './index';
 import {useActions} from '../../hooks/useActions/useActions';
 
-
 export type FormValuesType = {
     email: string
     password: string
