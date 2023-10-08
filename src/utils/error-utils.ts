@@ -1,27 +1,25 @@
 import {Dispatch} from 'redux'
-import {
-    setErrorAC,
-    SetErrorACType,
-    setLoadingStatusAC,
-    SetLoadingStatusACType
-} from '../features/Application/app-reducer';
 import {ResponseType} from '../api/types';
+import {appActions} from '../features/CommonActions/App';
 
-type ErrorUtilsDispatchType = Dispatch<SetErrorACType | SetLoadingStatusACType>
+type ThunkAPIType = {
+    dispatch: (action: any) => any
+    rejectWithValue: Function
+}
 // generic function
-export const handleServerAppError = <T>(data: ResponseType<T>, dispatch: ErrorUtilsDispatchType) => {
+export const handleServerAppError = <T>(data: ResponseType<T>,  thunkAPI: ThunkAPIType,) => {
     if (data.messages.length) {
-        dispatch(setErrorAC({error: data.messages[0]}))
+       thunkAPI.dispatch(appActions.setError({error: data.messages[0]}))
     } else {
-        dispatch(setErrorAC({error: 'Some error occurred'}))
+        thunkAPI.dispatch(appActions.setError({error: 'Some error occurred'}))
     }
-    dispatch(setLoadingStatusAC({status: 'failed'}))
+    thunkAPI.dispatch(appActions.setLoadingStatus({status: 'failed'}))
 
 }
 
-export const handleServerNetworkError = (error: { message: string }, dispatch: ErrorUtilsDispatchType) => {
-    dispatch(setErrorAC({error: error.message || 'Some error'}))
-    dispatch(setLoadingStatusAC({status: 'failed'}))
+export const handleServerNetworkError = (error: { message: string }, dispatch: Dispatch) => {
+    dispatch(appActions.setError({error: error.message || 'Some error'}))
+    dispatch(appActions.setLoadingStatus({status: 'failed'}))
 
 }
 

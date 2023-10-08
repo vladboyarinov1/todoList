@@ -17,19 +17,19 @@ type TasksPropsType = {
 export const Task: FC<TasksPropsType> = memo(({todolistId, task, entityStatus}) => {
     const dispatch = useAppDispatch()
 
-    const {updateTaskTC, removeTaskTC,} = useActions(tasksActions)
+    const {updateTask, removeTask,} = useActions(tasksActions)
 
-    const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses) => updateTaskTC({
+    const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses) => updateTask({
         todolistId,
         taskId,
         model: {status}
     }), [dispatch, todolistId])
 
     const changeTaskTitle = useCallback((title: string) => {
-        updateTaskTC({todolistId, taskId: task.id, model: {title}})
+        updateTask({todolistId, taskId: task.id, model: {title}})
     }, [dispatch, task.id, todolistId])
 
-    const removeTask = useCallback((todolistId: string, taskId: string) => removeTaskTC({
+    const removeTaskHandler = useCallback((todolistId: string, taskId: string) => removeTask({
         todolistId,
         taskId
     }), [dispatch, task.id, todolistId])
@@ -37,7 +37,7 @@ export const Task: FC<TasksPropsType> = memo(({todolistId, task, entityStatus}) 
     return (
         <ListItem className={entityStatus === TaskEntityStatus.Expectation ? s.disabledTask : ''} key={task.id}
                   id={task.id} divider disablePadding
-                  secondaryAction={<IconButton onClick={() => removeTask(todolistId, task.id)}
+                  secondaryAction={<IconButton onClick={() => removeTaskHandler(todolistId, task.id)}
                                                size={'small'}><ClearIcon/></IconButton>}>
 
             <SuperCheckBox callBack={(current) => changeTaskStatus(task.id, current)}

@@ -23,7 +23,7 @@ export type FormValuesType = {
 export const Auth = () => {
     let isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
     const dispatch = useAppDispatch()
-    const {loginTC} = useActions(authAction)
+    const {login} = useActions(authAction)
 
     const formik = useFormik({
         initialValues: {
@@ -33,8 +33,8 @@ export const Auth = () => {
         },
         validate,
         onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
-            const action = await dispatch(authAction.loginTC(values));
-            if (loginTC.rejected.match(action)) {
+            const action = await dispatch(authAction.login(values));
+            if (login.rejected.match(action)) {
                 if (action.payload?.fieldsErrors?.length) {
                     const error = action.payload?.fieldsErrors[0];
                     formikHelpers.setFieldError(error.field, error.error)

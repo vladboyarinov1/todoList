@@ -6,7 +6,7 @@ import {TodoList} from './TodoList/TodoList';
 import {TodolistDomainType} from './todolists-reducer/todolists-reducer';
 import {Navigate} from 'react-router-dom';
 import {Box, CircularProgress} from '@mui/material';
-import {RequestStatusType} from '../Application/app-reducer';
+import {RequestStatusType} from '../Application/application-reducer';
 import {authSelectors} from '../Auth';
 import {todoListsSelector} from './selectors';
 import {todolistsActions} from './index';

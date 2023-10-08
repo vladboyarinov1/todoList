@@ -6,17 +6,17 @@ import App from './App/App';
 import {Provider} from 'react-redux';
 import {store} from './App/store';
 import './common/styles/fonts.module.css'
-import {BrowserRouter, HashRouter} from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
-    <HashRouter>
+    <BrowserRouter>
         <Provider store={store}>
             <App/>
         </Provider>
-    </HashRouter>
+    </BrowserRouter>
 );
 
 reportWebVitals();

@@ -10,7 +10,7 @@ import {
 import {ButtonWithMemo} from '../../../components/ButtonWithMemo/ButtonWithMemo';
 import {Task} from './Task/Task';
 import {TaskStatuses, TaskType, TodolistType} from '../../../api/types';
-import {RequestStatusType} from '../../Application/app-reducer';
+import {RequestStatusType} from '../../Application/application-reducer';
 import {tasksActions, todolistsActions} from '../index';
 import {useActions, useAppDispatch} from '../../../utils/redux-utils';
 import {useAppSelector} from '../../../utils/types';
@@ -43,10 +43,10 @@ export const TodoList: FC<TodoListPropsType> = memo(
         }, [dispatch, id])
 
         const addTask = useCallback(async (title: string) => {
-            let thunk = tasksActions.addTaskTC({todolistId: id, title})
+            let thunk = tasksActions.addTask({todolistId: id, title})
             const resultActions = await dispatch(thunk);
             // addTaskTC({todolistId: id, title})
-            if (tasksActions.addTaskTC.rejected.match(resultActions)) {
+            if (tasksActions.addTask.rejected.match(resultActions)) {
                 if (resultActions.payload?.errors?.length) {
                     const errorMessage = resultActions.payload?.errors[0];
                     throw new Error(errorMessage)

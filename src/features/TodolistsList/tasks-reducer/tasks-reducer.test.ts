@@ -40,7 +40,7 @@ describe('todolistReducer', () => {
     test('correct task should be deleted from correct array', () => {
         let param = {taskId: '1', todolistId: 'todolistId2'}
 
-        const action = tasksAsyncActions.removeTaskTC.fulfilled(param, '', {taskId: '1', todolistId: 'todolistId2'}, '',)
+        const action = tasksAsyncActions.removeTask.fulfilled(param, '', {taskId: '1', todolistId: 'todolistId2'}, '',)
 
 
         const endState = tasksReducer(startState, action)
@@ -48,7 +48,7 @@ describe('todolistReducer', () => {
         expect(endState['todolistId2'].length).toBeFalsy()
     })
     test('correct task should be added to correct array', () => {
-        const action = tasksAsyncActions.addTaskTC.fulfilled(
+        const action = tasksAsyncActions.addTask.fulfilled(
             {
                 task: {
                     id: '4',
@@ -77,7 +77,7 @@ describe('todolistReducer', () => {
     });
     test('status of specified task should be changed', () => {
         const data = {taskId: '2', model: {status: TaskStatuses.New}, todolistId: 'todolistId2'}
-        const action = tasksAsyncActions.updateTaskTC.fulfilled(data, '', data);
+        const action = tasksAsyncActions.updateTask.fulfilled(data, '', data);
 
         const endState = tasksReducer(startState, action);
 
@@ -87,7 +87,7 @@ describe('todolistReducer', () => {
 
     test('title of specified task should be changed', () => {
         const data = {taskId: '1', model: {title: 'newTitle'}, todolistId: 'todolistId1'}
-        const action = tasksAsyncActions.updateTaskTC.fulfilled(data, '', data)
+        const action = tasksAsyncActions.updateTask.fulfilled(data, '', data)
 
 
         const endState = tasksReducer(startState, action)

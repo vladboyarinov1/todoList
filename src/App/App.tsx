@@ -19,34 +19,31 @@ import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 import {Navigate, Route, Routes} from 'react-router-dom';
 import {TodoListsList} from '../features/TodolistsList/TodolistsList';
 import {Error404} from '../components/ErrorPage/ErrorPage';
-import {logoutTC} from '../features/Auth/auth-reducer';
 import LogoutIcon from '@mui/icons-material/Logout';
-import {initializeAppTC} from '../features/Application/app-reducer';
-import {appSelectors} from '../features/Application';
-import {Auth} from '../features/Auth';
+import {appActions, appSelectors} from '../features/Application';
+import {Auth, authAction, authSelectors} from '../features/Auth';
 import {TaskType} from '../api/types';
-import {useAppDispatch} from '../utils/redux-utils';
-import {AppDispatchType, useAppSelector} from '../utils/types';
-
+import {useActions} from '../utils/redux-utils';
+import {useAppSelector} from '../utils/types';
 
 export type TasksStateType = { // стейт с тасками
     [todoListId: string]: TaskType[]
 }
 
 const App = (): JSX.Element => {
+    const {logout} = useActions(authAction)
+    const {initializeApp} = useActions(appActions)
+
     let isInitialized = useAppSelector(appSelectors.selectIsInitialized)
-
-    const dispatch: AppDispatchType = useAppDispatch()
-
-    let isLoginIn = useAppSelector<any>(state => state.auth.isLoggedIn)
+    let isLoginIn = useAppSelector(authSelectors.selectIsLoggedIn)
     const isLinearProgress = useAppSelector(appSelectors.selectIsLinearProgress)
 
     useEffect(() => {
-        dispatch(initializeAppTC())
+        initializeApp()
     }, []);
 
     const logoutHandler = () => {
-        dispatch(logoutTC())
+        logout()
     }
 
     const [isDark, setDarkMode] = useState<boolean>(false)

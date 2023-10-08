@@ -1,20 +1,18 @@
 import {TodolistApi} from '../../../api/todolist-api';
 import {
     RequestStatusType,
-    setLinearProgressAC,
-    setLoadingStatusAC,
-    SetLoadingStatusACType
-} from '../../Application/app-reducer';
+} from '../../Application/application-reducer';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {ResultCode} from '../tasks-reducer/tasks-reducer';
 import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
 import {FieldErrorType, TodolistType} from '../../../api/types';
+import {appActions} from '../../CommonActions/App';
 
 const fetchTodolists = createAsyncThunk('todolists/fetchTodolists', async (param, {dispatch}) => {
-    dispatch(setLoadingStatusAC({status: 'loading'}))
+    dispatch(appActions.setLoadingStatus({status: 'loading'}))
     try {
         const res = await TodolistApi.getTodolists()
-        dispatch(setLoadingStatusAC({status: 'succeeded'}))
+        dispatch(appActions.setLoadingStatus({status: 'succeeded'}))
         return {todos: res.data}
     } catch (e) {
         throw new Error('error in getTodolistTC')
@@ -23,57 +21,56 @@ const fetchTodolists = createAsyncThunk('todolists/fetchTodolists', async (param
 
 const addTodolistTC = createAsyncThunk<any, string, {
     rejectValue: { errors: string[], fieldsErrors?: FieldErrorType[] }
-}>('todolists/addTodolist', async (title: string, {dispatch, rejectWithValue}) => {
-    dispatch(setLinearProgressAC({value: true}))
+}>('todolists/addTodolist', async (title: string, thunkAPI) => {
+    thunkAPI.dispatch(appActions.setLinearProgress({value: true}))
     try {
         const res = await TodolistApi.createTodolist(title)
         if (res.data.resultCode === ResultCode.OK) {
-            dispatch(setLinearProgressAC({value: false}))
+            thunkAPI.dispatch(appActions.setLinearProgress({value: false}))
             return {todolist: res.data.data.item}
         } else {
-            handleServerAppError(res.data, dispatch)
-            return rejectWithValue({errors: res.data.messages, fieldsErrors: res.data.fieldsErrors})
+            return handleServerAppError(res.data, thunkAPI)
+
         }
     } catch (e: any) {
-        handleServerNetworkError(e, dispatch)
-        return rejectWithValue({errors: [e.errors], fieldsErrors: undefined})
+        return handleServerNetworkError(e, thunkAPI.dispatch)
     } finally {
-        dispatch(setLinearProgressAC({value: false}))
+        thunkAPI.dispatch(appActions.setLinearProgress({value: false}))
     }
 })
-const deleteTodolistTC = createAsyncThunk('todolists/deleteTodolist', async (id: string, {dispatch}) => {
-    dispatch(changeTodosEntityStatus({id, status: 'loading'}))
-    dispatch(setLinearProgressAC({value: true}))
+const deleteTodolistTC = createAsyncThunk('todolists/deleteTodolist', async (id: string, thunkAPI) => {
+    thunkAPI.dispatch(changeTodosEntityStatus({id, status: 'loading'}))
+    thunkAPI.dispatch(appActions.setLinearProgress({value: true}))
     try {
         const res = await TodolistApi.deleteTodolist(id)
         if (res.data.resultCode === ResultCode.OK) {
-            dispatch(changeTodosEntityStatus({id, status: 'succeeded'}))
-            dispatch(setLinearProgressAC({value: false}))
+            thunkAPI.dispatch(changeTodosEntityStatus({id, status: 'succeeded'}))
+            thunkAPI.dispatch(appActions.setLinearProgress({value: false}))
             return {id}
         } else {
-            handleServerAppError(res.data, dispatch)
+            handleServerAppError(res.data, thunkAPI)
         }
     } catch (e: any) {
-        handleServerNetworkError(e, dispatch)
+        handleServerNetworkError(e, thunkAPI.dispatch)
 
     }
 })
 const updateTodolistTC = createAsyncThunk('todolists/updateTodolist', async (param: {
     id: string,
     title: string
-}, {dispatch}) => {
-    dispatch(setLinearProgressAC({value: true}))
+}, thunkAPI) => {
+    thunkAPI.dispatch(appActions.setLinearProgress({value: true}))
     try {
         const res = await TodolistApi.updateTodolistTitle(param.id, param.title)
         if (res.data.resultCode === ResultCode.OK) {
-            dispatch(setLinearProgressAC({value: false}))
+            thunkAPI.dispatch(appActions.setLinearProgress({value: false}))
             return {title: param.title, id: param.id}
         } else {
-            handleServerAppError(res.data, dispatch)
+            handleServerAppError(res.data, thunkAPI)
         }
     } catch (e: any) {
-        dispatch(setLinearProgressAC({value: false}))
-        handleServerNetworkError(e, dispatch)
+        thunkAPI.dispatch(appActions.setLinearProgress({value: false}))
+        handleServerNetworkError(e, thunkAPI.dispatch)
     }
 })
 
@@ -141,7 +138,6 @@ export type SetTodolistAT = ReturnType<typeof fetchTodolists.fulfilled>
 
 export  type TodolistsActionType =
     | SetTodolistAT
-    | SetLoadingStatusACType
     | ReturnType<typeof changeTodolistFilter>
     | ReturnType<typeof changeTodosEntityStatus>
 
