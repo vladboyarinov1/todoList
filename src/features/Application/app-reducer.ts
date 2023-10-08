@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {AuthApi} from '../../api/todolist-api';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
-import {setIsLoggedInAC} from '../../features/Auth/auth-reducer/auth-reducer';
+import {setIsLoggedInAC} from '../Auth/auth-reducer';
 
 export const initializeAppTC = createAsyncThunk('app/initializeApp', async (param, {dispatch}) => {
     dispatch(setLoadingStatusAC({status: 'loading'}))
@@ -19,7 +19,7 @@ export const initializeAppTC = createAsyncThunk('app/initializeApp', async (para
     }
 })
 
-const slice = createSlice({
+export const slice = createSlice({
     name: 'app',
     initialState: {
         error: null as string | null,// errorIsActive
@@ -47,7 +47,7 @@ const slice = createSlice({
     }
 })
 
-export const appReducer = slice.reducer
+// const appReducer = slice.reducer
 export const {setLoadingStatusAC, setErrorAC, setLinearProgressAC} = slice.actions
 
 //types

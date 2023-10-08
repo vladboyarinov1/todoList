@@ -1,13 +1,14 @@
-import {FieldErrorType, TodolistApi, TodolistType} from '../../../api/todolist-api';
+import {TodolistApi} from '../../../api/todolist-api';
 import {
     RequestStatusType,
     setLinearProgressAC,
     setLoadingStatusAC,
     SetLoadingStatusACType
-} from '../../../App/app-reducer/app-reducer';
+} from '../../Application/app-reducer';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {ResultCode} from '../TodoList/Task/tasks-reducer/tasks-reducer';
+import {ResultCode} from '../tasks-reducer/tasks-reducer';
 import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
+import {FieldErrorType, TodolistType} from '../../../api/types';
 
 const fetchTodolists = createAsyncThunk('todolists/fetchTodolists', async (param, {dispatch}) => {
     dispatch(setLoadingStatusAC({status: 'loading'}))

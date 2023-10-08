@@ -1,17 +1,17 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import Grid from '@mui/material/Grid';
-import {AddItemForm} from '../AddItemForm/AddItemForm';
+import {AddItemForm} from '../../components/AddItemForm/AddItemForm';
 import Paper from '@mui/material/Paper';
 import {TodoList} from './TodoList/TodoList';
-import {AppDispatchType, useAppDispatch, useAppSelector} from '../../state/store/store';
 import {TodolistDomainType} from './todolists-reducer/todolists-reducer';
 import {Navigate} from 'react-router-dom';
 import {Box, CircularProgress} from '@mui/material';
-import {RequestStatusType} from '../../App/app-reducer/app-reducer';
-import {authSelectors} from '../../features/Auth';
+import {RequestStatusType} from '../Application/app-reducer';
+import {authSelectors} from '../Auth';
 import {todoListsSelector} from './selectors';
-import {useActions} from '../../hooks/useActions/useActions';
-import {tasksActions, todolistsActions} from './index';
+import {todolistsActions} from './index';
+import {useActions, useAppDispatch} from '../../utils/redux-utils';
+import {useAppSelector} from '../../utils/types';
 
 export const TodoListsList: FC = () => {
     const { fetchTodolists} = useActions(todolistsActions)

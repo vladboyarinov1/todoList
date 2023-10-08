@@ -1,20 +1,19 @@
 import React, {FC, memo, useCallback, useEffect, useState} from 'react';
-import {AddItemForm} from '../../AddItemForm/AddItemForm';
-import {EditableSpan} from '../../EditableSpan/EditableSpan';
+import {AddItemForm} from '../../../components/AddItemForm/AddItemForm';
+import {EditableSpan} from '../../../components/EditableSpan/EditableSpan';
 import s from './TodoList.module.css'
 import {IconButton, Typography} from '@mui/material';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
-import {useAppDispatch, useAppSelector} from '../../../state/store/store';
 import {
     FilterValueType,
 } from '../todolists-reducer/todolists-reducer';
-import {ButtonWithMemo} from '../../ButtonWithMemo/ButtonWithMemo';
+import {ButtonWithMemo} from '../../../components/ButtonWithMemo/ButtonWithMemo';
 import {Task} from './Task/Task';
-import {TaskStatuses, TaskType, TodolistType} from '../../../api/todolist-api';
-import {RequestStatusType} from '../../../App/app-reducer/app-reducer';
-
-import {useActions} from '../../../hooks/useActions/useActions';
+import {TaskStatuses, TaskType, TodolistType} from '../../../api/types';
+import {RequestStatusType} from '../../Application/app-reducer';
 import {tasksActions, todolistsActions} from '../index';
+import {useActions, useAppDispatch} from '../../../utils/redux-utils';
+import {useAppSelector} from '../../../utils/types';
 
 
 type TodoListPropsType = {
@@ -28,7 +27,7 @@ export const TodoList: FC<TodoListPropsType> = memo(
         const {id, title} = todolist
         const [filter, setFilter] = useState<FilterValueType>('all')
         let tasks = useAppSelector<TaskType[]>(state => state.tasks[id])
-        const {fetchTasks,} = useActions(tasksActions)
+        const {fetchTasks} = useActions(tasksActions)
 
         const {deleteTodolistTC, changeTodolistFilter, updateTodolistTC} = useActions(todolistsActions)
 

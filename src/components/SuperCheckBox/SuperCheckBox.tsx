@@ -1,6 +1,7 @@
 import React, {ChangeEvent, FC} from 'react';
 import {Checkbox} from '@mui/material';
-import {TaskStatuses} from '../../api/todolist-api';
+import {TaskStatuses} from '../../api/types';
+
 
 type CheckBoxType = {
     callBack: (current: TaskStatuses) => void

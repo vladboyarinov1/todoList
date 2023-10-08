@@ -1,16 +1,16 @@
-import {TasksStateType} from '../../../../../App/App';
-import {asyncActions as asyncTodolistsActions, SetTodolistAT,} from '../../../todolists-reducer/todolists-reducer';
+import {TasksStateType} from '../../../App/App';
+import {asyncActions as asyncTodolistsActions, SetTodolistAT,} from '../todolists-reducer/todolists-reducer';
 import {
-    FieldErrorType,
+    TodolistApi
+} from '../../../api/todolist-api';
+import {    FieldErrorType,
     TaskEntityStatus,
     TaskPriorities,
-    TaskStatuses,
-    TodolistApi
-} from '../../../../../api/todolist-api';
-import {SetErrorACType, setLinearProgressAC} from '../../../../../App/app-reducer/app-reducer';
+    TaskStatuses} from '../../../api/types';
+import {SetErrorACType, setLinearProgressAC} from '../../Application/app-reducer';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {AppRootStateType} from '../../../../../state/store/store';
-import {handleServerAppError, handleServerNetworkError} from '../../../../../utils/error-utils';
+import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
+import {AppRootStateType} from '../../../utils/types';
 
 
 const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (todolistId: string, {dispatch, rejectWithValue}) => {
@@ -40,7 +40,7 @@ const updateTaskTC = createAsyncThunk('tasks/updateTask', async (param: {
     const task = state.tasks[param.todolistId].find(t => t.id === param.taskId)
     if (task) {
         const model = {
-            title: task.title, // утверждаем что этот элемент точно будет
+            title: task.title,
             description: task.description,
             priority: task.priority,
             startDate: task.startDate,
@@ -124,7 +124,7 @@ const addTaskTC = createAsyncThunk<any, { todolistId: string, title: string }, {
 export const asyncActions = {fetchTasks, updateTaskTC, addTaskTC, removeTaskTC}
 
 const initialState: TasksStateType = {}
-const slice = createSlice({
+export const slice = createSlice({
     name: 'tasks',
     initialState,
     reducers: {

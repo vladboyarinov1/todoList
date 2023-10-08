@@ -9,11 +9,10 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {FormikHelpers, useFormik} from 'formik';
 import {validate} from './validate';
-import {useAppDispatch, useAppSelector} from '../../state/store/store';
-import {loginTC} from './auth-reducer/auth-reducer';
 import {Navigate} from 'react-router-dom';
 import {authAction, authSelectors} from './index';
-import {useActions} from '../../hooks/useActions/useActions';
+import {useActions, useAppDispatch} from '../../utils/redux-utils';
+import {useAppSelector} from '../../utils/types';
 
 export type FormValuesType = {
     email: string
@@ -24,7 +23,7 @@ export type FormValuesType = {
 export const Auth = () => {
     let isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
     const dispatch = useAppDispatch()
-    const {loginTC, logoutTC} = useActions(authAction)
+    const {loginTC} = useActions(authAction)
 
     const formik = useFormik({
         initialValues: {
@@ -72,7 +71,7 @@ export const Auth = () => {
                         <p>Password: free</p>
                     </FormLabel>
                     <FormGroup>
-                        <TextField  label="email" margin="normal" placeholder={'free@samuraijs.com'}
+                        <TextField label="email" margin="normal" placeholder={'free@samuraijs.com'}
                                    helperText={formik.touched.email && formik.errors.email && formik.errors.email}
                                    {...formik.getFieldProps('email')}/>
                         <TextField type="password" label="Password"

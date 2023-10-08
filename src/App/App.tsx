@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import '../fonts/Nunito/myfont.ttf'
+import '../common/fonts/Nunito/myfont.ttf'
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
@@ -14,26 +14,24 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import {ThemeProvider} from '@emotion/react';
 import {createTheme} from '@mui/material/styles';
-import {AppDispatchType, useAppDispatch, useAppSelector} from '../state/store/store';
-import {TaskType} from '../api/todolist-api';
 import {CircularProgress, LinearProgress} from '@mui/material';
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 import {Navigate, Route, Routes} from 'react-router-dom';
-import {TodoListsList} from '../components/TodolistsList/TodolistsList';
+import {TodoListsList} from '../features/TodolistsList/TodolistsList';
 import {Error404} from '../components/ErrorPage/ErrorPage';
-import {logoutTC} from '../features/Auth/auth-reducer/auth-reducer';
+import {logoutTC} from '../features/Auth/auth-reducer';
 import LogoutIcon from '@mui/icons-material/Logout';
-import {initializeAppTC} from './app-reducer/app-reducer';
-import {appSelectors} from './index';
+import {initializeAppTC} from '../features/Application/app-reducer';
+import {appSelectors} from '../features/Application';
 import {Auth} from '../features/Auth';
+import {TaskType} from '../api/types';
+import {useAppDispatch} from '../utils/redux-utils';
+import {AppDispatchType, useAppSelector} from '../utils/types';
 
 
 export type TasksStateType = { // стейт с тасками
     [todoListId: string]: TaskType[]
 }
-
-//Кастомные хуки 1) это функция, которая начинается со слова use. 2) Внутри кастомных хуков можно использовать React хуки либо другие кастомные хуки. 
-
 
 const App = (): JSX.Element => {
     let isInitialized = useAppSelector(appSelectors.selectIsInitialized)

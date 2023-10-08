@@ -4,8 +4,8 @@ import {
     SetErrorACType,
     setLoadingStatusAC,
     SetLoadingStatusACType
-} from '../App/app-reducer/app-reducer';
-import {ResponseType} from '../api/todolist-api';
+} from '../features/Application/app-reducer';
+import {ResponseType} from '../api/types';
 
 type ErrorUtilsDispatchType = Dispatch<SetErrorACType | SetLoadingStatusACType>
 // generic function

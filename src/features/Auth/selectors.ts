@@ -1,3 +1,3 @@
-import {AppRootStateType} from '../../state/store/store';
+import {AppRootStateType} from '../../utils/types';
 
 export const selectIsLoggedIn = (state: AppRootStateType) => state.auth.isLoggedIn;
