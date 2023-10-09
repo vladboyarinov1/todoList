@@ -23,9 +23,9 @@ const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (todolistId: strin
         dispatch(setLinearProgress({value: false}))
         return {todolistId, tasks: res.data.items}
     } catch (e: any) {
-        handleServerNetworkError(e, dispatch)
         dispatch(setLinearProgress({value: false}))
-        return rejectWithValue(null)
+        return  handleServerNetworkError(e, dispatch)
+
     }
 })
 const updateTask = createAsyncThunk('tasks/updateTask', async (param: {
@@ -148,8 +148,8 @@ export const slice = createSlice({
                 const index = tasks.findIndex(t => t.id === action.payload.taskId)
                 tasks[index] = {...tasks[index], ...action.payload.model}
             })
-            .addCase(fetchTasks.fulfilled, (state, action) => {
-                state[action.payload.todolistId] = action.payload.tasks
+            .addCase(fetchTasks.fulfilled, (state, action: any) => {
+                state[action.payload?.todolistId] = action.payload?.tasks
             })
             .addCase(removeTask.fulfilled, (state, action: any) => {
                 const tasks = state[action.payload.todolistId];

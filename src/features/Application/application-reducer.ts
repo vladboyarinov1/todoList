@@ -1,7 +1,7 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {AuthApi} from '../../api/todolist-api';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
-import {setIsLoggedIn} from '../Auth/auth-reducer';
+import {authAction} from '../Auth';
 import {appActions} from '../CommonActions/App';
 
 export const initializeApp = createAsyncThunk('application/initializeApp', async (param, thunkAPI) => {
@@ -10,7 +10,7 @@ export const initializeApp = createAsyncThunk('application/initializeApp', async
         const res = await AuthApi.me()
         if (res.data.resultCode === 0) {
             //значит залогинины
-            thunkAPI.dispatch(setIsLoggedIn({value: true}));
+            thunkAPI.dispatch(authAction.setIsLoggedIn({value: true}));
             return;
         } else {
             handleServerAppError(res.data, thunkAPI)
@@ -32,19 +32,7 @@ export const slice = createSlice({
         isInitialized: false,
         isLinearProgress: false
     } as InitialStateType,
-    reducers: {
-        // setLoadingStatus(state, action: PayloadAction<{
-        //     status: RequestStatusType
-        // }>) {
-        //     state.status = action.payload.status
-        // },
-        // setError(state, action: PayloadAction<{ error: string | null }>) {
-        //     state.error = action.payload.error
-        // },
-        // setLinearProgress(state: InitialStateType, action: PayloadAction<{ value: boolean }>) {
-        //     state.isLinearProgress = action.payload.value
-        // },
-    },
+    reducers: {},
     extraReducers: builder => {
         builder
             .addCase(initializeApp.fulfilled, (state) => {
@@ -56,11 +44,11 @@ export const slice = createSlice({
             .addCase(appActions.setError, (state, action) => {
                 state.error = action.payload.error
             })
+            .addCase(appActions.setLinearProgress, (state, action) => {
+                state.isLinearProgress = action.payload.value
+            })
     }
 })
-
-
-// export const {setLoadingStatus, setError, setLinearProgress} = slice.actions
 
 //types
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
@@ -69,7 +57,7 @@ type InitialStateType = {
     status: RequestStatusType
     error: string | null
     isInitialized: boolean
-    isLinearProgress: boolean
+    isLinearProgress: boolean | null
 }
 
 

@@ -4,6 +4,7 @@ import {ThunkDispatch} from 'redux-thunk';
 import {AnyAction} from 'redux';
 import {TypedUseSelectorHook, useSelector} from 'react-redux';
 import {rootReducer} from '../App/store';
+import {FieldErrorType} from '../api/types';
 
 export type AppDispatchType = ThunkDispatch<AppRootStateType, any, AnyAction>
 
@@ -15,4 +16,5 @@ export type AppRootStateType = ReturnType<typeof rootReducer>
 
 // определить автоматически тип всего объекта состояния
 export const useAppSelector: TypedUseSelectorHook<AppRootStateType> = useSelector
+export type ThunkError = { rejectValue: { errors: Array<string>, fieldsErrors?: Array<FieldErrorType> } }
 

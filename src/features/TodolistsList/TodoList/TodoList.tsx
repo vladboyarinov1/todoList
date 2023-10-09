@@ -14,6 +14,7 @@ import {RequestStatusType} from '../../Application/application-reducer';
 import {tasksActions, todolistsActions} from '../index';
 import {useActions, useAppDispatch} from '../../../utils/redux-utils';
 import {useAppSelector} from '../../../utils/types';
+import {authSelectors} from '../../Auth';
 
 
 type TodoListPropsType = {
@@ -26,14 +27,16 @@ export const TodoList: FC<TodoListPropsType> = memo(
         const dispatch = useAppDispatch()
         const {id, title} = todolist
         const [filter, setFilter] = useState<FilterValueType>('all')
+
         let tasks = useAppSelector<TaskType[]>(state => state.tasks[id])
+
         const {fetchTasks} = useActions(tasksActions)
 
         const {deleteTodolistTC, changeTodolistFilter, updateTodolistTC} = useActions(todolistsActions)
 
         useEffect(() => {
             fetchTasks(id)
-        }, [id])
+        }, [])
 
         const removeTodolist = () => deleteTodolistTC(id)
 
