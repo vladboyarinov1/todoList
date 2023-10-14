@@ -47,14 +47,7 @@ export const AddItemForm: FC<AddItemFormProps> = memo((props) => {
 
 
     return (
-        // <div style={{display: 'flex', justifyContent: 'space-between', width: '80%'}}>
-        //     <TextField onChange={changeLocalTitle} value={title} onKeyDown={addItemEnter}
-        //                error={error} size={'small'}
-        //                onBlur={onBlurHandler}
-        //                label={error ? errorMessage : label} disabled={disabled}/>
-        //     <IconButton onClick={addItemHandler} size={'small'} disabled={taskNotAdd || disabled}
-        //                 style={{}}><AddIcon/></IconButton>
-        // </div>
+
         <div style={{display: 'flex', justifyContent: 'space-between', width: '80%'}}>
                 <TextField onChange={changeLocalTitle}  error={error} value={title} onKeyDown={addItemEnter}
                            size={'small'}
