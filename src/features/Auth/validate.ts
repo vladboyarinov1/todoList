@@ -1,7 +1,7 @@
 type FormikErrorType = {
-    email?: string
-    password?: string
-}
+    email?: string;
+    password?: string;
+};
 
 export const validate = (values: any) => {
     const errors: FormikErrorType = {};
@@ -13,14 +13,13 @@ export const validate = (values: any) => {
     // }
     //password
     if (!values.password) {
-        errors.password = 'Required';
+        errors.password = "Required";
     } else if (/\s/.test(values.password)) {
-        errors.password = 'Password cannot contain spaces';
+        errors.password = "Password cannot contain spaces";
     } else if (values.password.length > 25) {
-        errors.password = 'Password must be at most 25 characters long';
+        errors.password = "Password must be at most 25 characters long";
     } else if (!/^.{4,}$/.test(values.password)) {
-        errors.password = 'Password must be at least 4 characters long';
-
+        errors.password = "Password must be at least 4 characters long";
     }
     return errors;
 };

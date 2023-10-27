@@ -1,91 +1,99 @@
-import React, {ReactNode} from 'react'
-import {Provider} from 'react-redux';
-import {combineReducers} from 'redux';
-import {tasksReducer} from '../../features/TodolistsList/tasks-reducer/tasks-reducer';
-import {v1} from 'uuid';
-import {todolistsReducer} from '../../features/TodolistsList/todolists-reducer/todolists-reducer';
-import {TaskEntityStatus, TaskPriorities, TaskStatuses} from '../../api/types';
-import {configureStore} from '@reduxjs/toolkit';
-import thunk from 'redux-thunk';
-import {AppRootStateType} from '../../utils/types';
+import React, { ReactNode } from "react";
+import { Provider } from "react-redux";
+import { combineReducers } from "redux";
+import { tasksReducer } from "../../features/TodolistsList/tasks-reducer/tasks-reducer";
+import { v1 } from "uuid";
+import { todolistsReducer } from "../../features/TodolistsList/todolists-reducer/todolists-reducer";
+import { TaskEntityStatus, TaskPriorities, TaskStatuses } from "../../api/types";
+import { configureStore } from "@reduxjs/toolkit";
+import thunk from "redux-thunk";
+import { AppRootStateType } from "../../utils/types";
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
     todolists: todolistsReducer,
-})
+});
 
 const initialGlobalState: AppRootStateType = {
     todolists: [
-        {id: 'todolistId1', title: 'What to learn', filter: 'all', addedDate: '', order: 0, entityStatus: 'idle'},
-        {id: 'todolistId2', title: 'What to buy', filter: 'all', addedDate: '', order: 0, entityStatus: 'loading'}
+        { id: "todolistId1", title: "What to learn", filter: "all", addedDate: "", order: 0, entityStatus: "idle" },
+        { id: "todolistId2", title: "What to buy", filter: "all", addedDate: "", order: 0, entityStatus: "loading" },
     ],
     tasks: {
-        ['todolistId1']: [
+        ["todolistId1"]: [
             {
-                id: v1(), title: 'HTML&CSS', status: TaskStatuses.New,
-                startDate: '',
-                deadline: '',
-                addedDate: '',
+                id: v1(),
+                title: "HTML&CSS",
+                status: TaskStatuses.New,
+                startDate: "",
+                deadline: "",
+                addedDate: "",
                 order: 0,
                 priority: TaskPriorities.Low,
-                todoListId: 'todolistId1',
-                description: '',
-                entityStatus: TaskEntityStatus.Expectation
+                todoListId: "todolistId1",
+                description: "",
+                entityStatus: TaskEntityStatus.Expectation,
             },
             {
-                id: v1(), title: 'JS', status: TaskStatuses.New,
-                startDate: '',
-                deadline: '',
-                addedDate: '',
+                id: v1(),
+                title: "JS",
+                status: TaskStatuses.New,
+                startDate: "",
+                deadline: "",
+                addedDate: "",
                 order: 0,
                 priority: TaskPriorities.Low,
-                todoListId: 'todolistId1',
-                description: '',
-                entityStatus: TaskEntityStatus.Expectation
-            }
+                todoListId: "todolistId1",
+                description: "",
+                entityStatus: TaskEntityStatus.Expectation,
+            },
         ],
-        ['todolistId2']: [
+        ["todolistId2"]: [
             {
-                id: v1(), title: 'Milk', status: TaskStatuses.New,
-                startDate: '',
-                deadline: '',
-                addedDate: '',
+                id: v1(),
+                title: "Milk",
+                status: TaskStatuses.New,
+                startDate: "",
+                deadline: "",
+                addedDate: "",
                 order: 0,
                 priority: TaskPriorities.Low,
-                todoListId: 'todolistId2',
-                description: '',
-                entityStatus: TaskEntityStatus.Expectation
+                todoListId: "todolistId2",
+                description: "",
+                entityStatus: TaskEntityStatus.Expectation,
             },
             {
-                id: v1(), title: 'React Book', status: TaskStatuses.New,
-                startDate: '',
-                deadline: '',
-                addedDate: '',
+                id: v1(),
+                title: "React Book",
+                status: TaskStatuses.New,
+                startDate: "",
+                deadline: "",
+                addedDate: "",
                 order: 0,
                 priority: TaskPriorities.Low,
-                todoListId: 'todolistId2',
-                description: '',
-                entityStatus: TaskEntityStatus.Expectation
-            }
-        ]
+                todoListId: "todolistId2",
+                description: "",
+                entityStatus: TaskEntityStatus.Expectation,
+            },
+        ],
     },
     app: {
         error: null,
-        status: 'succeeded',
+        status: "succeeded",
         isInitialized: true,
-        isLinearProgress: false
+        isLinearProgress: false,
     },
     auth: {
-        isLoggedIn: true
-    }
+        isLoggedIn: true,
+    },
 };
 
 export const storyBookStore = configureStore({
     reducer: rootReducer,
     preloadedState: initialGlobalState,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(thunk)
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(thunk),
 });
 
 export const ReduxStoreProviderDecorator = (storyFn: () => ReactNode) => {
-    return <Provider store={storyBookStore}>{storyFn()}</Provider>
-}
+    return <Provider store={storyBookStore}>{storyFn()}</Provider>;
+};

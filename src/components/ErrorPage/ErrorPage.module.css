@@ -2,7 +2,6 @@
     max-width: 100%; /* Сделать картинку адаптивной */
     max-height: 100%; /* Сделать картинку адаптивной */
     object-fit: contain; /* Сохранить пропорции картинки */
-
 }
 
 .wrapper {
@@ -12,13 +11,10 @@
     height: 100vh;
 }
 
-
 @media screen and (max-width: 760px) {
     .container {
-
     }
 
     .error404 {
-
     }
 }
