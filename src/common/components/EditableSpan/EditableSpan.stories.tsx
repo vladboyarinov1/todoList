@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import { EditableSpan } from "./EditableSpan";
+import { EditableSpan } from "common/components/EditableSpan/EditableSpan";
 import { action } from "@storybook/addon-actions";
 
 //Storybook - это инструмент для разработки и тестирования компонентов пользовательского интерфейса (UI) в изоляции от основного приложения. С помощью Storybook вы можете создавать и демонстрировать компоненты UI, чтобы убедиться, что они работают правильно, и протестировать их в разных контекстах и состояниях.

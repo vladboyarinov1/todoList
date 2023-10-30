@@ -1,6 +1,5 @@
 import React, { FC, useCallback, useEffect } from "react";
 import Grid from "@mui/material/Grid";
-import { AddItemForm } from "components/AddItemForm/AddItemForm";
 import Paper from "@mui/material/Paper";
 import { TodoList } from "./TodoList/TodoList";
 import { TodolistDomainType } from "./todolists-reducer/todolists-reducer";
@@ -10,8 +9,10 @@ import { RequestStatusType } from "../Application/application-reducer";
 import { authSelectors } from "../Auth";
 import { todoListsSelector } from "./selectors";
 import { todolistsActions } from "./index";
-import { useActions, useAppDispatch } from "utils/redux-utils";
-import { useAppSelector } from "utils/types";
+import { useActions } from "common/hooks/useActions";
+import { AddItemForm } from "common/components";
+import { useAppDispatch } from "common/hooks/useAppDispatch";
+import { useAppSelector } from "common/hooks/useAppSelector";
 
 export const TodoListsList: FC = () => {
     const { fetchTodolists } = useActions(todolistsActions);
@@ -66,12 +67,25 @@ export const TodoListsList: FC = () => {
                         alignItems: "center",
                     }}
                 >
-                    <CircularProgress sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }} />
+                    <CircularProgress
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                        }}
+                    />
                 </Box>
             ) : (
                 <div style={{ paddingBottom: "20px" }}>
-                    <Grid container sx={{ p: "15px 0" }} style={{ width: "300px" }}>
-                        <AddItemForm addItem={addNewTodoList} label="todolist name" />
+                    <Grid
+                        container
+                        sx={{ p: "15px 0" }}
+                        style={{ width: "300px" }}
+                    >
+                        <AddItemForm
+                            addItem={addNewTodoList}
+                            label="todolist name"
+                        />
                     </Grid>
                     <Grid container spacing={4}>
                         {todoListsComponents}

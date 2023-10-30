@@ -1,52 +1,63 @@
-import { AuthApi } from "api/todolist-api";
-import { handleServerAppError, handleServerNetworkError } from "utils/error-utils";
-import { ResultCode } from "../TodolistsList/tasks-reducer/tasks-reducer";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FormValuesType } from "./Auth";
-import { FieldErrorType } from "api/types";
+import { LoginParams } from "./Auth";
 import { appActions } from "../CommonActions/App";
 import { authAction } from "features/Auth/index";
+import { handleServerAppError, handleServerNetworkError } from "common/utils";
+import { authAPI } from "features/Auth/authAPI";
+import { ResultCode } from "common/enums/enums";
+import { FieldErrorType } from "common/types/commonTypes";
 
 const { setLoadingStatus } = appActions;
 
 export const login = createAsyncThunk<
     undefined,
-    FormValuesType,
+    LoginParams,
     {
         rejectValue: { errors: string[]; fieldsErrors?: FieldErrorType[] };
     }
->("auth/login", async (param: FormValuesType, thunkAPI) => {
+>("auth/login", async (param: LoginParams, thunkAPI) => {
     thunkAPI.dispatch(setLoadingStatus({ status: "loading" }));
     try {
-        let res = await AuthApi.login(param);
+        let res = await authAPI.login(param);
         if (res.data.resultCode === ResultCode.OK) {
             thunkAPI.dispatch(setLoadingStatus({ status: "succeeded" }));
             return; //return {value: true};
         } else {
             handleServerAppError(res.data, thunkAPI);
-            return thunkAPI.rejectWithValue({ errors: res.data.messages, fieldsErrors: res.data.fieldsErrors });
+            return thunkAPI.rejectWithValue({
+                errors: res.data.messages,
+                fieldsErrors: res.data.fieldsErrors,
+            });
         }
     } catch (e: any) {
         handleServerNetworkError(e, thunkAPI.dispatch);
-        return thunkAPI.rejectWithValue({ errors: [e.errors], fieldsErrors: undefined });
+        return thunkAPI.rejectWithValue({
+            errors: [e.errors],
+            fieldsErrors: undefined,
+        });
     }
 });
 
-export const logout = createAsyncThunk("auth/logout", async (param, thunkAPI) => {
-    thunkAPI.dispatch(setLoadingStatus({ status: "loading" }));
-    try {
-        let res = await AuthApi.logout();
-        if (res.data.resultCode === 0) {
-            thunkAPI.dispatch(setLoadingStatus({ status: "succeeded" }));
-            thunkAPI.dispatch(authAction.setIsLoggedIn({ isLoggedIn: false }));
-            return;
-        } else {
-            return handleServerAppError(res.data, thunkAPI);
+export const logout = createAsyncThunk(
+    "auth/logout",
+    async (param, thunkAPI) => {
+        thunkAPI.dispatch(setLoadingStatus({ status: "loading" }));
+        try {
+            let res = await authAPI.logout();
+            if (res.data.resultCode === 0) {
+                thunkAPI.dispatch(setLoadingStatus({ status: "succeeded" }));
+                thunkAPI.dispatch(
+                    authAction.setIsLoggedIn({ isLoggedIn: false }),
+                );
+                return;
+            } else {
+                return handleServerAppError(res.data, thunkAPI);
+            }
+        } catch (error: any) {
+            return handleServerNetworkError(error, thunkAPI.dispatch);
         }
-    } catch (error: any) {
-        return handleServerNetworkError(error, thunkAPI.dispatch);
-    }
-});
+    },
+);
 export const asyncActions = {
     login,
     logout,

@@ -1,4 +1,6 @@
-import { AppRootStateType } from "../../utils/types";
+import { AppRootStateType } from "common/types/commonTypes";
 
-export const selectIsInitialized = (state: AppRootStateType) => state.app.isInitialized;
-export const selectIsLinearProgress = (state: AppRootStateType) => state.app.isLinearProgress;
+export const selectIsInitialized = (state: AppRootStateType) =>
+    state.app.isInitialized;
+export const selectIsLinearProgress = (state: AppRootStateType) =>
+    state.app.isLinearProgress;

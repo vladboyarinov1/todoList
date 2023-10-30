@@ -1,7 +1,11 @@
 import { InitialStateType, tasksReducer } from "./tasks-reducer";
-import { TaskEntityStatus, TaskPriorities, TaskStatuses } from "api/types";
 import { asyncActions as tasksAsyncActions } from "./tasks-reducer";
 import { asyncActions as todolistsAsyncActions } from "../todolists-reducer/todolists-reducer";
+import {
+    TaskEntityStatus,
+    TaskPriorities,
+    TaskStatuses,
+} from "common/enums/enums";
 
 describe("todolistReducer", () => {
     let startState: InitialStateType;
@@ -71,7 +75,7 @@ describe("todolistReducer", () => {
                     entityStatus: TaskEntityStatus.Expectation,
                 },
             },
-            "",
+            "requestId",
             {
                 todolistId: "todolistId1",
                 title: "juce",
@@ -83,8 +87,16 @@ describe("todolistReducer", () => {
         expect(endState["todolistId2"][0].status).toBe(TaskStatuses.New);
     });
     test("status of specified task should be changed", () => {
-        const data = { taskId: "2", model: { status: TaskStatuses.New }, todolistId: "todolistId2" };
-        const action = tasksAsyncActions.updateTask.fulfilled(data, "", data);
+        const data = {
+            taskId: "2",
+            model: { status: TaskStatuses.New },
+            todolistId: "todolistId2",
+        };
+        const action = tasksAsyncActions.updateTask.fulfilled(
+            data,
+            "requestId",
+            data,
+        );
 
         const endState = tasksReducer(startState, action);
 
@@ -93,7 +105,11 @@ describe("todolistReducer", () => {
     });
 
     test("title of specified task should be changed", () => {
-        const data = { taskId: "1", model: { title: "newTitle" }, todolistId: "todolistId1" };
+        const data = {
+            taskId: "1",
+            model: { title: "newTitle" },
+            todolistId: "todolistId1",
+        };
         const action = tasksAsyncActions.updateTask.fulfilled(data, "", data);
 
         const endState = tasksReducer(startState, action);
@@ -110,12 +126,18 @@ describe("todolistReducer", () => {
                 order: 0,
             },
         };
-        const action = todolistsAsyncActions.addTodolistTC.fulfilled(payload, "", "newTL");
+        const action = todolistsAsyncActions.addTodolistTC.fulfilled(
+            payload,
+            "",
+            "newTL",
+        );
 
         const endState = tasksReducer({}, action);
 
         const keys = Object.keys(endState);
-        const newKey = keys.find((k) => k != "todolistId1" && k != "todolistId2");
+        const newKey = keys.find(
+            (k) => k != "todolistId1" && k != "todolistId2",
+        );
         if (!newKey) {
             throw Error("new key should be added");
         }
@@ -125,7 +147,11 @@ describe("todolistReducer", () => {
     });
 
     test("property with todolistId should be deleted", () => {
-        const action = todolistsAsyncActions.deleteTodolistTC.fulfilled({ id: "todolistId2" }, "", "todolistId2");
+        const action = todolistsAsyncActions.deleteTodolistTC.fulfilled(
+            { id: "todolistId2" },
+            "",
+            "todolistId2",
+        );
 
         const endState = tasksReducer(startState, action);
         const keys = Object.keys(endState);
@@ -141,7 +167,11 @@ describe("todolistReducer", () => {
                 order: 0,
             },
         };
-        const action = todolistsAsyncActions.addTodolistTC.fulfilled(payload, "", payload.todolist.title);
+        const action = todolistsAsyncActions.addTodolistTC.fulfilled(
+            payload,
+            "",
+            payload.todolist.title,
+        );
 
         const endState = tasksReducer(startState, action);
         const keys = Object.keys(endState);

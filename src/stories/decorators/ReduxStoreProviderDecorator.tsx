@@ -4,10 +4,14 @@ import { combineReducers } from "redux";
 import { tasksReducer } from "../../features/TodolistsList/tasks-reducer/tasks-reducer";
 import { v1 } from "uuid";
 import { todolistsReducer } from "../../features/TodolistsList/todolists-reducer/todolists-reducer";
-import { TaskEntityStatus, TaskPriorities, TaskStatuses } from "../../api/types";
 import { configureStore } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
-import { AppRootStateType } from "../../utils/types";
+import {
+    TaskEntityStatus,
+    TaskPriorities,
+    TaskStatuses,
+} from "common/enums/enums";
+import { AppRootStateType } from "common/types/commonTypes";
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
@@ -16,8 +20,22 @@ const rootReducer = combineReducers({
 
 const initialGlobalState: AppRootStateType = {
     todolists: [
-        { id: "todolistId1", title: "What to learn", filter: "all", addedDate: "", order: 0, entityStatus: "idle" },
-        { id: "todolistId2", title: "What to buy", filter: "all", addedDate: "", order: 0, entityStatus: "loading" },
+        {
+            id: "todolistId1",
+            title: "What to learn",
+            filter: "all",
+            addedDate: "",
+            order: 0,
+            entityStatus: "idle",
+        },
+        {
+            id: "todolistId2",
+            title: "What to buy",
+            filter: "all",
+            addedDate: "",
+            order: 0,
+            entityStatus: "loading",
+        },
     ],
     tasks: {
         ["todolistId1"]: [

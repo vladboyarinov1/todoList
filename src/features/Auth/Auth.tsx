@@ -11,13 +11,15 @@ import { FormikHelpers, useFormik } from "formik";
 import { validate } from "./validate";
 import { Navigate } from "react-router-dom";
 import { authAction, authSelectors } from "./index";
-import { useActions, useAppDispatch } from "../../utils/redux-utils";
-import { useAppSelector } from "../../utils/types";
+import { useActions } from "common/hooks/useActions";
+import { useAppDispatch } from "common/hooks/useAppDispatch";
+import { useAppSelector } from "common/hooks/useAppSelector";
 
-export type FormValuesType = {
+export type LoginParams = {
     email: string;
     password: string;
     rememberMe: boolean;
+    captcha?: string;
 };
 
 export const Auth = () => {
@@ -32,7 +34,10 @@ export const Auth = () => {
             rememberMe: false,
         },
         validate,
-        onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
+        onSubmit: async (
+            values: LoginParams,
+            formikHelpers: FormikHelpers<LoginParams>,
+        ) => {
             const action = await dispatch(authAction.login(values));
             if (login.rejected.match(action)) {
                 if (action.payload?.fieldsErrors?.length) {
@@ -56,14 +61,24 @@ export const Auth = () => {
     }
 
     return (
-        <Grid container display={"flex"} justifyContent={"center"} alignItems={"center"}>
+        <Grid
+            container
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+        >
             <Grid item justifyContent={"center"} paddingTop="100px">
                 <form onSubmit={formik.handleSubmit}>
                     <FormControl>
                         <FormLabel>
                             <p>
                                 To log in get registered
-                                <a href={"https://social-network.samuraijs.com/"} target={"_blank"}>
+                                <a
+                                    href={
+                                        "https://social-network.samuraijs.com/"
+                                    }
+                                    target={"_blank"}
+                                >
                                     {" "}
                                     here
                                 </a>
@@ -77,13 +92,21 @@ export const Auth = () => {
                                 label="email"
                                 margin="normal"
                                 placeholder={"free@samuraijs.com"}
-                                helperText={formik.touched.email && formik.errors.email && formik.errors.email}
+                                helperText={
+                                    formik.touched.email &&
+                                    formik.errors.email &&
+                                    formik.errors.email
+                                }
                                 {...formik.getFieldProps("email")}
                             />
                             <TextField
                                 type="password"
                                 label="Password"
-                                helperText={formik.touched.password && formik.errors.password && formik.errors.password}
+                                helperText={
+                                    formik.touched.password &&
+                                    formik.errors.password &&
+                                    formik.errors.password
+                                }
                                 margin="normal"
                                 {...formik.getFieldProps("password")}
                             />
@@ -96,7 +119,11 @@ export const Auth = () => {
                                     />
                                 }
                             />
-                            <Button type={"submit"} variant={"contained"} color={"primary"}>
+                            <Button
+                                type={"submit"}
+                                variant={"contained"}
+                                color={"primary"}
+                            >
                                 Login
                             </Button>
                         </FormGroup>
