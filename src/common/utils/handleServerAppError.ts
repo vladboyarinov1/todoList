@@ -1,6 +1,6 @@
 import { appActions } from "features/CommonActions/App";
 
-import { ResponseType } from "common/types/commonTypes";
+import { BaseResponseType } from "common/types/commonTypes";
 
 type ThunkAPIType = {
     dispatch: (action: any) => any;
@@ -8,7 +8,7 @@ type ThunkAPIType = {
 };
 // generic function
 export const handleServerAppError = <D>(
-    data: ResponseType<D>,
+    data: BaseResponseType<D>,
     thunkAPI: ThunkAPIType,
 ) => {
     if (data.messages.length) {

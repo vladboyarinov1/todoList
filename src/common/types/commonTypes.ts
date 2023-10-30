@@ -5,17 +5,20 @@ import {
     TaskPriorities,
     TaskStatuses,
 } from "common/enums/enums";
-import { rootReducer } from "app/store";
+import { store } from "app/store";
 
 export type AppDispatchType = ThunkDispatch<AppRootStateType, any, AnyAction>;
-export type AppRootStateType = ReturnType<typeof rootReducer>;
+export type AppRootStateType = ReturnType<typeof store.getState>;
+
 export type TodolistType = {
     id: string;
     title: string;
     addedDate: string;
     order: number;
 };
+
 export type FieldErrorType = { field: string; error: string };
+
 export type TaskType = {
     description: string;
     title: string;
@@ -46,17 +49,7 @@ export type CreateTaskParam = {
     todolistId: string;
     title: string;
 };
-export type UpdateTaskParam = {
-    todolistId: string;
-    taskId: string;
-    model: UpdateTaskModelType;
-};
-export type ThunkError = {
-    rejectValue: {
-        errors: Array<string>;
-        fieldsErrors?: Array<FieldErrorType>;
-    };
-};
+
 export type FlexType = {
     title?: string;
     description?: string;
@@ -65,7 +58,7 @@ export type FlexType = {
     startDate?: string;
     deadline?: string;
 };
-export type ResponseType<T = {}> = {
+export type BaseResponseType<T = {}> = {
     resultCode: number;
     fieldsErrors?: FieldErrorType[];
     messages: string[];

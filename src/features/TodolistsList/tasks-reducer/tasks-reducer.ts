@@ -158,28 +158,26 @@ const updateTask = createAsyncThunk<any, UpdateTaskParam>(
 const removeTask = createAsyncThunk(
     `${slice.name}/removeTask`,
     async (param: { todolistId: string; taskId: string }, thunkAPI) => {
-        thunkAPI.dispatch(
+        const { dispatch } = thunkAPI;
+        dispatch(
             changeEntityStatus({
                 todolistId: param.todolistId,
                 taskId: param.taskId,
                 entityStatus: TaskEntityStatus.Expectation,
             }),
         );
-        thunkAPI.dispatch(setLinearProgress({ value: true }));
+        dispatch(setLinearProgress({ value: true }));
         try {
-            let res = await todolistsAPI.deleteTask(
-                param.todolistId,
-                param.taskId,
-            );
+            let res = await todolistsAPI.deleteTask(param);
             if (res.data.resultCode === ResultCode.OK) {
-                thunkAPI.dispatch(setLinearProgress({ value: false }));
+                dispatch(setLinearProgress({ value: false }));
                 return { taskId: param.taskId, todolistId: param.todolistId };
             } else {
                 handleServerAppError(res.data, thunkAPI);
             }
         } catch (e: any) {
-            handleServerNetworkError(e, thunkAPI.dispatch);
-            thunkAPI.dispatch(
+            handleServerNetworkError(e, dispatch);
+            dispatch(
                 changeEntityStatus({
                     todolistId: param.todolistId,
                     taskId: param.taskId,
@@ -192,27 +190,28 @@ const removeTask = createAsyncThunk(
 const addTask = createAppAsyncThunk<{ task: TaskType }, CreateTaskParam>(
     `${slice.name}/addTask`,
     async (param, thunkAPI) => {
-        thunkAPI.dispatch(setLinearProgress({ value: true }));
+        const { dispatch, rejectWithValue } = thunkAPI;
+        dispatch(setLinearProgress({ value: true }));
         try {
             const res = await todolistsAPI.createTask(param);
             if (res.data.resultCode === ResultCode.OK) {
-                thunkAPI.dispatch(setLinearProgress({ value: false }));
+                dispatch(setLinearProgress({ value: false }));
                 return { task: res.data.data.item };
             } else {
                 handleServerAppError(res.data, thunkAPI);
-                return thunkAPI.rejectWithValue({
+                return rejectWithValue({
                     errors: res.data.messages,
                     fieldsErrors: res.data.fieldsErrors,
                 });
             }
         } catch (e: any) {
-            handleServerNetworkError(e, thunkAPI.dispatch);
-            return thunkAPI.rejectWithValue({
+            handleServerNetworkError(e, dispatch);
+            return rejectWithValue({
                 errors: [e.errors],
                 fieldsErrors: undefined,
             });
         } finally {
-            thunkAPI.dispatch(setLinearProgress({ value: false }));
+            dispatch(setLinearProgress({ value: false }));
         }
     },
 );

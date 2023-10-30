@@ -15,12 +15,12 @@ import Typography from "@mui/material/Typography";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material/styles";
 import { CircularProgress, LinearProgress } from "@mui/material";
-import { ErrorSnackbar } from "../common/components/ErrorSnackbar/ErrorSnackbar";
+import { ErrorSnackbar } from "common/components/ErrorSnackbar/ErrorSnackbar";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { TodoListsList } from "../features/TodolistsList/TodolistsList";
-import { Error404 } from "../common/components/ErrorPage/ErrorPage";
+import { TodoListsList } from "features/TodolistsList/TodolistsList";
+import { Error404 } from "common/components/ErrorPage/ErrorPage";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { appActions, appSelectors } from "../features/Application";
+import { appSelectors } from "../features/Application";
 import { Auth, authAction, authSelectors } from "../features/Auth";
 import { useActions } from "common/hooks/useActions";
 
@@ -34,7 +34,7 @@ export type TasksStateType = {
 
 const App = (): JSX.Element => {
     const { logout } = useActions(authAction);
-    const { initializeApp } = useActions(appActions);
+    const { initializeApp } = useActions(authAction);
 
     let isInitialized = useAppSelector(appSelectors.selectIsInitialized);
     let isLoginIn = useAppSelector(authSelectors.selectIsLoggedIn);

@@ -1,6 +1,6 @@
-import * as authSelectors from "./selectors";
-import { Auth } from "./Auth";
-import { asyncActions, slice } from "./auth-reducer";
+import * as authSelectors from "features/Auth/model/auth-selectors";
+import { Auth } from "features/Auth/ui/Auth";
+import { asyncActions, slice } from "features/Auth/model/auth-reducer";
 
 const authAction = {
     ...asyncActions,

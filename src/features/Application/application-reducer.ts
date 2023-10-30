@@ -1,34 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { handleServerAppError } from "common/utils/handleServerAppError";
-import { authAction } from "../Auth";
+import { createSlice } from "@reduxjs/toolkit";
 import { appActions } from "../CommonActions/App";
-import { handleServerNetworkError } from "common/utils/handleServerNetworkError";
-import { authAPI } from "features/Auth/authAPI";
-
-export const initializeApp = createAsyncThunk(
-    "application/initializeApp",
-    async (param, thunkAPI) => {
-        thunkAPI.dispatch(appActions.setLoadingStatus({ status: "loading" }));
-        try {
-            const res = await authAPI.me();
-            if (res.data.resultCode === 0) {
-                //значит залогинины
-                thunkAPI.dispatch(
-                    authAction.setIsLoggedIn({ isLoggedIn: true }),
-                );
-                return;
-            } else {
-                handleServerAppError(res.data, thunkAPI);
-            }
-        } catch (e: any) {
-            handleServerNetworkError(e, thunkAPI.dispatch);
-        }
-    },
-);
-
-export const asyncActions = {
-    initializeApp,
-};
+import { initializeApp } from "features/Auth/model/auth-reducer";
 
 export const slice = createSlice({
     name: "application",
