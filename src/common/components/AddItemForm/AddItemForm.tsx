@@ -20,9 +20,11 @@ export const AddItemForm: FC<AddItemFormProps> = memo((props) => {
         error && setError(null); // если была ошибка, то снимаем ее
         setTitle(e.currentTarget.value);
     };
+    /////////Прилетает ошибка при добавлении но добавляется
     const addItemHandler = async () => {
         if (title.trim() !== "") {
             try {
+                debugger;
                 if (title.trim()) {
                     await addItem(title);
                     setTitle("");

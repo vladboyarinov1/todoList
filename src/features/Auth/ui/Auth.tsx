@@ -7,78 +7,25 @@ import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { FormikHelpers, useFormik } from "formik";
-import { validate } from "features/Auth/validate";
 import { Navigate } from "react-router-dom";
-import { authAction, authSelectors } from "features/Auth/index";
-import { useActions } from "common/hooks/useActions";
-import { useAppDispatch } from "common/hooks/useAppDispatch";
-import { useAppSelector } from "common/hooks/useAppSelector";
-
-export type LoginParams = {
-    email: string;
-    password: string;
-    rememberMe: boolean;
-    captcha?: string;
-};
+import { useAuth } from "features/Auth/lib/useAuth";
 
 export const Auth = () => {
-    let isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn);
-    const dispatch = useAppDispatch();
-    const { login } = useActions(authAction);
+    const { formik, isLoggedIn } = useAuth();
 
-    const formik = useFormik({
-        initialValues: {
-            email: "free@samuraijs.com",
-            password: "free",
-            rememberMe: false,
-        },
-        validate,
-        onSubmit: async (
-            values: LoginParams,
-            formikHelpers: FormikHelpers<LoginParams>,
-        ) => {
-            const action = await dispatch(authAction.login(values));
-            if (login.rejected.match(action)) {
-                if (action.payload?.fieldsErrors?.length) {
-                    const error = action.payload?.fieldsErrors[0];
-                    formikHelpers.setFieldError(error.field, error.error);
-                }
-            } else {
-                formik.resetForm();
-            }
-        },
-    });
-
-    //{status: boolean}, any , {rejectValue: {errors: string[], fieldsErrors?: FieldErrorType[]}
-    //flow
-    //происходит ввод с помощью onChange={formik.handleChange} значение помещается в объект initialValues
-    //нажимается кнопка submit вызывается onSubmit={formik.handleSubmit}
-    //этот объект помещается в onSubmit в values
-    //дальнейшая логика
     if (isLoggedIn) {
         return <Navigate to={"/"} />;
     }
 
     return (
-        <Grid
-            container
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
-        >
+        <Grid container display={"flex"} justifyContent={"center"} alignItems={"center"}>
             <Grid item justifyContent={"center"} paddingTop="100px">
                 <form onSubmit={formik.handleSubmit}>
                     <FormControl>
                         <FormLabel>
                             <p>
                                 To log in get registered
-                                <a
-                                    href={
-                                        "https://social-network.samuraijs.com/"
-                                    }
-                                    target={"_blank"}
-                                >
+                                <a href={"https://social-network.samuraijs.com/"} target={"_blank"}>
                                     {" "}
                                     here
                                 </a>
@@ -92,21 +39,13 @@ export const Auth = () => {
                                 label="email"
                                 margin="normal"
                                 placeholder={"free@samuraijs.com"}
-                                helperText={
-                                    formik.touched.email &&
-                                    formik.errors.email &&
-                                    formik.errors.email
-                                }
+                                helperText={formik.touched.email && formik.errors.email && formik.errors.email}
                                 {...formik.getFieldProps("email")}
                             />
                             <TextField
                                 type="password"
                                 label="Password"
-                                helperText={
-                                    formik.touched.password &&
-                                    formik.errors.password &&
-                                    formik.errors.password
-                                }
+                                helperText={formik.touched.password && formik.errors.password && formik.errors.password}
                                 margin="normal"
                                 {...formik.getFieldProps("password")}
                             />
@@ -119,11 +58,7 @@ export const Auth = () => {
                                     />
                                 }
                             />
-                            <Button
-                                type={"submit"}
-                                variant={"contained"}
-                                color={"primary"}
-                            >
+                            <Button type={"submit"} variant={"contained"} color={"primary"}>
                                 Login
                             </Button>
                         </FormGroup>

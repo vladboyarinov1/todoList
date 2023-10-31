@@ -1,21 +1,21 @@
 import React, { FC, useCallback, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import { TodoList } from "./TodoList/TodoList";
-import { TodolistDomainType } from "./todolists-reducer/todolists-reducer";
+import { TodoList } from "features/TodolistsList/ui/TodoList/TodoList";
+import { TodolistDomainType } from "features/TodolistsList/model/todolists/todolistsSlice";
 import { Navigate } from "react-router-dom";
 import { Box, CircularProgress } from "@mui/material";
-import { RequestStatusType } from "../Application/application-reducer";
-import { authSelectors } from "../Auth";
-import { todoListsSelector } from "./selectors";
-import { todolistsActions } from "./index";
+import { RequestStatusType } from "features/Application/application-reducer";
+import { authSelectors } from "features/Auth";
+import { todoListsSelector } from "features/TodolistsList/model/todolists/todolistsSelectors";
+import { todolistsActions } from "features/TodolistsList/index";
 import { useActions } from "common/hooks/useActions";
 import { AddItemForm } from "common/components";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { useAppSelector } from "common/hooks/useAppSelector";
 
 export const TodoListsList: FC = () => {
-    const { fetchTodolists } = useActions(todolistsActions);
+    const { fetchTodolists, addTodolistTC } = useActions(todolistsActions);
     let todoLists = useAppSelector<TodolistDomainType[]>(todoListsSelector);
     let isLoggedIn = useAppSelector<any>(authSelectors.selectIsLoggedIn);
     let status = useAppSelector<RequestStatusType>((state) => state.app.status);
@@ -28,10 +28,10 @@ export const TodoListsList: FC = () => {
     }, []);
 
     const addNewTodoList = useCallback(async (title: string) => {
-        let thunk = todolistsActions.addTodolistTC(title);
+        let thunk = addTodolistTC(title);
         const resultActions = await dispatch(thunk);
 
-        if (todolistsActions.addTodolistTC.rejected.match(resultActions)) {
+        if (addTodolistTC.rejected.match(resultActions)) {
             if (resultActions.payload?.errors?.length) {
                 const errorMessage = resultActions.payload?.errors[0];
                 throw new Error(errorMessage);
@@ -77,15 +77,8 @@ export const TodoListsList: FC = () => {
                 </Box>
             ) : (
                 <div style={{ paddingBottom: "20px" }}>
-                    <Grid
-                        container
-                        sx={{ p: "15px 0" }}
-                        style={{ width: "300px" }}
-                    >
-                        <AddItemForm
-                            addItem={addNewTodoList}
-                            label="todolist name"
-                        />
+                    <Grid container sx={{ p: "15px 0" }} style={{ width: "300px" }}>
+                        <AddItemForm addItem={addNewTodoList} label="todolist name" />
                     </Grid>
                     <Grid container spacing={4}>
                         {todoListsComponents}

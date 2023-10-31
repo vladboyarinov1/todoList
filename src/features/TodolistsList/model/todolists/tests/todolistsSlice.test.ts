@@ -1,9 +1,8 @@
-import { TodolistDomainType, todolistsReducer } from "./todolists-reducer";
+import { TodolistDomainType, todolistsReducer } from "features/TodolistsList/model/todolists/todolistsSlice";
 
-import { asyncActions as todolistsAsyncActions } from "./todolists-reducer";
-import { todolistsActions } from "../index";
-
-import { TodolistType } from "common/types/commonTypes";
+import { asyncActions as todolistsAsyncActions } from "features/TodolistsList/model/todolists/todolistsSlice";
+import { todolistsActions } from "features/TodolistsList/index";
+import { TodolistType } from "features/TodolistsList/api/todolists/todolistsApi-types";
 
 describe("todolistReducer", () => {
     let initialState: TodolistType[] | any;
@@ -15,26 +14,16 @@ describe("todolistReducer", () => {
     });
 
     test("todolists should be set", () => {
-        const action = todolistsAsyncActions.fetchTodolists.fulfilled(
-            { todos: initialState },
-            "",
-        );
+        const action = todolistsAsyncActions.fetchTodolists.fulfilled({ todos: initialState }, "");
 
-        const endState: TodolistDomainType[] = todolistsReducer(
-            initialState,
-            action,
-        );
+        const endState: TodolistDomainType[] = todolistsReducer(initialState, action);
 
         expect(endState[0].filter).toBe("all");
         expect(endState[1].filter).toBe("all");
     });
 
     test("should remove a todolist from the state", () => {
-        const action = todolistsActions.deleteTodolistTC.fulfilled(
-            { id: "2" },
-            "",
-            "2",
-        );
+        const action = todolistsActions.deleteTodolistTC.fulfilled({ id: "2" }, "", "2");
         const expectedState = [
             {
                 id: "1",
@@ -57,11 +46,7 @@ describe("todolistReducer", () => {
             addedDate: "",
             order: 0,
         };
-        const action = todolistsAsyncActions.addTodolistTC.fulfilled(
-            { todolist },
-            "",
-            todolist.title,
-        );
+        const action = todolistsAsyncActions.addTodolistTC.fulfilled({ todolist }, "", todolist.title);
 
         const newState: TodolistDomainType[] = todolistsReducer([], action);
 
@@ -97,10 +82,7 @@ describe("todolistReducer", () => {
             },
         ];
 
-        const newState: TodolistDomainType[] = todolistsReducer(
-            expectedState,
-            action,
-        );
+        const newState: TodolistDomainType[] = todolistsReducer(expectedState, action);
 
         expect(newState[1].title).toBe("newTitleForTodolistWithID2");
         expect(newState[0].title).toBe("First Todo List");

@@ -17,7 +17,7 @@ import { createTheme } from "@mui/material/styles";
 import { CircularProgress, LinearProgress } from "@mui/material";
 import { ErrorSnackbar } from "common/components/ErrorSnackbar/ErrorSnackbar";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { TodoListsList } from "features/TodolistsList/TodolistsList";
+import { TodoListsList } from "features/TodolistsList/ui/TodolistsList";
 import { Error404 } from "common/components/ErrorPage/ErrorPage";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { appSelectors } from "../features/Application";
@@ -25,22 +25,16 @@ import { Auth, authAction, authSelectors } from "../features/Auth";
 import { useActions } from "common/hooks/useActions";
 
 import { useAppSelector } from "common/hooks/useAppSelector";
-import { TaskType } from "common/types/commonTypes";
+import { TaskType } from "features/TodolistsList/api/tasks/tasksApi-types";
 
-export type TasksStateType = {
-    // стейт с тасками
-    [todoListId: string]: TaskType[];
-};
+export type TasksStateType = Record<string, TaskType[]>;
 
 const App = (): JSX.Element => {
-    const { logout } = useActions(authAction);
-    const { initializeApp } = useActions(authAction);
+    const { logout, initializeApp } = useActions(authAction);
 
     let isInitialized = useAppSelector(appSelectors.selectIsInitialized);
     let isLoginIn = useAppSelector(authSelectors.selectIsLoggedIn);
-    const isLinearProgress = useAppSelector(
-        appSelectors.selectIsLinearProgress,
-    );
+    const isLinearProgress = useAppSelector(appSelectors.selectIsLinearProgress);
 
     useEffect(() => {
         initializeApp();
@@ -91,33 +85,15 @@ const App = (): JSX.Element => {
                 <div>
                     <AppBar position="static">
                         <Toolbar>
-                            <IconButton
-                                size="large"
-                                edge="start"
-                                color="inherit"
-                                aria-label="menu"
-                                sx={{ mr: 2 }}
-                            >
+                            <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
                                 <MenuIcon />
                             </IconButton>
-                            <Typography
-                                variant="h6"
-                                component="div"
-                                sx={{ flexGrow: 1 }}
-                            >
+                            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                                 TodoLists
                             </Typography>
                             <FormGroup>
                                 <FormControlLabel
-                                    control={
-                                        <Switch
-                                            onChange={(e) =>
-                                                setDarkMode(
-                                                    e.currentTarget.checked,
-                                                )
-                                            }
-                                        />
-                                    }
+                                    control={<Switch onChange={(e) => setDarkMode(e.currentTarget.checked)} />}
                                     label={isDark ? "dark mode" : "light mode"}
                                 />
                             </FormGroup>
@@ -134,10 +110,7 @@ const App = (): JSX.Element => {
                             <Route path={"/"} element={<TodoListsList />} />
                             <Route path={"/auth"} element={<Auth />} />
                             <Route path={"/404"} element={<Error404 />} />
-                            <Route
-                                path={"*"}
-                                element={<Navigate to={"/404"} />}
-                            />
+                            <Route path={"*"} element={<Navigate to={"/404"} />} />
                         </Routes>
                     </Container>
                     <ErrorSnackbar />

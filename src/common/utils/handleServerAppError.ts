@@ -6,16 +6,22 @@ type ThunkAPIType = {
     dispatch: (action: any) => any;
     rejectWithValue: Function;
 };
-// generic function
+
+/**
+ *
+ * @param data
+ * @param thunkAPI
+ * @param showError
+ */
+
 export const handleServerAppError = <D>(
     data: BaseResponseType<D>,
     thunkAPI: ThunkAPIType,
+    showError: boolean = true,
 ) => {
-    if (data.messages.length) {
-        thunkAPI.dispatch(appActions.setError({ error: data.messages[0] }));
-    } else {
+    if (showError) {
         thunkAPI.dispatch(
-            appActions.setError({ error: "Some error occurred" }),
+            appActions.setError({ error: data.messages.length ? data.messages[0] : "Some error occurred" }),
         );
     }
     thunkAPI.dispatch(appActions.setLoadingStatus({ status: "failed" }));

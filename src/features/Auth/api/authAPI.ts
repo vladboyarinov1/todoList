@@ -1,4 +1,3 @@
-import { LoginParams } from "features/Auth/ui/Auth";
 import { AxiosResponse } from "axios";
 import { instance } from "api/instance";
 
@@ -22,4 +21,11 @@ export const authAPI = {
     logout() {
         return instance.delete<BaseResponseType>(`auth/login`);
     },
+};
+
+export type LoginParams = {
+    email: string;
+    password: string;
+    rememberMe: boolean;
+    captcha?: string;
 };
