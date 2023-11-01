@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, memo, useState } from "react";
+import React, { ChangeEvent, memo, useState } from "react";
 import { TextField } from "@mui/material";
 
 type Props = {
@@ -6,7 +6,7 @@ type Props = {
     changeTitle: (title: string) => void;
 };
 
-export const EditableSpan: FC<Props> = memo(({ title, changeTitle }) => {
+export const EditableSpan = memo(({ title, changeTitle }: Props) => {
     const [editMode, setEditMode] = useState<boolean>(false);
     const [localTitle, setTitle] = useState<string>(title);
 

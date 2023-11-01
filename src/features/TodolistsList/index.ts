@@ -1,5 +1,5 @@
-import { asyncActions as tasksAsyncActions } from "features/TodolistsList/model/tasks/tasks.reducer";
-import { slice as tasksSlice } from "features/TodolistsList/model/tasks/tasks.reducer";
+import { asyncActions as tasksAsyncActions } from "features/TodolistsList/model/tasks/tasksSlice";
+import { slice as tasksSlice } from "features/TodolistsList/model/tasks/tasksSlice";
 import { asyncActions as todolistsAsyncActions } from "features/TodolistsList/model/todolists/todolistsSlice";
 import { slice as todolistsSlice } from "features/TodolistsList/model/todolists/todolistsSlice";
 

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, memo, useState } from "react";
+import React, { ChangeEvent, memo, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { IconButton, TextField } from "@mui/material";
 
@@ -8,9 +8,7 @@ type Props = {
     disabled?: boolean;
 };
 
-export const AddItemForm: FC<Props> = memo((props) => {
-    const { addItem, label, disabled } = props;
-
+export const AddItemForm = memo(({ addItem, label, disabled }: Props) => {
     const [title, setTitle] = useState<string>("");
     const [error, setError] = useState<any>("");
 

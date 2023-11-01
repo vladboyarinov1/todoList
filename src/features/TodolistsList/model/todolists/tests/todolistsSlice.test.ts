@@ -23,7 +23,7 @@ describe("todolistReducer", () => {
     });
 
     test("should remove a todolist from the state", () => {
-        const action = todolistsActions.deleteTodolistTC.fulfilled({ id: "2" }, "", "2");
+        const action = todolistsActions.deleteTodolist.fulfilled({ id: "2" }, "", "2");
         const expectedState = [
             {
                 id: "1",
@@ -46,7 +46,7 @@ describe("todolistReducer", () => {
             addedDate: "",
             order: 0,
         };
-        const action = todolistsAsyncActions.addTodolistTC.fulfilled({ todolist }, "", todolist.title);
+        const action = todolistsAsyncActions.addTodolist.fulfilled({ todolist }, "", todolist.title);
 
         const newState: TodolistDomain[] = todolistsReducer([], action);
 
@@ -54,14 +54,10 @@ describe("todolistReducer", () => {
         expect(newState[0].title).toBe("new todos");
     });
     test("todolist should change the title", () => {
-        const action = todolistsActions.updateTodolistTC.fulfilled(
-            { title: "newTitleForTodolistWithID2", id: "2" },
-            "",
-            {
-                id: "2",
-                title: "newTitleForTodolistWithID2",
-            },
-        );
+        const action = todolistsActions.updateTodolist.fulfilled({ title: "newTitleForTodolistWithID2", id: "2" }, "", {
+            id: "2",
+            title: "newTitleForTodolistWithID2",
+        });
 
         const expectedState: TodolistDomain[] | any = [
             {

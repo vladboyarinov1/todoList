@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC } from "react";
+import React, { ChangeEvent } from "react";
 import { Checkbox } from "@mui/material";
 
 import { TaskStatuses } from "common/enums/enums";
@@ -8,9 +8,7 @@ type Props = {
     checked: boolean;
 };
 
-export const SuperCheckBox: FC<Props> = (props) => {
-    const { callBack, checked } = props;
-
+export const SuperCheckBox = ({ callBack, checked }: Props) => {
     const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
         callBack(e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New);
     };

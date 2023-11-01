@@ -48,10 +48,10 @@ export const slice = createSlice({
                     tasks.splice(index, 1);
                 }
             })
-            .addCase(asyncTodolistsActions.deleteTodolistTC.fulfilled, (state, action: any) => {
+            .addCase(asyncTodolistsActions.deleteTodolist.fulfilled, (state, action: any) => {
                 delete state[action.payload.id];
             })
-            .addCase(asyncTodolistsActions.addTodolistTC.fulfilled, (state, action) => {
+            .addCase(asyncTodolistsActions.addTodolist.fulfilled, (state, action) => {
                 if (action.payload) {
                     state[action.payload.todolist.id] = [];
                 }
@@ -183,7 +183,7 @@ const addTask = createAppAsyncThunk<{ task: TaskType }, CreateTaskParam>(
     },
 );
 
-export const tasksReducer = slice.reducer;
+export const tasksSlice = slice.reducer;
 export const { changeEntityStatus } = slice.actions;
 export const asyncActions = { fetchTasks, updateTask, addTask, removeTask };
 export type InitialState = ReturnType<typeof slice.getInitialState>;

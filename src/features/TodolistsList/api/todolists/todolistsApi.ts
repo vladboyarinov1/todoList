@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { instance } from "api/instance";
 import { BaseResponse } from "common/types/commonTypes";
 import { Todolist } from "features/TodolistsList/api/todolists/todolistsApi.types";

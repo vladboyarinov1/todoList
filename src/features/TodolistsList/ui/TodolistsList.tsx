@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { TodoList } from "features/TodolistsList/ui/TodoList/TodoList";
@@ -13,35 +13,18 @@ import { useActions } from "common/hooks/useActions";
 import { AddItemForm } from "common/components";
 import { useAppSelector } from "common/hooks/useAppSelector";
 
-export const TodoListsList: FC = () => {
-    const { fetchTodolists, addTodolistTC } = useActions(todolistsActions);
+export const TodoListsList = () => {
+    const { fetchTodolists, addTodolist } = useActions(todolistsActions);
     let todoLists = useAppSelector<TodolistDomain[]>(todoListsSelector);
     let isLoggedIn = useAppSelector<any>(authSelectors.selectIsLoggedIn);
     let status = useAppSelector<RequestStatus>((state) => state.app.status);
-
-    // const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (!isLoggedIn) return;
         fetchTodolists();
     }, []);
-
-    // const addNewTodoList = useCallback(async (title: string) => {
-    //     let thunk = addTodolistTC(title);
-    //     const resultActions = await dispatch(thunk);
-    //
-    //     if (addTodolistTC.rejected.match(resultActions)) {
-    //         if (resultActions.payload?.errors?.length) {
-    //             const errorMessage = resultActions.payload?.errors[0];
-    //             throw new Error(errorMessage);
-    //         } else {
-    //             throw new Error("Some error occured");
-    //         }
-    //     } else {
-    //     }
-    // }, []);
     const addNewTodoList = (title: string) => {
-        addTodolistTC(title);
+        addTodolist(title);
     };
 
     const todoListsComponents = todoLists.map((tl) => {

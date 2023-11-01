@@ -1,5 +1,5 @@
-import { InitialState, tasksReducer } from "features/TodolistsList/model/tasks/tasks.reducer";
-import { asyncActions as tasksAsyncActions } from "features/TodolistsList/model/tasks/tasks.reducer";
+import { InitialState, tasksSlice } from "features/TodolistsList/model/tasks/tasksSlice";
+import { asyncActions as tasksAsyncActions } from "features/TodolistsList/model/tasks/tasksSlice";
 import { asyncActions as todolistsAsyncActions } from "features/TodolistsList/model/todolists/todolistsSlice";
 import { TaskEntityStatus, TaskPriorities, TaskStatuses } from "common/enums/enums";
 
@@ -50,7 +50,7 @@ describe("todolistReducer", () => {
             "",
         );
 
-        const endState = tasksReducer(startState, action);
+        const endState = tasksSlice(startState, action);
 
         expect(endState["todolistId2"].length).toBeFalsy();
     });
@@ -77,7 +77,7 @@ describe("todolistReducer", () => {
                 title: "juce",
             },
         );
-        const endState = tasksReducer(startState, action);
+        const endState = tasksSlice(startState, action);
 
         expect(endState["todolistId1"][0].title).toBe("juce");
         expect(endState["todolistId2"][0].status).toBe(TaskStatuses.New);
@@ -90,7 +90,7 @@ describe("todolistReducer", () => {
         };
         const action = tasksAsyncActions.updateTask.fulfilled(data, "requestId", data);
 
-        const endState = tasksReducer(startState, action);
+        const endState = tasksSlice(startState, action);
 
         expect(endState["todolistId2"][0].status).toBeFalsy();
         expect(endState["todolistId1"][0].status).toBeFalsy();
@@ -104,7 +104,7 @@ describe("todolistReducer", () => {
         };
         const action = tasksAsyncActions.updateTask.fulfilled(data, "", data);
 
-        const endState = tasksReducer(startState, action);
+        const endState = tasksSlice(startState, action);
 
         expect(endState["todolistId1"][0].title).toBe("newTitle");
         expect(endState["todolistId2"][0].title).toBe("bread");
@@ -118,9 +118,9 @@ describe("todolistReducer", () => {
                 order: 0,
             },
         };
-        const action = todolistsAsyncActions.addTodolistTC.fulfilled(payload, "", "newTL");
+        const action = todolistsAsyncActions.addTodolist.fulfilled(payload, "", "newTL");
 
-        const endState = tasksReducer({}, action);
+        const endState = tasksSlice({}, action);
 
         const keys = Object.keys(endState);
         const newKey = keys.find((k) => k != "todolistId1" && k != "todolistId2");
@@ -133,9 +133,9 @@ describe("todolistReducer", () => {
     });
 
     test("property with todolistId should be deleted", () => {
-        const action = todolistsAsyncActions.deleteTodolistTC.fulfilled({ id: "todolistId2" }, "", "todolistId2");
+        const action = todolistsAsyncActions.deleteTodolist.fulfilled({ id: "todolistId2" }, "", "todolistId2");
 
-        const endState = tasksReducer(startState, action);
+        const endState = tasksSlice(startState, action);
         const keys = Object.keys(endState);
         expect(keys.length).toBe(1);
         expect(endState["todolistId2"]).not.toBeDefined();
@@ -149,9 +149,9 @@ describe("todolistReducer", () => {
                 order: 0,
             },
         };
-        const action = todolistsAsyncActions.addTodolistTC.fulfilled(payload, "", payload.todolist.title);
+        const action = todolistsAsyncActions.addTodolist.fulfilled(payload, "", payload.todolist.title);
 
-        const endState = tasksReducer(startState, action);
+        const endState = tasksSlice(startState, action);
         const keys = Object.keys(endState);
 
         expect(keys.length).toBe(3);

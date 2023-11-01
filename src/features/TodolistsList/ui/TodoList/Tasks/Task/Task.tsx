@@ -1,8 +1,8 @@
-import React, { FC, memo } from "react";
+import React, { memo } from "react";
 import { IconButton, ListItem } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { SuperCheckBox } from "common/components/SuperCheckBox/SuperCheckBox";
-import s from "features/TodolistsList/ui/TodoList/Task/Task.module.css";
+import s from "features/TodolistsList/ui/TodoList/Tasks/Task/Task.module.css";
 import { tasksActions } from "features/TodolistsList/index";
 import { EditableSpan } from "common/components/EditableSpan/EditableSpan";
 import { useActions } from "common/hooks/useActions";
@@ -15,7 +15,7 @@ type Props = {
     entityStatus: TaskEntityStatus;
 };
 
-export const Task: FC<Props> = memo(({ todolistId, task, entityStatus }) => {
+export const Task = memo(({ todolistId, task, entityStatus }: Props) => {
     const { updateTask, removeTask } = useActions(tasksActions);
 
     const changeTaskStatusHandler = (taskId: string, status: TaskStatuses) =>

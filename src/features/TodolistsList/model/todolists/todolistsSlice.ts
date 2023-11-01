@@ -21,7 +21,7 @@ const fetchTodolists = createAsyncThunk("todolists/fetchTodolists", async (param
     }
 });
 
-const addTodolistTC = createAsyncThunk<
+const addTodolist = createAsyncThunk<
     any,
     string,
     {
@@ -43,7 +43,7 @@ const addTodolistTC = createAsyncThunk<
         thunkAPI.dispatch(setLinearProgress({ value: false }));
     }
 });
-const deleteTodolistTC = createAsyncThunk("todolists/deleteTodolist", async (id: string, thunkAPI) => {
+const deleteTodolist = createAsyncThunk("todolists/deleteTodolist", async (id: string, thunkAPI) => {
     thunkAPI.dispatch(changeTodosEntityStatus({ id, status: "loading" }));
     thunkAPI.dispatch(setLinearProgress({ value: true }));
     try {
@@ -59,7 +59,7 @@ const deleteTodolistTC = createAsyncThunk("todolists/deleteTodolist", async (id:
         handleServerNetworkError(e, thunkAPI.dispatch);
     }
 });
-const updateTodolistTC = createAsyncThunk(
+const updateTodolist = createAsyncThunk(
     "todolists/updateTodolist",
     async (
         param: {
@@ -86,9 +86,9 @@ const updateTodolistTC = createAsyncThunk(
 
 export const asyncActions = {
     fetchTodolists,
-    addTodolistTC,
-    deleteTodolistTC,
-    updateTodolistTC,
+    addTodolist,
+    deleteTodolist,
+    updateTodolist,
 };
 
 export const slice = createSlice({
@@ -128,7 +128,7 @@ export const slice = createSlice({
                     entityStatus: "idle",
                 }));
             })
-            .addCase(deleteTodolistTC.fulfilled, (state, action: any) => {
+            .addCase(deleteTodolist.fulfilled, (state, action: any) => {
                 // console.log(current(state));
                 const index = state.findIndex((tl) => tl.id === action.payload.id);
                 if (index !== -1) {
@@ -136,7 +136,7 @@ export const slice = createSlice({
                 }
                 return state;
             })
-            .addCase(addTodolistTC.fulfilled, (state, action) => {
+            .addCase(addTodolist.fulfilled, (state, action) => {
                 if (action.payload) {
                     state.unshift({
                         ...action.payload.todolist,
@@ -145,7 +145,7 @@ export const slice = createSlice({
                     });
                 }
             })
-            .addCase(updateTodolistTC.fulfilled, (state, action: any) => {
+            .addCase(updateTodolist.fulfilled, (state, action: any) => {
                 const index = state.findIndex((tl) => tl.id === action.payload.id);
                 if (index !== -1) {
                     state[index].title = action.payload.title;
