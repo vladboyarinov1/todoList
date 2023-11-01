@@ -1,12 +1,12 @@
 import { instance } from "api/instance";
-import { BaseResponseType } from "common/types";
+import { BaseResponse } from "common/types";
 import { AxiosResponse } from "axios";
 import {
     CreateTaskParam,
     GetTypeResponse,
     TaskType,
-    UpdateTaskModelType,
-} from "features/TodolistsList/api/tasks/tasksApi-types";
+    UpdateTaskModel,
+} from "features/TodolistsList/api/tasks/tasksApi.types";
 
 export const tasksApi = {
     getTasks(todolistId: string) {
@@ -14,9 +14,9 @@ export const tasksApi = {
     },
     createTask(param: CreateTaskParam) {
         return instance.post<
-            BaseResponseType<{ item: TaskType }>,
+            BaseResponse<{ item: TaskType }>,
             AxiosResponse<
-                BaseResponseType<{
+                BaseResponse<{
                     item: TaskType;
                 }>
             >,
@@ -24,17 +24,17 @@ export const tasksApi = {
         >(`/todo-lists/${param.todolistId}/tasks`, { title: param.title });
     },
     deleteTask(param: { todolistId: string; taskId: string }) {
-        return instance.delete<BaseResponseType>(`/todo-lists/${param.todolistId}/tasks/${param.taskId}`);
+        return instance.delete<BaseResponse>(`/todo-lists/${param.todolistId}/tasks/${param.taskId}`);
     },
-    updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
+    updateTask(todolistId: string, taskId: string, model: UpdateTaskModel) {
         return instance.put<
-            BaseResponseType<{ item: TaskType }>,
+            BaseResponse<{ item: TaskType }>,
             AxiosResponse<
-                BaseResponseType<{
+                BaseResponse<{
                     item: TaskType;
                 }>
             >,
-            UpdateTaskModelType
+            UpdateTaskModel
         >(`/todo-lists/${todolistId}/tasks/${taskId}`, model);
     },
 };

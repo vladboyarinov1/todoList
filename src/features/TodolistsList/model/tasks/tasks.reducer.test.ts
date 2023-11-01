@@ -1,10 +1,10 @@
-import { InitialStateType, tasksReducer } from "features/TodolistsList/model/tasks/tasks-reducer";
-import { asyncActions as tasksAsyncActions } from "features/TodolistsList/model/tasks/tasks-reducer";
+import { InitialState, tasksReducer } from "features/TodolistsList/model/tasks/tasks.reducer";
+import { asyncActions as tasksAsyncActions } from "features/TodolistsList/model/tasks/tasks.reducer";
 import { asyncActions as todolistsAsyncActions } from "features/TodolistsList/model/todolists/todolistsSlice";
 import { TaskEntityStatus, TaskPriorities, TaskStatuses } from "common/enums/enums";
 
 describe("todolistReducer", () => {
-    let startState: InitialStateType;
+    let startState: InitialState;
     beforeEach(() => {
         startState = {
             todolistId1: [

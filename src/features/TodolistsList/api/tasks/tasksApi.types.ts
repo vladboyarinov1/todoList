@@ -13,7 +13,7 @@ export type TaskType = {
     addedDate: string;
     entityStatus: TaskEntityStatus;
 };
-export type UpdateTaskModelType = {
+export type UpdateTaskModel = {
     title: string;
     description: string;
     status: TaskStatuses;

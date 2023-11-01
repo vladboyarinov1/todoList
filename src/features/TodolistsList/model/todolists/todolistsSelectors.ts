@@ -1,3 +1,3 @@
-import { AppRootStateType } from "common/types/commonTypes";
+import { AppRootState } from "common/types/commonTypes";
 
-export const todoListsSelector = (state: AppRootStateType) => state.todolists;
+export const todoListsSelector = (state: AppRootState) => state.todolists;

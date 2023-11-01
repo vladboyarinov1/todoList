@@ -1,28 +1,28 @@
 import { AxiosResponse } from "axios";
 import { instance } from "api/instance";
-import { BaseResponseType } from "common/types/commonTypes";
-import { TodolistType } from "features/TodolistsList/api/todolists/todolistsApi-types";
+import { BaseResponse } from "common/types/commonTypes";
+import { Todolist } from "features/TodolistsList/api/todolists/todolistsApi.types";
 
 export const todolistsApi = {
     getTodolists() {
-        return instance.get<TodolistType[]>(`todo-lists`); // типизируем данные с бэка
+        return instance.get<Todolist[]>(`todo-lists`); // типизируем данные с бэка
     },
     createTodolist(title: string) {
         return instance.post<
-            BaseResponseType<{ item: TodolistType }>,
+            BaseResponse<{ item: Todolist }>,
             AxiosResponse<
-                BaseResponseType<{
-                    item: TodolistType;
+                BaseResponse<{
+                    item: Todolist;
                 }>
             >,
             { title: string }
         >(`todo-lists`, { title });
     },
     deleteTodolist(id: string) {
-        return instance.delete<BaseResponseType>(`todo-lists/${id}`);
+        return instance.delete<BaseResponse>(`todo-lists/${id}`);
     },
     updateTodolistTitle(id: string, title: string) {
-        return instance.put<BaseResponseType, AxiosResponse<BaseResponseType>, { title: string }>(`todo-lists/${id}`, {
+        return instance.put<BaseResponse, AxiosResponse<BaseResponse>, { title: string }>(`todo-lists/${id}`, {
             title,
         });
     },

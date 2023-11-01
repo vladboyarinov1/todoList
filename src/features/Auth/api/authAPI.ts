@@ -1,14 +1,14 @@
 import { AxiosResponse } from "axios";
 import { instance } from "api/instance";
 
-import { BaseResponseType } from "common/types/commonTypes";
+import { BaseResponse } from "common/types/commonTypes";
 
 export const authAPI = {
     login(data: LoginParams) {
         return instance.post<
             { title: string },
             AxiosResponse<
-                BaseResponseType<{
+                BaseResponse<{
                     userId: number;
                 }>
             >,
@@ -19,7 +19,7 @@ export const authAPI = {
         return instance.get(`auth/me`);
     },
     logout() {
-        return instance.delete<BaseResponseType>(`auth/login`);
+        return instance.delete<BaseResponse>(`auth/login`);
     },
 };
 

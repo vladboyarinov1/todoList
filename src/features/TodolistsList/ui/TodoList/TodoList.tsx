@@ -4,27 +4,27 @@ import { EditableSpan } from "common/components/EditableSpan/EditableSpan";
 import s from "features/TodolistsList/ui/TodoList/TodoList.module.css";
 import { IconButton, Typography } from "@mui/material";
 import RestoreFromTrashIcon from "@mui/icons-material/RestoreFromTrash";
-import { FilterValueType } from "features/TodolistsList/model/todolists/todolistsSlice";
+import { FilterValue } from "features/TodolistsList/model/todolists/todolistsSlice";
 import { ButtonWithMemo } from "common/components/ButtonWithMemo/ButtonWithMemo";
 import { Task } from "features/TodolistsList/ui/TodoList/Task/Task";
-import { RequestStatusType } from "features/Application/application-reducer";
+import { RequestStatus } from "features/Application/application-reducer";
 import { tasksActions, todolistsActions } from "features/TodolistsList/index";
 import { useActions } from "common/hooks/useActions";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { TaskStatuses } from "common/enums/enums";
 import { useAppSelector } from "common/hooks/useAppSelector";
-import { TaskType } from "features/TodolistsList/api/tasks/tasksApi-types";
-import { TodolistType } from "features/TodolistsList/api/todolists/todolistsApi-types";
+import { TaskType } from "features/TodolistsList/api/tasks/tasksApi.types";
+import { Todolist } from "features/TodolistsList/api/todolists/todolistsApi.types";
 
-type TodoListPropsType = {
-    todolist: TodolistType;
-    entityStatus: RequestStatusType;
+type Props = {
+    todolist: Todolist;
+    entityStatus: RequestStatus;
 };
 
-export const TodoList: FC<TodoListPropsType> = memo(({ todolist, entityStatus }) => {
+export const TodoList: FC<Props> = memo(({ todolist, entityStatus }) => {
     const dispatch = useAppDispatch();
     const { id, title } = todolist;
-    const [filter, setFilter] = useState<FilterValueType>("all");
+    const [filter, setFilter] = useState<FilterValue>("all");
 
     let tasks = useAppSelector<TaskType[]>((state) => state.tasks[id]);
 
@@ -39,7 +39,7 @@ export const TodoList: FC<TodoListPropsType> = memo(({ todolist, entityStatus })
     const removeTodolist = () => deleteTodolistTC(id);
 
     const onClickChangeFilter = useCallback(
-        (filter: FilterValueType) => {
+        (filter: FilterValue) => {
             changeTodolistFilter({ filter, id });
             setFilter(filter);
         },
@@ -70,7 +70,7 @@ export const TodoList: FC<TodoListPropsType> = memo(({ todolist, entityStatus })
         [id],
     );
 
-    const getFilterValues = useCallback((tasksList: TaskType[], filterValue: FilterValueType) => {
+    const getFilterValues = useCallback((tasksList: TaskType[], filterValue: FilterValue) => {
         switch (filterValue) {
             case "active":
                 return tasksList?.filter((t) => t.status === TaskStatuses.New);
@@ -81,7 +81,7 @@ export const TodoList: FC<TodoListPropsType> = memo(({ todolist, entityStatus })
         }
     }, []);
 
-    const renderFilterButton = (title: string, currenFilter: FilterValueType) => {
+    const renderFilterButton = (title: string, currenFilter: FilterValue) => {
         return (
             <ButtonWithMemo
                 title={title}

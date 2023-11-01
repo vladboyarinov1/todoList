@@ -6,7 +6,7 @@ export const slice = createSlice({
     name: "application",
     initialState: {
         error: null as string | null, // errorIsActive
-        status: "loading" as RequestStatusType,
+        status: "loading" as RequestStatus,
         isInitialized: false,
         isLinearProgress: false as boolean | null,
     },
@@ -29,4 +29,4 @@ export const slice = createSlice({
 });
 
 //types
-export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed";
+export type RequestStatus = "idle" | "loading" | "succeeded" | "failed";

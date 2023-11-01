@@ -25,9 +25,9 @@ import { Auth, authAction, authSelectors } from "../features/Auth";
 import { useActions } from "common/hooks/useActions";
 
 import { useAppSelector } from "common/hooks/useAppSelector";
-import { TaskType } from "features/TodolistsList/api/tasks/tasksApi-types";
+import { TaskType } from "features/TodolistsList/api/tasks/tasksApi.types";
 
-export type TasksStateType = Record<string, TaskType[]>;
+export type TasksState = Record<string, TaskType[]>;
 
 const App = (): JSX.Element => {
     const { logout, initializeApp } = useActions(authAction);

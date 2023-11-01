@@ -1,11 +1,11 @@
-import { TodolistDomainType, todolistsReducer } from "features/TodolistsList/model/todolists/todolistsSlice";
+import { TodolistDomain, todolistsReducer } from "features/TodolistsList/model/todolists/todolistsSlice";
 
 import { asyncActions as todolistsAsyncActions } from "features/TodolistsList/model/todolists/todolistsSlice";
 import { todolistsActions } from "features/TodolistsList/index";
-import { TodolistType } from "features/TodolistsList/api/todolists/todolistsApi-types";
+import { Todolist } from "features/TodolistsList/api/todolists/todolistsApi.types";
 
 describe("todolistReducer", () => {
-    let initialState: TodolistType[] | any;
+    let initialState: Todolist[] | any;
     beforeEach(() => {
         initialState = [
             { id: "1", title: "First Todo List", addedDate: "", order: 0 },
@@ -16,7 +16,7 @@ describe("todolistReducer", () => {
     test("todolists should be set", () => {
         const action = todolistsAsyncActions.fetchTodolists.fulfilled({ todos: initialState }, "");
 
-        const endState: TodolistDomainType[] = todolistsReducer(initialState, action);
+        const endState: TodolistDomain[] = todolistsReducer(initialState, action);
 
         expect(endState[0].filter).toBe("all");
         expect(endState[1].filter).toBe("all");
@@ -40,7 +40,7 @@ describe("todolistReducer", () => {
     });
 
     test("should add a new todolist to the state", () => {
-        const todolist: TodolistType = {
+        const todolist: Todolist = {
             title: "new todos",
             id: "12",
             addedDate: "",
@@ -48,7 +48,7 @@ describe("todolistReducer", () => {
         };
         const action = todolistsAsyncActions.addTodolistTC.fulfilled({ todolist }, "", todolist.title);
 
-        const newState: TodolistDomainType[] = todolistsReducer([], action);
+        const newState: TodolistDomain[] = todolistsReducer([], action);
 
         expect(newState.length).toBe(1);
         expect(newState[0].title).toBe("new todos");
@@ -63,7 +63,7 @@ describe("todolistReducer", () => {
             },
         );
 
-        const expectedState: TodolistDomainType[] | any = [
+        const expectedState: TodolistDomain[] | any = [
             {
                 id: "1",
                 title: "First Todo List",
@@ -82,7 +82,7 @@ describe("todolistReducer", () => {
             },
         ];
 
-        const newState: TodolistDomainType[] = todolistsReducer(expectedState, action);
+        const newState: TodolistDomain[] = todolistsReducer(expectedState, action);
 
         expect(newState[1].title).toBe("newTitleForTodolistWithID2");
         expect(newState[0].title).toBe("First Todo List");

@@ -1,16 +1,14 @@
-type FormikErrorType = {
+type FormikError = {
     email?: string;
     password?: string;
 };
 
 export const validate = (values: any) => {
-    const errors: FormikErrorType = {};
+    const errors: FormikError = {};
     // email
     if (!values.email) {
         errors.email = "Required";
-    } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-    ) {
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = "Invalid email address";
     }
     //password

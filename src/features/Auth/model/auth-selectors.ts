@@ -1,4 +1,3 @@
-import { AppRootStateType } from "common/types/commonTypes";
+import { AppRootState } from "common/types/commonTypes";
 
-export const selectIsLoggedIn = (state: AppRootStateType) =>
-    state.auth.isLoggedIn;
+export const selectIsLoggedIn = (state: AppRootState) => state.auth.isLoggedIn;

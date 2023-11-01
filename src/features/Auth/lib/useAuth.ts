@@ -6,9 +6,7 @@ import { FormikHelpers, useFormik } from "formik";
 import { validate } from "features/Auth/validate";
 import { LoginParams } from "features/Auth/api/authAPI";
 
-//Partial<Omit<LoginParams, 'captcha'>>
-
-type FormikTypes = Omit<LoginParams, "captcha">;
+type Formik = Omit<LoginParams, "captcha">;
 
 export const useAuth = () => {
     let isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn);
@@ -22,8 +20,8 @@ export const useAuth = () => {
             rememberMe: false,
         },
         validate,
-        onSubmit: async (values: FormikTypes, formikHelpers: FormikHelpers<FormikTypes>) => {
-            const action = await dispatch(authAction.login(values));
+        onSubmit: async (values: Formik, formikHelpers: FormikHelpers<Formik>) => {
+            const action = await dispatch(login(values));
             if (login.rejected.match(action)) {
                 if (action.payload?.fieldsErrors?.length) {
                     const error = action.payload?.fieldsErrors[0];

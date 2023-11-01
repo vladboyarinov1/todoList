@@ -1,19 +1,18 @@
-import { TasksStateType } from "app/App";
+import { TasksState } from "app/App";
 import { asyncActions as asyncTodolistsActions } from "features/TodolistsList/model/todolists/todolistsSlice";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { appActions } from "features/CommonActions/App";
 import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from "common/utils";
-import { todolistsApi } from "features/TodolistsList/api/todolists/todolistsApi";
 import { ResultCode, TaskEntityStatus } from "common/enums/enums";
-import { AppRootStateType, FlexType } from "common/types/commonTypes";
+import { AppRootState, Flex } from "common/types/commonTypes";
 import { tasksApi } from "features/TodolistsList/api/tasks/tasksApi";
-import { CreateTaskParam, TaskType } from "features/TodolistsList/api/tasks/tasksApi-types";
+import { CreateTaskParam, TaskType } from "features/TodolistsList/api/tasks/tasksApi.types";
 
 const { setLinearProgress } = appActions;
 
 export const slice = createSlice({
     name: "tasks",
-    initialState: {} as TasksStateType,
+    initialState: {} as TasksState,
     reducers: {
         changeEntityStatus(
             state,
@@ -77,12 +76,12 @@ const fetchTasks = createAppAsyncThunk<void | { todolistId: string; tasks: TaskT
 export type UpdateTaskParam = {
     todolistId: string;
     taskId: string;
-    model: FlexType;
+    model: Flex;
 };
 const updateTask = createAsyncThunk<any, UpdateTaskParam>(`${slice.name}/updateTask`, async (param, thunkAPI) => {
     const { dispatch, getState, rejectWithValue } = thunkAPI;
     dispatch(setLinearProgress({ value: true }));
-    const state = getState() as AppRootStateType;
+    const state = getState() as AppRootState;
     dispatch(
         changeEntityStatus({
             todolistId: param.todolistId,
@@ -187,4 +186,4 @@ const addTask = createAppAsyncThunk<{ task: TaskType }, CreateTaskParam>(
 export const tasksReducer = slice.reducer;
 export const { changeEntityStatus } = slice.actions;
 export const asyncActions = { fetchTasks, updateTask, addTask, removeTask };
-export type InitialStateType = ReturnType<typeof slice.getInitialState>;
+export type InitialState = ReturnType<typeof slice.getInitialState>;

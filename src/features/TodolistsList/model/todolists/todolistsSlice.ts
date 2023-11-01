@@ -1,12 +1,12 @@
-import { RequestStatusType } from "features/Application/application-reducer";
-import { createAsyncThunk, createSlice, current, PayloadAction } from "@reduxjs/toolkit";
+import { RequestStatus } from "features/Application/application-reducer";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { handleServerAppError } from "common/utils/handleServerAppError";
 import { appActions } from "features/CommonActions/App";
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError";
 import { todolistsApi } from "features/TodolistsList/api/todolists/todolistsApi";
 import { ResultCode } from "common/enums/enums";
-import { FieldErrorType } from "common/types/commonTypes";
-import { TodolistType } from "features/TodolistsList/api/todolists/todolistsApi-types";
+import { FieldError } from "common/types/commonTypes";
+import { Todolist } from "features/TodolistsList/api/todolists/todolistsApi.types";
 
 const { setLoadingStatus, setLinearProgress } = appActions;
 
@@ -25,7 +25,7 @@ const addTodolistTC = createAsyncThunk<
     any,
     string,
     {
-        rejectValue: { errors: string[]; fieldsErrors?: FieldErrorType[] };
+        rejectValue: { errors: string[]; fieldsErrors?: FieldError[] };
     }
 >("todolists/addTodolist", async (title: string, thunkAPI) => {
     thunkAPI.dispatch(setLinearProgress({ value: true }));
@@ -93,12 +93,12 @@ export const asyncActions = {
 
 export const slice = createSlice({
     name: "todolists",
-    initialState: [] as TodolistDomainType[],
+    initialState: [] as TodolistDomain[],
     reducers: {
         changeTodolistFilter(
             state,
             action: PayloadAction<{
-                filter: FilterValueType;
+                filter: FilterValue;
                 id: string;
             }>,
         ) {
@@ -109,7 +109,7 @@ export const slice = createSlice({
             state,
             action: PayloadAction<{
                 id: string;
-                status: RequestStatusType;
+                status: RequestStatus;
             }>,
         ) {
             const index = state.findIndex((tl) => tl.id === action.payload.id);
@@ -160,9 +160,9 @@ export const { changeTodolistFilter, changeTodosEntityStatus } = slice.actions;
 // types
 export type SetTodolistAT = ReturnType<typeof fetchTodolists.fulfilled>;
 
-export type FilterValueType = "all" | "active" | "complete";
+export type FilterValue = "all" | "active" | "complete";
 
-export type TodolistDomainType = TodolistType & {
-    filter: FilterValueType;
-    entityStatus: RequestStatusType;
+export type TodolistDomain = Todolist & {
+    filter: FilterValue;
+    entityStatus: RequestStatus;
 };

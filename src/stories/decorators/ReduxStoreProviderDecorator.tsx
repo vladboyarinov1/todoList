@@ -1,20 +1,20 @@
 import React, { ReactNode } from "react";
 import { Provider } from "react-redux";
 import { combineReducers } from "redux";
-import { tasksReducer } from "../../features/TodolistsList/model/tasks/tasks-reducer";
+import { tasksReducer } from "features/TodolistsList/model/tasks/tasks.reducer";
 import { v1 } from "uuid";
 import { todolistsReducer } from "features/TodolistsList/model/todolists/todolistsSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
 import { TaskEntityStatus, TaskPriorities, TaskStatuses } from "common/enums/enums";
-import { AppRootStateType } from "common/types/commonTypes";
+import { AppRootState } from "common/types/commonTypes";
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
     todolists: todolistsReducer,
 });
 
-const initialGlobalState: AppRootStateType = {
+const initialGlobalState: AppRootState = {
     todolists: [
         {
             id: "todolistId1",

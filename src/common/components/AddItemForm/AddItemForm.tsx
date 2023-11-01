@@ -2,13 +2,13 @@ import React, { ChangeEvent, FC, memo, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { IconButton, TextField } from "@mui/material";
 
-type AddItemFormProps = {
-    addItem: (title: string) => Promise<any>;
+type Props = {
+    addItem: (title: string) => Promise<any> | void;
     label: string;
     disabled?: boolean;
 };
 
-export const AddItemForm: FC<AddItemFormProps> = memo((props) => {
+export const AddItemForm: FC<Props> = memo((props) => {
     const { addItem, label, disabled } = props;
 
     const [title, setTitle] = useState<string>("");
@@ -24,7 +24,6 @@ export const AddItemForm: FC<AddItemFormProps> = memo((props) => {
     const addItemHandler = async () => {
         if (title.trim() !== "") {
             try {
-                debugger;
                 if (title.trim()) {
                     await addItem(title);
                     setTitle("");
