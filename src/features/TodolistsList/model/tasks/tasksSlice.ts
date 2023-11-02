@@ -159,12 +159,9 @@ const addTask = createAppAsyncThunk<{ task: TaskType }, CreateTaskParam>(
     `${slice.name}/addTask`,
     async (param, thunkAPI) => {
         const { dispatch, rejectWithValue } = thunkAPI;
-        // dispatch(setLinearProgress({ value: true }));
-
         return thunkTryCatch(thunkAPI, async () => {
             const res = await tasksApi.createTask(param);
             if (res.data.resultCode === ResultCode.OK) {
-                dispatch(setLinearProgress({ value: false }));
                 return { task: res.data.data.item };
             } else {
                 handleServerAppError(res.data, thunkAPI, false);
@@ -174,25 +171,6 @@ const addTask = createAppAsyncThunk<{ task: TaskType }, CreateTaskParam>(
                 });
             }
         });
-        // try {
-        //     const res = await tasksApi.createTask(param);
-        //     if (res.data.resultCode === ResultCode.OK) {
-        //         dispatch(setLinearProgress({ value: false }));
-        //         return { task: res.data.data.item };
-        //     } else {
-        //         handleServerAppError(res.data, thunkAPI, false);
-        //         return rejectWithValue({
-        //             errors: res.data.messages,
-        //             fieldsErrors: res.data.fieldsErrors,
-        //         });
-        //     }
-        // } catch (e: any) {
-        //     handleServerNetworkError(e, dispatch);
-        //     return rejectWithValue({
-        //         errors: [e.errors],
-        //         fieldsErrors: undefined,
-        //     });
-        // }
     },
 );
 

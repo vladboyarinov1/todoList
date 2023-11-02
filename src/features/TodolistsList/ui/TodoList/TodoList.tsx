@@ -2,7 +2,7 @@ import React, { memo, useCallback, useEffect } from "react";
 import { AddItemForm } from "common/components/AddItemForm/AddItemForm";
 import s from "features/TodolistsList/ui/TodoList/TodoList.module.css";
 import { TodolistDomain } from "features/TodolistsList/model/todolists/todolistsSlice";
-import { RequestStatus } from "features/Application/application-reducer";
+import { RequestStatus } from "features/Application/applicationSlice";
 import { tasksActions, todolistsActions } from "features/TodolistsList/index";
 import { useActions } from "common/hooks/useActions";
 import { useAppSelector } from "common/hooks/useAppSelector";

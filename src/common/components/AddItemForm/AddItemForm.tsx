@@ -27,11 +27,9 @@ export const AddItemForm = memo(({ addItem, label, disabled }: Props) => {
                     setTitle("");
                 })
                 .catch((e: any) => {
-                    debugger;
                     setError(e.errors);
                 });
         } else {
-            debugger;
             setError("Title required!");
         }
     };

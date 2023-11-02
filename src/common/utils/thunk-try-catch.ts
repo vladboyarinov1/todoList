@@ -8,13 +8,13 @@ export const thunkTryCatch = async <T>(
     logic: () => Promise<T>,
 ): Promise<T | ReturnType<typeof thunkAPI.rejectWithValue>> => {
     const { dispatch, rejectWithValue } = thunkAPI;
-    dispatch(appActions.setLinearProgress({ value: true }));
+    // dispatch(appActions.setLinearProgress({ value: true }));
     try {
         return await logic();
     } catch (e: any) {
         handleServerNetworkError(e, dispatch);
         return rejectWithValue(e.errors);
     } finally {
-        dispatch(appActions.setLinearProgress({ value: false }));
+        // dispatch(appActions.setLinearProgress({ value: false }));
     }
 };

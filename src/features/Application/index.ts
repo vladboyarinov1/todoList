@@ -1,4 +1,4 @@
-import { slice } from "./application-reducer";
+import { slice } from "features/Application/applicationSlice";
 import * as appSelectors from "./selectors";
 
 const appReducer = slice.reducer;

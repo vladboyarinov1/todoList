@@ -1,5 +1,5 @@
 import { createAction } from "@reduxjs/toolkit";
-import { RequestStatus } from "../Application/application-reducer";
+import { RequestStatus } from "features/Application/applicationSlice";
 
 const setLoadingStatus = createAction<{ status: RequestStatus }>("appActions/setLoadingStatus");
 const setError = createAction<{ error: string | null }>("appActions/setError");

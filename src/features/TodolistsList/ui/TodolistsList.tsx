@@ -5,7 +5,7 @@ import { TodoList } from "features/TodolistsList/ui/TodoList/TodoList";
 import { TodolistDomain } from "features/TodolistsList/model/todolists/todolistsSlice";
 import { Navigate } from "react-router-dom";
 import { Box, CircularProgress } from "@mui/material";
-import { RequestStatus } from "features/Application/application-reducer";
+import { RequestStatus } from "features/Application/applicationSlice";
 import { authSelectors } from "features/Auth";
 import { todoListsSelector } from "features/TodolistsList/model/todolists/todolistsSelectors";
 import { todolistsActions } from "features/TodolistsList/index";
