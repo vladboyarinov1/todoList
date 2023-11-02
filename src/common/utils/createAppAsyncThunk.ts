@@ -4,5 +4,7 @@ import { AppDispatch, AppRootState, FieldError } from "common/types/commonTypes"
 export const createAppAsyncThunk = createAsyncThunk.withTypes<{
     state: AppRootState;
     dispatch: AppDispatch;
-    rejectValue: { errors: string[]; fieldsErrors?: FieldError[] };
+    rejectValue: any;
 }>();
+
+// { errors: string[]; fieldsErrors?: FieldError[] }

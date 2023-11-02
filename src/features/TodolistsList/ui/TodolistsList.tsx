@@ -23,8 +23,9 @@ export const TodoListsList = () => {
         if (!isLoggedIn) return;
         fetchTodolists();
     }, []);
-    const addNewTodoList = (title: string) => {
-        addTodolist(title);
+
+    const addTodoListCallback = (title: string) => {
+        return addTodolist(title);
     };
 
     const todoListsComponents = todoLists.map((tl) => {
@@ -63,7 +64,7 @@ export const TodoListsList = () => {
             ) : (
                 <div style={{ paddingBottom: "20px" }}>
                     <Grid container sx={{ p: "15px 0" }} style={{ width: "300px" }}>
-                        <AddItemForm addItem={addNewTodoList} label="todolist name" />
+                        <AddItemForm addItem={addTodoListCallback} label="todolist name" />
                     </Grid>
                     <Grid container spacing={4}>
                         {todoListsComponents}

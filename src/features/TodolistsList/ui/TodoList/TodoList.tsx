@@ -32,7 +32,7 @@ export const TodoList = memo(({ todolist, entityStatus }: Props) => {
 
     const addTaskCallback = useCallback(
         (title: string) => {
-            addTask({ todolistId: id, title });
+            return addTask({ todolistId: id, title });
         },
         [id],
     );

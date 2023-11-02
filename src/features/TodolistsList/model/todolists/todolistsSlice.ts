@@ -5,8 +5,11 @@ import { appActions } from "features/CommonActions/App";
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError";
 import { todolistsApi } from "features/TodolistsList/api/todolists/todolistsApi";
 import { ResultCode } from "common/enums/enums";
-import { FieldError } from "common/types/commonTypes";
+
 import { Todolist } from "features/TodolistsList/api/todolists/todolistsApi.types";
+import { createAppAsyncThunk } from "common/utils";
+import { thunkTryCatch } from "common/utils/thunk-try-catch";
+import { AppDispatch, AppRootState, FieldError } from "common/types";
 
 const { setLoadingStatus, setLinearProgress } = appActions;
 
@@ -21,42 +24,91 @@ const fetchTodolists = createAsyncThunk("todolists/fetchTodolists", async (param
     }
 });
 
-const addTodolist = createAsyncThunk<
-    any,
-    string,
-    {
-        rejectValue: { errors: string[]; fieldsErrors?: FieldError[] };
-    }
->("todolists/addTodolist", async (title: string, thunkAPI) => {
-    thunkAPI.dispatch(setLinearProgress({ value: true }));
-    try {
-        const res = await todolistsApi.createTodolist(title);
-        if (res.data.resultCode === ResultCode.OK) {
-            thunkAPI.dispatch(setLinearProgress({ value: false }));
-            return { todolist: res.data.data.item };
-        } else {
-            return handleServerAppError(res.data, thunkAPI);
-        }
-    } catch (e: any) {
-        return handleServerNetworkError(e, thunkAPI.dispatch);
-    } finally {
-        thunkAPI.dispatch(setLinearProgress({ value: false }));
-    }
-});
+// const addTodolist = createAppAsyncThunk<{ todolist: Todolist }, string>(
+//     "todolists/addTodolist",
+//     async (title, thunkAPI) => {
+//         const { dispatch, rejectWithValue } = thunkAPI;
+//         dispatch(setLinearProgress({ value: true }));
+//
+//         const res = await todolistsApi.createTodolist(title);
+//         if (res.data.resultCode === ResultCode.OK) {
+//             dispatch(setLinearProgress({ value: false }));
+//             return { todolist: res.data.data.item };
+//         } else {
+//             handleServerAppError(res.data, thunkAPI, false);
+//             // dispatch(setLinearProgress({ value: false }));
+//             return rejectWithValue(res.data);
+//         }
+//
+//         // catch (e: any) {
+//         //     return handleServerNetworkError(e, dispatch);
+//     },
+// );
+// const addTodolist = createAppAsyncThunk<{ todolist: Todolist }, string>(
+//     "todolists/addTodolist",
+//     async (title, thunkAPI) => {
+//         debugger;
+//         const { dispatch, rejectWithValue } = thunkAPI;
+//         return thunkTryCatch(thunkAPI, async () => {
+//             const res = await todolistsApi.createTodolist(title);
+//             if (res.data.resultCode === ResultCode.OK) {
+//                 return { todolist: res.data.data.item };
+//             } else {
+//                 handleServerAppError(res.data, thunkAPI);
+//                 return rejectWithValue(null);
+//             }
+//         });
+//     },
+// );
+const addTodolist = createAppAsyncThunk<{ todolist: Todolist }, string>(
+    "todolists/addTodolist",
+    async (title, thunkAPI) => {
+        const { rejectWithValue } = thunkAPI;
+        return thunkTryCatch(thunkAPI, async () => {
+            const res = await todolistsApi.createTodolist(title);
+            if (res.data.resultCode === ResultCode.OK) {
+                return { todolist: res.data.data.item };
+            } else {
+                handleServerAppError(res.data, thunkAPI, false);
+                return rejectWithValue({
+                    errors: res.data.messages,
+                    fieldsErrors: res.data.fieldsErrors,
+                });
+            }
+        });
+    },
+);
+
+// try {
+// const res = await todolistsApi.createTodolist(title);
+// if (res.data.resultCode === ResultCode.OK) {
+//     return { todolist: res.data.data.item };
+// } else {
+//     handleServerAppError(res.data, thunkAPI, false);
+//     return rejectWithValue({ errors: res.data.messages, fieldsErrors: [] });
+// }
+// } catch (e: any) {
+//     handleServerNetworkError(e, dispatch);
+//     return rejectWithValue({
+//         errors: [e.errors],
+//         fieldsErrors: undefined,
+//     });
+// }
 const deleteTodolist = createAsyncThunk("todolists/deleteTodolist", async (id: string, thunkAPI) => {
-    thunkAPI.dispatch(changeTodosEntityStatus({ id, status: "loading" }));
-    thunkAPI.dispatch(setLinearProgress({ value: true }));
+    const { dispatch } = thunkAPI;
+    dispatch(changeTodosEntityStatus({ id, status: "loading" }));
+    dispatch(setLinearProgress({ value: true }));
     try {
         const res = await todolistsApi.deleteTodolist(id);
         if (res.data.resultCode === ResultCode.OK) {
-            thunkAPI.dispatch(changeTodosEntityStatus({ id, status: "succeeded" }));
-            thunkAPI.dispatch(setLinearProgress({ value: false }));
+            dispatch(changeTodosEntityStatus({ id, status: "succeeded" }));
+            dispatch(setLinearProgress({ value: false }));
             return { id };
         } else {
             handleServerAppError(res.data, thunkAPI);
         }
     } catch (e: any) {
-        handleServerNetworkError(e, thunkAPI.dispatch);
+        handleServerNetworkError(e, dispatch);
     }
 });
 const updateTodolist = createAsyncThunk(
@@ -68,18 +120,19 @@ const updateTodolist = createAsyncThunk(
         },
         thunkAPI,
     ) => {
-        thunkAPI.dispatch(setLinearProgress({ value: true }));
+        const { dispatch, rejectWithValue } = thunkAPI;
+        dispatch(setLinearProgress({ value: true }));
         try {
             const res = await todolistsApi.updateTodolistTitle(param.id, param.title);
             if (res.data.resultCode === ResultCode.OK) {
-                thunkAPI.dispatch(setLinearProgress({ value: false }));
+                dispatch(setLinearProgress({ value: false }));
                 return { title: param.title, id: param.id };
             } else {
                 handleServerAppError(res.data, thunkAPI);
             }
         } catch (e: any) {
-            thunkAPI.dispatch(setLinearProgress({ value: false }));
-            handleServerNetworkError(e, thunkAPI.dispatch);
+            dispatch(setLinearProgress({ value: false }));
+            handleServerNetworkError(e, dispatch);
         }
     },
 );

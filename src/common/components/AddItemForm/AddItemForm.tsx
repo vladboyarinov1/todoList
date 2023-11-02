@@ -3,7 +3,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { IconButton, TextField } from "@mui/material";
 
 type Props = {
-    addItem: (title: string) => Promise<any> | void;
+    addItem: (title: string) => any;
     label: string;
     disabled?: boolean;
 };
@@ -18,19 +18,21 @@ export const AddItemForm = memo(({ addItem, label, disabled }: Props) => {
         error && setError(null); // если была ошибка, то снимаем ее
         setTitle(e.currentTarget.value);
     };
-    /////////Прилетает ошибка при добавлении но добавляется
-    const addItemHandler = async () => {
+
+    const addItemHandler = () => {
         if (title.trim() !== "") {
-            try {
-                if (title.trim()) {
-                    await addItem(title);
+            addItem(title)
+                .unwrap()
+                .then((val: any) => {
                     setTitle("");
-                }
-            } catch (error: any) {
-                setError(error.message);
-            }
+                })
+                .catch((e: any) => {
+                    debugger;
+                    setError(e.errors);
+                });
         } else {
-            // setError(true)
+            debugger;
+            setError("Title required!");
         }
     };
 
